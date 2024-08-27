@@ -17,7 +17,6 @@ void US3GameInstance::Init()
 		SessionInterface = SubSystem->GetSessionInterface();
 		if ( SessionInterface.IsValid() )
 		{
-			//Bind Delegates here.
 			SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this , &US3GameInstance::OnCreateSessionCompleted);
 		}
 	}
@@ -44,13 +43,13 @@ void US3GameInstance::JoinServer()
 
 void US3GameInstance::OnCreateSessionCompleted(FName SessionName , bool bWasSuccessful)
 {
-	UE_LOG(LogTemp , Warning , TEXT("CreateSessionSuccessful? %d") , bWasSuccessful);
 	if ( bWasSuccessful )
 	{
+		GetWorld()->ServerTravel(TEXT("/Game/KHJ/Maps/KHJ_FirstPersonMap?listen"));
 	}
 	else
 	{
-
+		UE_LOG(LogTemp , Warning , TEXT("Create Session Unsuccessful"));
 	}
 }
 
