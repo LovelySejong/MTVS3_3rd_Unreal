@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "Interfaces/OnlineSessionInterface.h"
+#include "OnlineSessionSettings.h"
 #include "S3GameInstance.generated.h"
 
 /**
@@ -26,7 +27,11 @@ protected:
 	void JoinServer();
 
 	virtual void OnCreateSessionCompleted(FName SessionName, bool bWasSuccessful);
-	//virtual void 
+	virtual void OnFindSessionsCompleted(bool bWasSuccessful);
+	virtual void OnJoinSessionCompleted(FName SessionName , EOnJoinSessionCompleteResult::Type Result);
+
+
 private:
+	TSharedPtr<FOnlineSessionSearch> SessionSearch;
 	IOnlineSessionPtr SessionInterface;
 };
