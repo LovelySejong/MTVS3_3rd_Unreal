@@ -75,3 +75,9 @@ DerivedDataCache/*
 
 #Test batch files
 Batch/*
+
+#Packaged files
+Packaged/*
+
+#Misc.
+UpgradeLog.htm
