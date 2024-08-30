@@ -9,7 +9,7 @@
 
 US3GameInstance::US3GameInstance()
 {
-	
+
 }
 
 void US3GameInstance::Init()
@@ -17,84 +17,63 @@ void US3GameInstance::Init()
 	if ( IOnlineSubsystem* SubSystem = IOnlineSubsystem::Get() )
 	{
 		SessionInterface = SubSystem->GetSessionInterface();
-		if ( SessionInterface.IsValid() )
-		{
-			SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this , &US3GameInstance::OnCreateSessionCompleted);
-			SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this , &US3GameInstance::OnFindSessionsCompleted);
-			SessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this , &US3GameInstance::OnJoinSessionCompleted);
-		}
 	}
-
 	Super::Init();
+}
+
+void US3GameInstance::Shutdown()
+{
+	DestroyServer();
+
+	Super::Shutdown();
 }
 
 void US3GameInstance::CreateServer()
 {
-	FOnlineSessionSettings SessionSettings; 
+	UE_LOG(LogTemp , Warning , TEXT("Creating session Start "));
+
+	FOnlineSessionSettings SessionSettings;
 	SessionSettings.bAllowJoinInProgress = false;
 	SessionSettings.bIsDedicated = false;
-	if ( IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" ) 
-		SessionSettings.bIsLANMatch = true;
-	else 
-		SessionSettings.bIsLANMatch = false;
+	SessionSettings.bIsLANMatch = true;
+
+	/*if ( IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" )
+	else
+		SessionSettings.bIsLANMatch = false;*/
 
 	SessionSettings.bShouldAdvertise = true;
 	SessionSettings.bUsesPresence = true;
 	SessionSettings.NumPublicConnections = 2;
 
-	SessionInterface->CreateSession(0 , "MySession" , SessionSettings);
+	SessionInterface->CreateSession(0 , "Justin's Session" , SessionSettings);
 }
 
-void US3GameInstance::OnCreateSessionCompleted(FName SessionName , bool bWasSuccessful)
+void US3GameInstance::FindServer()
 {
-	if ( bWasSuccessful )
-	{
-		GetWorld()->ServerTravel(TEXT("/Game/KHJ/Maps/KHJ_FirstPersonMap?listen"));
-	}
-	else UE_LOG(LogTemp , Warning , TEXT("Create Session Unsuccessful"));
-}
-
-void US3GameInstance::JoinServer()
-{
-	UE_LOG(LogTemp , Warning , TEXT("Join Session Start "));
+	UE_LOG(LogTemp , Warning , TEXT("Find Sessions Start "));
 
 	SessionSearch = MakeShareable(new FOnlineSessionSearch());
-	if ( IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" )
+	SessionSearch->bIsLanQuery = true;
+	/*if ( IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" )
 		SessionSearch->bIsLanQuery = true;
 	else
-		SessionSearch->bIsLanQuery = false;
-	
+		SessionSearch->bIsLanQuery = false;*/
+
 	SessionSearch->MaxSearchResults = 10000;
 	SessionSearch->QuerySettings.Set(SEARCH_PRESENCE , true , EOnlineComparisonOp::Equals);
 
-	SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
+	SessionInterface->FindSessions(0 , SessionSearch.ToSharedRef());
 }
 
-void US3GameInstance::OnFindSessionsCompleted(bool bWasSuccessful)
+void US3GameInstance::JoinServer(int32 Index)
 {
-	if ( bWasSuccessful )
-	{
-		UE_LOG(LogTemp , Warning , TEXT("Found Session"));
-
-		TArray<FOnlineSessionSearchResult> Results = SessionSearch->SearchResults;
-		UE_LOG(LogTemp , Warning , TEXT("Sessions %d"), Results.Num());
-		if (Results.Num())
-		{
-			UE_LOG(LogTemp , Warning , TEXT("Joining Server"));
-			SessionInterface->JoinSession(0, "MySession", Results[0]);
-		}
-	}
-	else UE_LOG(LogTemp , Warning , TEXT("Find Session Unsuccessful"));
+	TArray<FOnlineSessionSearchResult> Results = SessionSearch->SearchResults;
+	UE_LOG(LogTemp , Warning , TEXT("Joining Server %s"), *Results[Index].GetSessionIdStr());
+	SessionInterface->JoinSession(0 , "Justin's Session" , Results[Index]);
 }
 
-void US3GameInstance::OnJoinSessionCompleted(FName SessionName , EOnJoinSessionCompleteResult::Type Result)
+void US3GameInstance::DestroyServer()
 {
-	UE_LOG(LogTemp , Warning , TEXT("OnJoinSessionComplete"));
-	if (APlayerController* PController = UGameplayStatics::GetPlayerController(GetWorld(), 0))
-	{
-		FString JoinAddress;
-		SessionInterface->GetResolvedConnectString(SessionName , JoinAddress);
-		if(JoinAddress != "") PController->ClientTravel(JoinAddress , ETravelType::TRAVEL_Absolute);
-	}
+	SessionInterface->DestroySession("Justin's Session");
 }
 

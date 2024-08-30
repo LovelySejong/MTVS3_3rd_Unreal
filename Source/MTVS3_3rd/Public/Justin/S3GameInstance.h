@@ -17,21 +17,25 @@ class MTVS3_3RD_API US3GameInstance : public UGameInstance
 	GENERATED_BODY()
 public:
 	US3GameInstance();
-protected:
-	virtual void Init() override;
 
-protected:
+public:
+	IOnlineSessionPtr SessionInterface;
+	TSharedPtr<FOnlineSessionSearch> SessionSearch;
+
 	UFUNCTION(BlueprintCallable)
 	void CreateServer();
+
 	UFUNCTION(BlueprintCallable)
-	void JoinServer();
+	void FindServer();
 
-	virtual void OnCreateSessionCompleted(FName SessionName, bool bWasSuccessful);
-	virtual void OnFindSessionsCompleted(bool bWasSuccessful);
-	virtual void OnJoinSessionCompleted(FName SessionName , EOnJoinSessionCompleteResult::Type Result);
+	UFUNCTION(BlueprintCallable)
+	void JoinServer(int32 Index);
+	UFUNCTION(BlueprintCallable)
+	void DestroyServer();
 
+protected:
+	virtual void Init() override;
+	virtual void Shutdown() override;
 
 private:
-	TSharedPtr<FOnlineSessionSearch> SessionSearch;
-	IOnlineSessionPtr SessionInterface;
 };
