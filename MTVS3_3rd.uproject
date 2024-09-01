@@ -9,7 +9,12 @@
 			"Type": "Runtime",
 			"LoadingPhase": "Default",
 			"AdditionalDependencies": [
+<<<<<<< HEAD
 				"Engine"
+=======
+				"Engine",
+				"UMG"
+>>>>>>> J_Branch
 			]
 		}
 	],
@@ -20,6 +25,10 @@
 			"TargetAllowList": [
 				"Editor"
 			]
+		},
+		{
+			"Name": "OnlineSubsystemSteam",
+			"Enabled": true
 		}
 	]
 }

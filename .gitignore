@@ -72,3 +72,12 @@ Plugins/**/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+#Test batch files
+Batch/*
+
+#Packaged files
+Packaged/*
+
+#Misc.
+UpgradeLog.htm
