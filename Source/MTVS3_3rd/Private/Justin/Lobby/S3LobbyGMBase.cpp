@@ -4,6 +4,8 @@
 #include "Justin/Lobby/S3LobbyGMBase.h"
 #include "Justin/Lobby/S3PCLobby.h"
 #include "GameFramework/GameSession.h"
+#include "Net/UnrealNetwork.h"
+#include "Justin/S3GameInstance.h"
 
 AS3LobbyGMBase::AS3LobbyGMBase()
 {
@@ -13,32 +15,66 @@ AS3LobbyGMBase::AS3LobbyGMBase()
 
 void AS3LobbyGMBase::PreLogin(const FString& Options , const FString& Address , const FUniqueNetIdRepl& UniqueId , FString& ErrorMessage)
 {
-	UE_LOG(LogTemp , Warning , TEXT("Im inside PreLogin, nice %s"), *UniqueId.ToString());
-	
 	if ( !bIsFull )
 	{
+		UE_LOG(LogTemp , Warning , TEXT("Login success %s") , *UniqueId.ToString());
 		Super::PreLogin(Options , Address , UniqueId , ErrorMessage);
+	}
+	else
+	{
+		ErrorMessage = TEXT("Server is full. Try again later.");
+		UE_LOG(LogTemp , Warning , TEXT("Login Failed %s") , *UniqueId.ToString());
 	}
 }
 
 void AS3LobbyGMBase::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
-	UE_LOG(LogTemp , Warning , TEXT("PostLogin Host %d") , Cast<AS3PCLobby>(NewPlayer)->GetHost());
 
-	if ( !Cast<AS3PCLobby>(NewPlayer)->GetHost() ) // is Client 
+	if ( !Cast<AS3PCLobby>(NewPlayer)->IsHost() ) // is Client 
 	{
 		bIsFull = true;
-		UE_LOG(LogTemp , Warning , TEXT("1111"));
 		auto PC = Cast<AS3PCLobby>(HostPC);
 		if ( PC )
 		{
-			UE_LOG(LogTemp , Warning , TEXT("2222"));
 			PC->AddPlayer();
 		}
 		else UE_LOG(LogTemp , Warning , TEXT("ERROR"));
 	}
 	else HostPC = NewPlayer;
+}
+
+void AS3LobbyGMBase::Logout(AController* Exiting)
+{
+	auto PC = Cast<AS3PCLobby>(Exiting);
+	if ( PC )
+	{
+		if ( PC->IsHost() )
+		{
+			auto GI = Cast<US3GameInstance>(GetWorld()->GetGameInstance());
+			if ( GI ) GI->DestroyServer();
+		}
+		else
+		{
+			PC = Cast<AS3PCLobby>(HostPC);
+			PC->RemovePlayer();
+		}
+	}
+
+	Super::Logout(Exiting);
+}
+
+bool AS3LobbyGMBase::IsReadyToPlay()
+{
+	bool bIsReadyToStart = false;
+
+	for ( FConstPlayerControllerIterator it = GetWorld()->GetPlayerControllerIterator(); it; ++it )
+	{
+		auto PC = Cast<AS3PCLobby>(*it);
+		if ( PC->IsHost() ) continue;
+		else bIsReadyToStart = PC->IsReady();
+	}
+	return bIsReadyToStart;
 }
 
 void AS3LobbyGMBase::HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer)
@@ -56,7 +92,6 @@ void AS3LobbyGMBase::HandleStartingNewPlayer_Implementation(APlayerController* N
 			PC->SetHost(true);
 		}
 	}
-	UE_LOG(LogTemp , Warning , TEXT("HandleStartingNewPlayer Called"));
 
 	Super::HandleStartingNewPlayer_Implementation(NewPlayer);
 }

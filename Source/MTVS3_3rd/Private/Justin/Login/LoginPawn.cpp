@@ -5,7 +5,6 @@
 #include "Justin/S3GameInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerState.h"
-//#include "GameFramework/OnlineReplStructs.h"
 
 // Sets default values
 ALoginPawn::ALoginPawn()
@@ -59,8 +58,12 @@ void ALoginPawn::Test_OnFindSessionsCompleted(bool bWasSuccessful)
 		{
 			TArray<FOnlineSessionSearchResult> Results = GI->SessionSearch->SearchResults;
 			UE_LOG(LogTemp, Warning, TEXT("Sessions %d"), Results.Num());
-			if (Results.Num())
+			if ( Results.Num() )
+			{
+				auto nice = GetPlayerState()->GetUniqueId();
+				UE_LOG(LogTemp , Warning , TEXT("Player UniqueId %s") , *nice.ToString());
 				GI->JoinServer(0);
+			}
 		}
 	}
 }

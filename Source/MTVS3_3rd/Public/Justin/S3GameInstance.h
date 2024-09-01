@@ -12,12 +12,13 @@
  * 
  */
 UCLASS()
-class MTVS3_3RD_API US3GameInstance : public UGameInstance
+class MTVS3_3RD_API US3GameInstance : public UGameInstance, public FTickableGameObject
 {
 	GENERATED_BODY()
 public:
 	US3GameInstance();
-
+	virtual TStatId GetStatId() const override;
+	virtual void Tick(float DeltaTime) override;
 public:
 	IOnlineSessionPtr SessionInterface;
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;

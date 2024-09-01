@@ -12,6 +12,20 @@ US3GameInstance::US3GameInstance()
 
 }
 
+TStatId US3GameInstance::GetStatId() const
+{
+	return TStatId();
+}
+
+void US3GameInstance::Tick(float DeltaTime)
+{
+	if ( SessionInterface )
+	{		
+		FString Str = EOnlineSessionState::ToString(SessionInterface->GetSessionState("Justin's Session"));
+		UE_LOG(LogTemp , Warning , TEXT("Session State: %s") , *Str);
+	}
+}
+
 void US3GameInstance::Init()
 {
 	if ( IOnlineSubsystem* SubSystem = IOnlineSubsystem::Get() )
@@ -68,7 +82,7 @@ void US3GameInstance::FindServer()
 void US3GameInstance::JoinServer(int32 Index)
 {
 	TArray<FOnlineSessionSearchResult> Results = SessionSearch->SearchResults;
-	UE_LOG(LogTemp , Warning , TEXT("Joining Server %s"), *Results[Index].GetSessionIdStr());
+	UE_LOG(LogTemp , Warning , TEXT("Joining Server %s") , *Results[Index].GetSessionIdStr());
 	SessionInterface->JoinSession(0 , "Justin's Session" , Results[Index]);
 }
 

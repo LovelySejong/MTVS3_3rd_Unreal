@@ -22,19 +22,22 @@ public:
 	void Init(bool bHost);
 	void RemovePlayer();
 	void AddPlayer();
+	
+	void SetReady(bool bReady);
+
 protected:
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UImage> PlayerOne_Image;
-
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UImage> PlayerTwo_Image;
 
+	UPROPERTY(meta=(BindWidget))
+	TObjectPtr<UImage> PlayerTwoReady_Image;
+
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UTextBlock> Ready_Text;
-
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UTextBlock> StartGame_Text;
-
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> Button;
 

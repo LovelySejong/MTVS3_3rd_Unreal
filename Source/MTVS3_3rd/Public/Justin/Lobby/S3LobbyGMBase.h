@@ -17,12 +17,13 @@ class MTVS3_3RD_API AS3LobbyGMBase : public AGameModeBase
 {
 	GENERATED_BODY()
 	
-
 public:
 	AS3LobbyGMBase();
 	virtual void PreLogin(const FString& Options , const FString& Address , const FUniqueNetIdRepl& UniqueId , FString& ErrorMessage) override;
-
 	virtual void PostLogin(APlayerController* NewPlayer) override;
+	virtual void Logout(AController* Exiting) override;
+
+	bool IsReadyToPlay();
 
 protected:
 	virtual void HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer) override;

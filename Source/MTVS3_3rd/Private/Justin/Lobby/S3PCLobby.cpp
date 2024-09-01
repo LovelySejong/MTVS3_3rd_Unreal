@@ -4,13 +4,43 @@
 #include "Justin/Lobby/S3PCLobby.h"
 #include "Justin/Lobby/LobbyWidget.h"
 #include "Blueprint/UserWidget.h"
+#include "Net/UnrealNetwork.h"
+#include "Justin/Lobby/S3LobbyGMBase.h"
+
+AS3PCLobby::AS3PCLobby()
+{
+	bIsReady = false;
+}
+
+void AS3PCLobby::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if ( IsLocalPlayerController() )
+	{
+		LobbyWidget = CreateWidget<ULobbyWidget>(this , LobbyWidgetClass);
+		UE_LOG(LogTemp , Warning , TEXT("S3PCLobby BeginPlay Host : %d") , bIsHost);
+		if ( ensure(LobbyWidget) )
+		{
+			LobbyWidget->Init(bIsHost);
+			LobbyWidget->AddToViewport();
+		}
+	}
+}
+
+void AS3PCLobby::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AS3PCLobby , bIsReady);
+}
 
 void AS3PCLobby::SetHost(bool _bIsHost)
 {
 	bIsHost = _bIsHost;
 }
 
-bool AS3PCLobby::GetHost() const
+bool AS3PCLobby::IsHost() const
 {
 	return bIsHost;
 }
@@ -25,8 +55,6 @@ void AS3PCLobby::RemovePlayer()
 
 void AS3PCLobby::AddPlayer()
 {
-	UE_LOG(LogTemp , Warning , TEXT("bIsHost : %d") , bIsHost);
-	UE_LOG(LogTemp , Warning , TEXT("LobbyWidget : %d") , IsValid(LobbyWidget));
 	if ( bIsHost && LobbyWidget )
 	{
 		UE_LOG(LogTemp , Warning , TEXT("AddpLayer Success"));
@@ -39,12 +67,38 @@ void AS3PCLobby::HandleButtonPress()
 {
 	if ( HasAuthority() )
 	{
-
+		Server_CheckCanStart();
 	}
 	else
 	{
-
+		Server_SetReady();
 	}
+}
+
+void AS3PCLobby::Server_CheckCanStart_Implementation()
+{
+	auto GM = GetWorld()->GetAuthGameMode<AS3LobbyGMBase>();
+	if ( GM && GM->IsReadyToPlay() )
+	{
+		UE_LOG(LogTemp , Warning , TEXT("Start Game!"));
+	}
+	else UE_LOG(LogTemp , Warning , TEXT("Players not ready!"));
+}
+
+void AS3PCLobby::Server_SetReady_Implementation()
+{
+	for ( FConstPlayerControllerIterator it = GetWorld()->GetPlayerControllerIterator(); it; ++it )
+	{
+		auto PC = Cast<AS3PCLobby>(*it);
+		PC->bIsReady = !PC->bIsReady;
+		if ( PC->HasAuthority()) PC->OnRep_bIsReady();
+		UE_LOG(LogTemp , Warning , TEXT("Player is Ready: %d") , PC->bIsReady);
+	}
+}
+
+void AS3PCLobby::OnRep_bIsReady()
+{
+	if ( LobbyWidget ) LobbyWidget->SetReady(bIsReady);
 }
 
 void AS3PCLobby::What()
@@ -52,18 +106,7 @@ void AS3PCLobby::What()
 	UE_LOG(LogTemp , Warning , TEXT("RemoteRole: :%s") , *UEnum::GetValueAsString(GetRemoteRole()));
 }
 
-void AS3PCLobby::BeginPlay()
+bool AS3PCLobby::IsReady() const
 {
-	Super::BeginPlay();
-	
-	if ( IsLocalPlayerController() )
-	{
-		LobbyWidget = CreateWidget<ULobbyWidget>(this , LobbyWidgetClass);
-		UE_LOG(LogTemp , Warning , TEXT("S3PCLobby BeginPlay Host : %d") , bIsHost);
-		if ( ensure(LobbyWidget))
-		{
-			LobbyWidget->Init(bIsHost);
-			LobbyWidget->AddToViewport();
-		}
-	}
+	return bIsReady;
 }
