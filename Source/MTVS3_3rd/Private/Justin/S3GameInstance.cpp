@@ -19,11 +19,11 @@ TStatId US3GameInstance::GetStatId() const
 
 void US3GameInstance::Tick(float DeltaTime)
 {
-	if ( SessionInterface )
-	{		
-		FString Str = EOnlineSessionState::ToString(SessionInterface->GetSessionState("Justin's Session"));
-		UE_LOG(LogTemp , Warning , TEXT("Session State: %s") , *Str);
-	}
+	//if ( SessionInterface )
+	//{		
+	//	FString Str = EOnlineSessionState::ToString(SessionInterface->GetSessionState("Justin's Session"));
+	//	UE_LOG(LogTemp , Warning , TEXT("Session State: %s") , *Str);
+	//}
 }
 
 void US3GameInstance::Init()
