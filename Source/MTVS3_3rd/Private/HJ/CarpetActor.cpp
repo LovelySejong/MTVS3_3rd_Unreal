@@ -31,6 +31,8 @@ void ACarpetActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	BoxComp->OnComponentBeginOverlap.AddDynamic(this , &ACarpetActor::OnMyBoxBeginOverlap);
+	BoxComp->OnComponentEndOverlap.AddDynamic(this , &ACarpetActor::OnMyBoxEndOverlap);
 }
 
 // Called every frame

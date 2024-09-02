@@ -39,7 +39,9 @@ public:
 	// 문제방4 끝, 게임 클리어
 	void OnGameClear();
 
+	UPROPERTY(VisibleAnywhere, Category = "Default|Game")
 	int Q1ClearCount = 0;
+	UPROPERTY(VisibleAnywhere, Category = "Default|Game")
 	int Q2ClearCount = 0;
 	UPROPERTY(EditAnywhere, Category = "Default|Game");
 	int RequiredCount = 2;
@@ -53,7 +55,9 @@ public:
 	bool DebugCarpetSuccessEnable;
 	
 	void CheckCarpet(int num, int value);
+	UPROPERTY(VisibleAnywhere, Category = "Default|Game")
 	int OnCarpet1Count = 0;
+	UPROPERTY(VisibleAnywhere, Category = "Default|Game")
 	int OnCarpet2Count = 0;
 };
 

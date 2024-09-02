@@ -72,22 +72,22 @@ void AMTVS3_3rdGameMode::CheckCarpet(int num, int value)
 		OnCarpet1Count += value;
 		if ( OnCarpet1Count == RequiredCount )
 		{
-			if ( DebugCarpetSuccessEnable) GEngine->AddOnScreenDebugMessage(-1 , 5.f , FColor::Yellow , FString::Printf(TEXT("Carpet Success")));
+			if ( DebugCarpetSuccessEnable) GEngine->AddOnScreenDebugMessage(-1 , 5.f , FColor::Yellow , FString::Printf(TEXT("Carpet1 ON")));
 			// 문 열기 함수 호출
 		}
 	}
 	else if ( num == 2 )
 	{
 		OnCarpet2Count += value;
-		if ( OnCarpet1Count == RequiredCount )
+		if ( OnCarpet2Count == RequiredCount )
 		{
-			if ( DebugCarpetSuccessEnable ) GEngine->AddOnScreenDebugMessage(-1 , 5.f , FColor::Yellow , FString::Printf(TEXT("Carpet Success")));
+			if ( DebugCarpetSuccessEnable ) GEngine->AddOnScreenDebugMessage(-1 , 5.f , FColor::Yellow , FString::Printf(TEXT("Carpet2 ON")));
 			// 장롱 열리는 함수 호출
 			// 문제 액자 등장 함수 호출
 		}
 		else
 		{
-			if ( DebugCarpetSuccessEnable ) GEngine->AddOnScreenDebugMessage(-1 , 5.f , FColor::Yellow , FString::Printf(TEXT("Carpet Failed")));
+			if ( DebugCarpetSuccessEnable ) GEngine->AddOnScreenDebugMessage(-1 , 5.f , FColor::Yellow , FString::Printf(TEXT("Carpet2 OFF")));
 			// 장롱 닫히는 함수 호출
 			// 문제 액자 숨겨지는 함수 호출
 		}
