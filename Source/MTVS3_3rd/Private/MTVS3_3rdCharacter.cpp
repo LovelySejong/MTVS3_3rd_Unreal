@@ -53,7 +53,7 @@ void AMTVS3_3rdCharacter::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 
 	FVector start = FirstPersonCameraComponent->GetComponentLocation();
-	FVector end = start + 10000.f * FirstPersonCameraComponent->GetForwardVector();
+	FVector end = start + 1000.f * FirstPersonCameraComponent->GetForwardVector();
 	FHitResult res;
 
 	bool bHit = GetWorld()->LineTraceSingleByChannel(res, start, end, ECC_Visibility);
@@ -97,6 +97,7 @@ void AMTVS3_3rdCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMTVS3_3rdCharacter::Look);
 
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Started, this, &AMTVS3_3rdCharacter::Interact);
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Completed, this, &AMTVS3_3rdCharacter::InteractEnd);
 	}
 	else
 	{
@@ -156,4 +157,10 @@ void AMTVS3_3rdCharacter::Interact(const FInputActionValue& Value)
 {
 	if (CurrentActor)
 		CurrentActor->Interact(this);
+}
+
+void AMTVS3_3rdCharacter::InteractEnd(const FInputActionValue& Value)
+{
+	if (CurrentActor)
+		CurrentActor->InteractEnd();
 }

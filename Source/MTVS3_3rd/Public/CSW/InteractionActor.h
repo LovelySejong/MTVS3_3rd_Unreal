@@ -31,4 +31,7 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void Interact(class AMTVS3_3rdCharacter* caller);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void InteractEnd();
 };
