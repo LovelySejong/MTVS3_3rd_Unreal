@@ -67,6 +67,8 @@ protected:
 	void Look(const FInputActionValue& Value);
 
 	void Interact(const FInputActionValue& Value);
+	void InteractEnd(const FInputActionValue& Value);
+
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
