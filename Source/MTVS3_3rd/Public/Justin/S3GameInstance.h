@@ -12,7 +12,7 @@
  * 
  */
 UCLASS()
-class MTVS3_3RD_API US3GameInstance : public UGameInstance, public FTickableGameObject
+class MTVS3_3RD_API US3GameInstance : public UGameInstance, public FTickableGameObject	
 {
 	GENERATED_BODY()
 public:
@@ -25,10 +25,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void CreateServer();
-
 	UFUNCTION(BlueprintCallable)
 	void FindServer();
-
 	UFUNCTION(BlueprintCallable)
 	void JoinServer(int32 Index);
 	UFUNCTION(BlueprintCallable)
@@ -37,6 +35,7 @@ public:
 protected:
 	virtual void Init() override;
 	virtual void Shutdown() override;
-
 private:
+	float MaxTime = 2.f;
+	float TotalTime = 0.f;
 };
