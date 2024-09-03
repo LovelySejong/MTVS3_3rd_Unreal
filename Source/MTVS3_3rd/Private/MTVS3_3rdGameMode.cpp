@@ -13,6 +13,8 @@ AMTVS3_3rdGameMode::AMTVS3_3rdGameMode()
 
 }
 
+#pragma region 방 체크
+// 체크포인트 액터가 호출하는 함수들
 void AMTVS3_3rdGameMode::OnQuiz1Start()
 {
 	SetState(ERoomState::QUIZ1_ROOM);
@@ -34,8 +36,6 @@ void AMTVS3_3rdGameMode::OnMeetingStart()
 	{
 		SetState(ERoomState::MEETING_ROOM);
 	}
-
-	// 카페트 2개 체크
 }
 
 void AMTVS3_3rdGameMode::OnQuiz3Start()
@@ -64,10 +64,12 @@ void AMTVS3_3rdGameMode::SetState(ERoomState NextState)
 		GEngine->AddOnScreenDebugMessage(-1 , 5.f , FColor::Green , FString::Printf(TEXT("%s") , *stateText));
 	}
 }
+#pragma endregion
 
+#pragma region 카페트 기믹
 void AMTVS3_3rdGameMode::CheckCarpet(int num, int value)
 {
-	if ( num == 1 )
+	if ( num == 1 ) // MEETING_ROOM의 Carpet1일 때
 	{
 		OnCarpet1Count += value;
 		if ( OnCarpet1Count == RequiredCount )
@@ -76,7 +78,7 @@ void AMTVS3_3rdGameMode::CheckCarpet(int num, int value)
 			// 문 열기 함수 호출
 		}
 	}
-	else if ( num == 2 )
+	else if ( num == 2 ) // QUIZ3_ROOM의 Carpet2일 때
 	{
 		OnCarpet2Count += value;
 		if ( OnCarpet2Count == RequiredCount )
@@ -93,3 +95,16 @@ void AMTVS3_3rdGameMode::CheckCarpet(int num, int value)
 		}
 	}
 }
+void AMTVS3_3rdGameMode::CheckLever(int value)
+{
+	CorrectLeverCount += value;
+	if ( CorrectLeverCount == 4 )
+	{
+		// P2 카페트가 바닥에서 올라오기
+	}
+	else
+	{
+		// P2 카페트 바닥으로 사라지기
+	}
+}
+#pragma endregion

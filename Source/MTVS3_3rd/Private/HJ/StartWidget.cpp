@@ -39,7 +39,7 @@ void UStartWidget::SetActiveLoginUI(bool value)
 void UStartWidget::OnSignInButtonClicked()
 {
 	StartPanel->SetVisibility(ESlateVisibility::Hidden);
-	FName LevelName = FName(TEXT("KHJ_Proto"));
+	FName LevelName = FName(TEXT("MatchingLevel"));
 	UGameplayStatics::OpenLevel(this , LevelName);
 	auto* pc = GetWorld()->GetFirstPlayerController();
 	pc->SetInputMode(FInputModeGameOnly());
