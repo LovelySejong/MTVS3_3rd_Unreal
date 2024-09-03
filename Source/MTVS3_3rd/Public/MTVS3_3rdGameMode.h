@@ -77,7 +77,13 @@ public:
 
 #pragma region 레버 기믹(문제방3)
 	TMap<int , bool> LeverStates;  // 각 레버의 키와 상태를 저장하는 TMap
+	UFUNCTION(BlueprintCallable)
 	void CheckLever(int num, bool bIsCorrect);
+
+	UFUNCTION(BlueprintImplementableEvent) // 카페트를 들어올리는 이벤트
+	void MovingUpCarpet();
+	UFUNCTION(BlueprintImplementableEvent) // 카페트를 아래로 내리는 이벤트
+	void MovingDownCarpet();
 #pragma endregion
 
 #pragma region 문제방4

@@ -139,11 +139,13 @@ void AMTVS3_3rdGameMode::CheckLever(int num , bool bIsCorrect)
 	{
 		// P2 카페트 올라오기
 		if ( DebugGimmickEnable ) GEngine->AddOnScreenDebugMessage(-1 , 5.f , FColor::Yellow , FString::Printf(TEXT("All levers are correct. Carpet rises.")));
+		MovingUpCarpet();
 	}
 	else
 	{
-		// P2 카페트가 올라온 상태라면 내려가기
+		// P2 카페트 내려가기
 		if ( DebugGimmickEnable ) GEngine->AddOnScreenDebugMessage(-1 , 5.f , FColor::Yellow , FString::Printf(TEXT("Some levers are incorrect. Carpet hides.")));
+		MovingDownCarpet();
 	}
 }
 void AMTVS3_3rdGameMode::CheckQuiz4(int num , bool bIsCorrect)
