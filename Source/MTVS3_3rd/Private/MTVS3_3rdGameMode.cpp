@@ -11,6 +11,15 @@ AMTVS3_3rdGameMode::AMTVS3_3rdGameMode()
 	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnClassFinder(TEXT("/Game/FirstPerson/Blueprints/BP_FirstPersonCharacter"));
 	DefaultPawnClass = PlayerPawnClassFinder.Class;
 
+	// 레버 상태 초기화 (키: 1~4, 값: 모두 false로 시작)
+	LeverStates.Add(1 , false);
+	LeverStates.Add(2 , false);
+	LeverStates.Add(3 , false);
+	LeverStates.Add(4 , false);
+
+	// 문제방4 상태 초기화 (키: 1~2, 값: 모두 false로 시작)
+	Q4GimmickStates.Add(1 , false);
+	Q4GimmickStates.Add(2 , false);
 }
 
 #pragma region 방 체크
@@ -74,8 +83,12 @@ void AMTVS3_3rdGameMode::CheckCarpet(int num, int value)
 		OnCarpet1Count += value;
 		if ( OnCarpet1Count == RequiredCount )
 		{
-			if ( DebugCarpetSuccessEnable) GEngine->AddOnScreenDebugMessage(-1 , 5.f , FColor::Yellow , FString::Printf(TEXT("Carpet1 ON")));
+			if ( DebugGimmickEnable) GEngine->AddOnScreenDebugMessage(-1 , 5.f , FColor::Yellow , FString::Printf(TEXT("Carpet1 ON")));
 			// 문 열기 함수 호출
+		}
+		else
+		{
+			if ( DebugGimmickEnable ) GEngine->AddOnScreenDebugMessage(-1 , 5.f , FColor::Yellow , FString::Printf(TEXT("Carpet1 OFF")));
 		}
 	}
 	else if ( num == 2 ) // QUIZ3_ROOM의 Carpet2일 때
@@ -83,28 +96,73 @@ void AMTVS3_3rdGameMode::CheckCarpet(int num, int value)
 		OnCarpet2Count += value;
 		if ( OnCarpet2Count == RequiredCount )
 		{
-			if ( DebugCarpetSuccessEnable ) GEngine->AddOnScreenDebugMessage(-1 , 5.f , FColor::Yellow , FString::Printf(TEXT("Carpet2 ON")));
+			if ( DebugGimmickEnable ) GEngine->AddOnScreenDebugMessage(-1 , 5.f , FColor::Yellow , FString::Printf(TEXT("Carpet2 ON")));
 			// 장롱 열리는 함수 호출
 			// 문제 액자 등장 함수 호출
 		}
 		else
 		{
-			if ( DebugCarpetSuccessEnable ) GEngine->AddOnScreenDebugMessage(-1 , 5.f , FColor::Yellow , FString::Printf(TEXT("Carpet2 OFF")));
+			if ( DebugGimmickEnable ) GEngine->AddOnScreenDebugMessage(-1 , 5.f , FColor::Yellow , FString::Printf(TEXT("Carpet2 OFF")));
 			// 장롱 닫히는 함수 호출
 			// 문제 액자 숨겨지는 함수 호출
 		}
 	}
 }
-void AMTVS3_3rdGameMode::CheckLever(int value)
+#pragma endregion
+
+#pragma region 레버 기믹(문제방3)
+void AMTVS3_3rdGameMode::CheckLever(int num , bool bIsCorrect)
 {
-	CorrectLeverCount += value;
-	if ( CorrectLeverCount == 4 )
+	// 레버 키가 1~4인지 확인하고 업데이트
+	if ( LeverStates.Contains(num) )
 	{
-		// P2 카페트가 바닥에서 올라오기
+		LeverStates[num] = bIsCorrect;  // 해당 레버 키의 상태 업데이트
 	}
 	else
 	{
-		// P2 카페트 바닥으로 사라지기
+		UE_LOG(LogTemp , Warning , TEXT("Invalid lever key: %d") , num);
+		return;
+	}
+
+	// 모든 레버가 정답인지 확인
+	bool bAllCorrect = true;
+	for ( const TPair<int , bool>& Pair : LeverStates )
+	{
+		if ( !Pair.Value )
+		{
+			bAllCorrect = false;
+			break;
+		}
+	}
+
+	if ( bAllCorrect )
+	{
+		// P2 카페트 올라오기
+		if ( DebugGimmickEnable ) GEngine->AddOnScreenDebugMessage(-1 , 5.f , FColor::Yellow , FString::Printf(TEXT("All levers are correct. Carpet rises.")));
+	}
+	else
+	{
+		// P2 카페트가 올라온 상태라면 내려가기
+		if ( DebugGimmickEnable ) GEngine->AddOnScreenDebugMessage(-1 , 5.f , FColor::Yellow , FString::Printf(TEXT("Some levers are incorrect. Carpet hides.")));
+	}
+}
+void AMTVS3_3rdGameMode::CheckQuiz4(int num , bool bIsCorrect)
+{
+	// 모든 기믹이 정답인지 확인
+	bool bAllCorrect = true;
+	for ( const TPair<int , bool>& Pair : Q4GimmickStates )
+	{
+		if ( !Pair.Value )
+		{
+			bAllCorrect = false;
+			break;
+		}
+	}
+
+	if ( bAllCorrect )
+	{
+		UE_LOG(LogTemp , Log , TEXT("Game Clear"));
+		// 엔딩방 문 열기
 	}
 }
 #pragma endregion

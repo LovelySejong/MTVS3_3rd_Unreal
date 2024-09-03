@@ -31,7 +31,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Default|Debug")
 	bool DebugRoomStateEnable;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Default|Debug")
-	bool DebugCarpetSuccessEnable;
+	bool DebugGimmickEnable;
 
 	// 에디터 설정
 	
@@ -75,13 +75,16 @@ public:
 	void CheckCarpet(int num , int value);
 #pragma endregion
 
-#pragma region 레버 기믹
-	UPROPERTY(VisibleAnywhere, Category = "Default|Game")
-	int CorrectLeverCount = 0; // 올바른 방향의 레버 카운트
-
-	// 정답이면 value=1, 오답이면 value=-1과 호출됨
-	void CheckLever(int value);
+#pragma region 레버 기믹(문제방3)
+	TMap<int , bool> LeverStates;  // 각 레버의 키와 상태를 저장하는 TMap
+	void CheckLever(int num, bool bIsCorrect);
 #pragma endregion
+
+#pragma region 문제방4
+	TMap<int , bool> Q4GimmickStates;  // 문제방4 기믹의 키와 상태를 저장하는 TMap
+	void CheckQuiz4(int num , bool bIsCorrect);
+#pragma endregion
+
 };
 
 
