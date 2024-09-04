@@ -73,3 +73,10 @@ Plugins/**/Intermediate/*
 # Cache files for the editor to use
 DerivedDataCache/*
 MTVS3_3rd.uproject
+
+
+./.idea/.idea.MTVS3_3rd
+
+#Test Files
+Batch/*
+Packaged/*
