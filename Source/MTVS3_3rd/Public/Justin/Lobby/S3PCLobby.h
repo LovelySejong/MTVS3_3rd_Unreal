@@ -11,6 +11,7 @@
  */
 
 class ULobbyWidget;
+class UImage;
 
 UCLASS()
 class MTVS3_3RD_API AS3PCLobby : public APlayerController
@@ -18,17 +19,27 @@ class MTVS3_3RD_API AS3PCLobby : public APlayerController
 	GENERATED_BODY()
 	
 public:
+	AS3PCLobby();
+
 	void SetHost(bool _bIsHost);
-	bool GetHost() const;
+	bool IsHost() const;
+	bool IsReady() const;
+
+	//Only Called in server---------------------
 	void RemovePlayer();
 	void AddPlayer();
-	void HandleButtonPress();
+	//---------------------
 
-	UFUNCTION(BlueprintCallable)
-	void What();
+	UFUNCTION(Server, Reliable)
+	void Server_CheckCanStart();
+
+	UFUNCTION(Server , Reliable)
+	void Server_SetReady();
 
 protected:
 	virtual void BeginPlay() override;
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	UPROPERTY(EditDefaultsOnly , Category = "Settings")
 	TSubclassOf<ULobbyWidget> LobbyWidgetClass;
@@ -36,4 +47,9 @@ protected:
 private:
 	TObjectPtr<ULobbyWidget> LobbyWidget;
 	bool bIsHost;
+
+	UPROPERTY(ReplicatedUsing = OnRep_bIsReady)
+	bool bIsReady;
+	UFUNCTION()
+	void OnRep_bIsReady();
 };

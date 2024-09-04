@@ -76,3 +76,7 @@ MTVS3_3rd.uproject
 
 
 ./.idea/.idea.MTVS3_3rd
+
+#Test Files
+Batch/*
+Packaged/*
