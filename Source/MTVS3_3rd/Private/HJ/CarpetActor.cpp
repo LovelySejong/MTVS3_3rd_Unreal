@@ -47,11 +47,11 @@ void ACarpetActor::OnMyBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent 
 	auto* gm = CastChecked<AMTVS3_3rdGameMode>(GetWorld()->GetAuthGameMode());
 	if ( OtherActor->IsA<AHJ_Player>() )
 	{
-		if ( this->ActorHasTag(FName("Carpet1")) )
+		if ( this->ActorHasTag(FName("Carpet1")) ) // MEETING_ROOM의 Carpet1 체크
 		{
 			gm->CheckCarpet(1, 1);
 		}
-		else if ( this->ActorHasTag(FName("Carpet2")) )
+		else if ( this->ActorHasTag(FName("Carpet2")) ) // QUIZ3_ROOM의 Carpet2 체크
 		{
 			gm->CheckCarpet(2, 1);
 		}
@@ -63,11 +63,11 @@ void ACarpetActor::OnMyBoxEndOverlap(UPrimitiveComponent* OverlappedComponent , 
 	auto* gm = CastChecked<AMTVS3_3rdGameMode>(GetWorld()->GetAuthGameMode());
 	if ( OtherActor->IsA<AHJ_Player>() )
 	{
-		if ( this->ActorHasTag(FName("Carpet1")) )
+		if ( this->ActorHasTag(FName("Carpet1")) ) // MEETING_ROOM의 Carpet1 체크
 		{
 			gm->CheckCarpet(1, -1);
 		}
-		else if ( this->ActorHasTag(FName("Carpet2")) )
+		else if ( this->ActorHasTag(FName("Carpet2")) ) // QUIZ3_ROOM의 Carpet2 체크
 		{
 			gm->CheckCarpet(2, -1);
 		}

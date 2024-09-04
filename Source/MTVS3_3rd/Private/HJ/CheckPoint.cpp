@@ -15,7 +15,7 @@ ACheckPoint::ACheckPoint()
 
 	BoxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComp"));
 	SetRootComponent(BoxComp);
-	BoxComp->SetBoxExtent(FVector(112.5f , 50.0f , 150.0f));
+	BoxComp->SetBoxExtent(FVector(112.5f , 25.0f , 150.0f));
 
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
 	MeshComp->SetupAttachment(RootComponent);
@@ -23,7 +23,21 @@ ACheckPoint::ACheckPoint()
 	if ( TempMesh.Succeeded() )
 	{
 		MeshComp->SetStaticMesh(TempMesh.Object);
-		MeshComp->SetRelativeScale3D(FVector(2.25f , 1.0f , 3.0f));
+		MeshComp->SetRelativeScale3D(FVector(2.25f , 0.5f , 3.0f));
+	}
+
+	BoxComp2 = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComp2"));
+	BoxComp2->SetupAttachment(RootComponent);
+	BoxComp2->SetBoxExtent(FVector(112.5f , 25.0f , 150.0f));
+	BoxComp2->SetRelativeLocation(FVector(0, -50, 0));
+
+	MeshComp2 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp2"));
+	MeshComp2->SetupAttachment(BoxComp2);
+	ConstructorHelpers::FObjectFinder<UStaticMesh> TempMesh2(TEXT("/Script/Engine.StaticMesh'/Engine/BasicShapes/Cube1.Cube1'"));
+	if ( TempMesh2.Succeeded() )
+	{
+		MeshComp2->SetStaticMesh(TempMesh2.Object);
+		MeshComp2->SetRelativeScale3D(FVector(2.25f , 0.5f , 3.0f));
 	}
 }
 
@@ -59,6 +73,7 @@ void ACheckPoint::OnMyBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent ,
 		else if ( this->ActorHasTag(FName("Quiz2End")) )
 		{
 			this->Destroy();
+			// 문제 발생: 플레이어가 
 			gm->OnMeetingStart();
 		}
 		else if ( this->ActorHasTag(FName("MeetingEnd")) )
