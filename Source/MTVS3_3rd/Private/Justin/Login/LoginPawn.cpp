@@ -32,6 +32,8 @@ void ALoginPawn::BeginPlay()
 		GI->SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &ALoginPawn::OnCreateSessionCompleted);
 		GI->SessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &ALoginPawn::OnJoinSessionCompleted);
 		GI->SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &ALoginPawn::OnDestroySessionComplete);
+		
+		GI->SessionInterface->RemoveNamedSession("Justin's Session");
 	}
 }
 

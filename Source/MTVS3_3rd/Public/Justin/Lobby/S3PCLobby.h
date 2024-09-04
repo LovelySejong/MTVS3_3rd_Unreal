@@ -25,14 +25,10 @@ public:
 	bool IsHost() const;
 	bool IsReady() const;
 
+	//Only Called in server---------------------
 	void RemovePlayer();
 	void AddPlayer();
-	
-	UFUNCTION(BlueprintCallable)
-	void What();
-	
-	UFUNCTION()
-	void HandleButtonPress();
+	//---------------------
 
 	UFUNCTION(Server, Reliable)
 	void Server_CheckCanStart();
@@ -47,9 +43,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly , Category = "Settings")
 	TSubclassOf<ULobbyWidget> LobbyWidgetClass;
-
-	UPROPERTY(EditDefaultsOnly , Category = "Settings")
-	TObjectPtr<UImage> Ready_Image;
 
 private:
 	TObjectPtr<ULobbyWidget> LobbyWidget;

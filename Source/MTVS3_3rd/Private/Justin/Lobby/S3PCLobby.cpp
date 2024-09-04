@@ -50,6 +50,8 @@ void AS3PCLobby::RemovePlayer()
 	if ( bIsHost && LobbyWidget )
 	{
 		LobbyWidget->RemovePlayer();
+		bIsReady = false;
+		if(HasAuthority() ) OnRep_bIsReady();
 	}
 }
 
@@ -61,18 +63,6 @@ void AS3PCLobby::AddPlayer()
 		LobbyWidget->AddPlayer();
 	}
 	else UE_LOG(LogTemp , Warning , TEXT("AddpLayer failed"));
-}
-
-void AS3PCLobby::HandleButtonPress()
-{
-	if ( HasAuthority() )
-	{
-		Server_CheckCanStart();
-	}
-	else
-	{
-		Server_SetReady();
-	}
 }
 
 void AS3PCLobby::Server_CheckCanStart_Implementation()
@@ -91,7 +81,7 @@ void AS3PCLobby::Server_SetReady_Implementation()
 	{
 		auto PC = Cast<AS3PCLobby>(*it);
 		PC->bIsReady = !PC->bIsReady;
-		if ( PC->HasAuthority()) PC->OnRep_bIsReady();
+		if ( PC->HasAuthority() ) PC->OnRep_bIsReady();
 		UE_LOG(LogTemp , Warning , TEXT("Player is Ready: %d") , PC->bIsReady);
 	}
 }
@@ -99,11 +89,6 @@ void AS3PCLobby::Server_SetReady_Implementation()
 void AS3PCLobby::OnRep_bIsReady()
 {
 	if ( LobbyWidget ) LobbyWidget->SetReady(bIsReady);
-}
-
-void AS3PCLobby::What()
-{
-	UE_LOG(LogTemp , Warning , TEXT("RemoteRole: :%s") , *UEnum::GetValueAsString(GetRemoteRole()));
 }
 
 bool AS3PCLobby::IsReady() const

@@ -58,6 +58,7 @@ void AS3LobbyGMBase::Logout(AController* Exiting)
 		{
 			PC = Cast<AS3PCLobby>(HostPC);
 			PC->RemovePlayer();
+			bIsFull = false;
 		}
 	}
 

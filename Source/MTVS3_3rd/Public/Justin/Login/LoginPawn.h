@@ -19,15 +19,15 @@ public:
 	// Sets default values for this pawn's properties
 	ALoginPawn();
 
+	UFUNCTION(BlueprintCallable)
+	void StartConnection();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	IOnlineIdentityPtr OnlineIdentity;
 	FOnLoginCompleteDelegate OnLoginCompleteDelegate;
-
-	UFUNCTION(BlueprintCallable)
-	void StartConnection();
 
 	UFUNCTION(BlueprintCallable)
 	void Test_CreateSession();
