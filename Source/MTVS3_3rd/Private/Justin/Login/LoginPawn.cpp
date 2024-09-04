@@ -5,7 +5,8 @@
 #include "Justin/S3GameInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerState.h"
-//#include "GameFramework/OnlineReplStructs.h"
+#include "Interfaces/OnlineIdentityInterface.h"
+#include "OnlineSubsystem.h"
 
 // Sets default values
 ALoginPawn::ALoginPawn()
@@ -21,11 +22,18 @@ void ALoginPawn::BeginPlay()
 	Super::BeginPlay();
 	GI = GetWorld()->GetGameInstance<US3GameInstance>();
 
+	if ( IOnlineSubsystem* SubSystem = IOnlineSubsystem::Get() )
+	{
+		OnlineIdentity = SubSystem->GetIdentityInterface();
+	}
+
 	if (GI && GI->SessionInterface.IsValid())
 	{
 		GI->SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &ALoginPawn::OnCreateSessionCompleted);
 		GI->SessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &ALoginPawn::OnJoinSessionCompleted);
 		GI->SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &ALoginPawn::OnDestroySessionComplete);
+		
+		GI->SessionInterface->RemoveNamedSession("Justin's Session");
 	}
 }
 
@@ -59,8 +67,12 @@ void ALoginPawn::Test_OnFindSessionsCompleted(bool bWasSuccessful)
 		{
 			TArray<FOnlineSessionSearchResult> Results = GI->SessionSearch->SearchResults;
 			UE_LOG(LogTemp, Warning, TEXT("Sessions %d"), Results.Num());
-			if (Results.Num())
+			if ( Results.Num() )
+			{
+				auto nice = GetPlayerState()->GetUniqueId();
+				UE_LOG(LogTemp , Warning , TEXT("Player UniqueId %s") , *nice.ToString());
 				GI->JoinServer(0);
+			}
 		}
 	}
 }
@@ -111,7 +123,8 @@ void ALoginPawn::OnCreateSessionCompleted(FName SessionName, bool bWasSuccessful
 	if (bWasSuccessful)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Create Session successful"));
-		GetWorld()->ServerTravel(TEXT("/Game/Justin/Lobby/LobbyLevel?listen"));
+		GetWorld()->ServerTravel(TEXT("/Game/Justin/Lobby/LobbyLevel?listen")); //Matchmaking Test Level
+		//GetWorld()->ServerTravel(TEXT("/Game/Justin/VoiceChat/Level_VoiceChatTest?listen")); //Voice Chat Test Level
 	}
 	else UE_LOG(LogTemp, Warning, TEXT("Create Session Unsuccessful"));
 }
@@ -130,9 +143,19 @@ void ALoginPawn::OnJoinSessionCompleted(FName SessionName, EOnJoinSessionComplet
 			{
 				FString JoinAddress;
 
-				GI->SessionInterface->GetResolvedConnectString(SessionName, JoinAddress);
-				UE_LOG(LogTemp, Warning, TEXT("Joining Session %s with Address %s"), *SessionName.ToString(), *JoinAddress);
-				if (JoinAddress != "") PController->ClientTravel(JoinAddress, ETravelType::TRAVEL_Absolute);
+				if ( GI->SessionInterface->GetResolvedConnectString(SessionName , JoinAddress) )
+				{
+					UE_LOG(LogTemp , Warning , TEXT("Attempting to join Session %s with Address %s") , *SessionName.ToString() , *JoinAddress);
+
+					//OnlineIdentity->AddOnLoginCompleteDelegate_Handle(0 , FOnLoginComplete::FDelegate::CreateUObject(this , &ALoginPawn::OnLoginCompleted));
+					GEngine->OnNetworkFailure().AddUObject(this , &ALoginPawn::OnNetworkFail);
+					PController->ClientTravel(JoinAddress , ETravelType::TRAVEL_Absolute);
+				}
+				else
+				{
+					UE_LOG(LogTemp , Warning , TEXT("Failed to get Address %s with Session Name : %s") , *JoinAddress , *SessionName.ToString());
+					GI->SessionInterface->RemoveNamedSession(SessionName);
+				}
 			}
 			break;
 		}
@@ -153,6 +176,29 @@ void ALoginPawn::OnJoinSessionCompleted(FName SessionName, EOnJoinSessionComplet
 			UE_LOG(LogTemp, Warning, TEXT("Default join result"));
 			break;
 		}
+		}
+	}
+}
+
+void ALoginPawn::OnLoginCompleted(int32 LocalUserNum , bool bWasSuccessful , const FUniqueNetId& UserId , const FString& Error)
+{
+	UE_LOG(LogTemp , Warning , TEXT("[%s]Error: %s") , *UserId.ToString() , *Error);
+}
+
+void ALoginPawn::OnNetworkFail(UWorld* World, UNetDriver* Driver, ENetworkFailure::Type Type, const FString& Error)
+{
+	UE_LOG(LogTemp , Warning , TEXT("OnNetworkFail in LoginPawn"));
+	switch ( Type )
+	{
+		case ENetworkFailure::PendingConnectionFailure:
+		{
+			UE_LOG(LogTemp , Warning , TEXT("Failed to join Session: Max Players"));
+			if ( GI ) GI->SessionInterface->RemoveNamedSession("Justin's Session");
+			break;
+		}
+		default:
+		{
+			UE_LOG(LogTemp , Warning , TEXT("Default - Failure type: [%s]") , ENetworkFailure::ToString(Type));
 		}
 	}
 }

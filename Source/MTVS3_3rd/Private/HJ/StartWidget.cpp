@@ -6,6 +6,7 @@
 #include "Components/Button.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
+#include "Justin/Login/LoginPawn.h"
 
 void UStartWidget::NativeConstruct()
 {
@@ -38,11 +39,20 @@ void UStartWidget::SetActiveLoginUI(bool value)
 
 void UStartWidget::OnSignInButtonClicked()
 {
-	StartPanel->SetVisibility(ESlateVisibility::Hidden);
+	/*StartPanel->SetVisibility(ESlateVisibility::Hidden);
 	FName LevelName = FName(TEXT("MatchingLevel"));
 	UGameplayStatics::OpenLevel(this , LevelName);
 	auto* pc = GetWorld()->GetFirstPlayerController();
-	pc->SetInputMode(FInputModeGameOnly());
+	pc->SetInputMode(FInputModeGameOnly());*/
+
+	//check if User successfully logged in.
+	//if yes, allow player to connect
+	auto Pawn = GetOwningPlayerPawn<ALoginPawn>();
+	if ( Pawn )
+	{
+		Pawn->StartConnection();
+	}
+	//else ask user to sign in	
 }
 
 void UStartWidget::OnSignUpButtonClicked()
