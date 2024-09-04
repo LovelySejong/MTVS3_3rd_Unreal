@@ -39,7 +39,7 @@ public:
 #pragma endregion
 
 #pragma region UI
-
+	//
 #pragma endregion
 
 #pragma region 방 체크
