@@ -71,6 +71,7 @@ void AS3PCLobby::Server_CheckCanStart_Implementation()
 	if ( GM && GM->IsReadyToPlay() )
 	{
 		UE_LOG(LogTemp , Warning , TEXT("Start Game!"));
+		GetWorld()->ServerTravel("/Game/LovelySejong/PlayLevel?listen");
 	}
 	else UE_LOG(LogTemp , Warning , TEXT("Players not ready!"));
 }

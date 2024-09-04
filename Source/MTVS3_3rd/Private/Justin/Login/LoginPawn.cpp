@@ -143,12 +143,19 @@ void ALoginPawn::OnJoinSessionCompleted(FName SessionName, EOnJoinSessionComplet
 			{
 				FString JoinAddress;
 
-				GI->SessionInterface->GetResolvedConnectString(SessionName, JoinAddress);
-				UE_LOG(LogTemp, Warning, TEXT("Joining Session %s with Address %s"), *SessionName.ToString(), *JoinAddress);
-				
-				//OnlineIdentity->AddOnLoginCompleteDelegate_Handle(0 , FOnLoginComplete::FDelegate::CreateUObject(this , &ALoginPawn::OnLoginCompleted));
-				GEngine->OnNetworkFailure().AddUObject(this , &ALoginPawn::OnNetworkFail);
-				if (JoinAddress != "") PController->ClientTravel(JoinAddress, ETravelType::TRAVEL_Absolute);
+				if ( GI->SessionInterface->GetResolvedConnectString(SessionName , JoinAddress) )
+				{
+					UE_LOG(LogTemp , Warning , TEXT("Attempting to join Session %s with Address %s") , *SessionName.ToString() , *JoinAddress);
+
+					//OnlineIdentity->AddOnLoginCompleteDelegate_Handle(0 , FOnLoginComplete::FDelegate::CreateUObject(this , &ALoginPawn::OnLoginCompleted));
+					GEngine->OnNetworkFailure().AddUObject(this , &ALoginPawn::OnNetworkFail);
+					PController->ClientTravel(JoinAddress , ETravelType::TRAVEL_Absolute);
+				}
+				else
+				{
+					UE_LOG(LogTemp , Warning , TEXT("Failed to get Address %s with Session Name : %s") , *JoinAddress , *SessionName.ToString());
+					GI->SessionInterface->RemoveNamedSession(SessionName);
+				}
 			}
 			break;
 		}
