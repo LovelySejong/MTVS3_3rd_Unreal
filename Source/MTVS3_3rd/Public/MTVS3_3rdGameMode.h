@@ -34,9 +34,12 @@ public:
 	bool DebugGimmickEnable;
 
 	// 에디터 설정
-	
 	UPROPERTY(EditAnywhere, Category = "Default|Game");
 	int RequiredCount = 2;
+#pragma endregion
+
+#pragma region UI
+
 #pragma endregion
 
 #pragma region 방 체크
