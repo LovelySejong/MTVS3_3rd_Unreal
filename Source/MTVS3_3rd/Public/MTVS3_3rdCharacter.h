@@ -45,6 +45,9 @@ class AMTVS3_3rdCharacter : public ACharacter
 
 	UPROPERTY()
 	class AInteractionActor* CurrentActor;
+
+	UPROPERTY()
+	class AInteractionActor* OutlineActor;
 	
 public:
 	AMTVS3_3rdCharacter();
@@ -64,9 +67,17 @@ protected:
 	void Move(const FInputActionValue& Value);
 
 	/** Called for looking input */
+
 	void Look(const FInputActionValue& Value);
 
+	UFUNCTION(Server, Unreliable)
+	void ServerLook(FVector2D Axis);
+
+	UFUNCTION(NetMulticast, Unreliable)
+	void MulticastLook(FVector2D Axis);
+
 	void Interact(const FInputActionValue& Value);
+	
 	void InteractEnd(const FInputActionValue& Value);
 
 protected:
@@ -86,6 +97,12 @@ public:
 	/** Returns FirstPersonCameraComponent subobject **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
-	void SetCurrentActor(AInteractionActor* actor);
+	void SetCurrentActor(AInteractionActor* actor);\
+	void SetOutlineActor(AInteractionActor* actor);
+
+
+
+	UFUNCTION(Server, Unreliable)
+	void Server_ExampleSetOwner(AActor* InteractableActor);
 };
 

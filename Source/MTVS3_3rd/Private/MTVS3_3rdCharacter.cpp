@@ -40,6 +40,7 @@ AMTVS3_3rdCharacter::AMTVS3_3rdCharacter()
 	//Mesh1P->SetRelativeRotation(FRotator(0.9f, -19.19f, 5.2f));
 	Mesh1P->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
 
+	bUseControllerRotationPitch = false;
 }
 
 void AMTVS3_3rdCharacter::BeginPlay()
@@ -52,30 +53,48 @@ void AMTVS3_3rdCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
+	if (!IsLocallyControlled())
+		return ;
+	
 	FVector start = FirstPersonCameraComponent->GetComponentLocation();
 	FVector end = start + 1000.f * FirstPersonCameraComponent->GetForwardVector();
 	FHitResult res;
 
 	bool bHit = GetWorld()->LineTraceSingleByChannel(res, start, end, ECC_Visibility);
+	DrawDebugLine(GetWorld(), start, end, FColor::Red, false, 0.5f);
 	if (bHit)
 	{
+		
 		AInteractionActor* actor = Cast<AInteractionActor>(res.GetActor());
 		if (actor)
 		{
+			//UE_LOG(LogTemp, Warning, TEXT("From Tick: %s"), *actor->GetName());
 			if (CurrentActor != actor)
 			{
+				
+				Server_ExampleSetOwner(actor);
 				SetCurrentActor(actor);
-				CurrentActor->OnCursor();
+				SetOutlineActor(actor);
+				// SetCurrentActor(actor);
+				// CurrentActor->OnCursor();
 			}
 		}
 		else
 		{
+			Server_ExampleSetOwner(nullptr);
 			SetCurrentActor(nullptr);
+			SetOutlineActor(nullptr);
+
+			// SetCurrentActor(nullptr);
 		}
 	}
 	else
 	{
+		Server_ExampleSetOwner(nullptr);
 		SetCurrentActor(nullptr);
+		SetOutlineActor(nullptr);
+
+		// SetCurrentActor(nullptr);
 	}
 }
 
@@ -119,10 +138,42 @@ void AMTVS3_3rdCharacter::ResetPlayerInputComponent()
 
 void AMTVS3_3rdCharacter::SetCurrentActor(AInteractionActor* actor)
 {
-	if (CurrentActor)
-		CurrentActor->OffCursor();
 	CurrentActor = actor;
+
+	if(CurrentActor && HasAuthority())
+	{
+		CurrentActor->SetOwner(this);
+		UE_LOG(LogTemp, Warning, TEXT("Checking Owner: %s"), *CurrentActor->GetOwner()->GetName());
+	}
 }
+
+void AMTVS3_3rdCharacter::SetOutlineActor(AInteractionActor* actor)
+{
+	if (!IsLocallyControlled())
+		return ;
+	
+	if (OutlineActor)
+		OutlineActor->OffCursor();
+	OutlineActor = actor;
+
+	if(OutlineActor)
+	{
+		OutlineActor->OnCursor();
+	}
+}
+
+void AMTVS3_3rdCharacter::Server_ExampleSetOwner_Implementation(AActor* InteractableActor)
+{
+	SetCurrentActor(Cast<AInteractionActor>(InteractableActor));
+
+	if(FirstPersonCameraComponent && ENetRole::ROLE_AutonomousProxy == GetLocalRole())
+	{
+		ENetMode Mode = GetWorld()->GetNetMode();
+		UE_LOG(LogTemp,Warning, TEXT("[%s] Camera: %s"), Mode == NM_Client ? TEXT("CLIENT") : TEXT("SERVER"),
+			*GetNameSafe(FirstPersonCameraComponent));
+	}
+}
+
 
 
 void AMTVS3_3rdCharacter::Move(const FInputActionValue& Value)
@@ -140,10 +191,28 @@ void AMTVS3_3rdCharacter::Move(const FInputActionValue& Value)
 
 void AMTVS3_3rdCharacter::Look(const FInputActionValue& Value)
 {
-	if (cube)
-		return ;
-	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
+
+	// UE_LOG(LogTemp, Warning, TEXT("Look : %f %f"), LookAxisVector.X, LookAxisVector.Y);
+	// if (!HasAuthority())
+	// ServerLook(LookAxisVector);
+	// else
+	// {
+	// 	if (cube)
+	// 		return ;
+	// 	// input is a Vector2D
+	// 	UE_LOG(LogTemp, Warning, TEXT("ServerLook: %f %f"), LookAxisVector.X, LookAxisVector.Y);
+	//
+	// 	if (Controller != nullptr)
+	// 	{
+	// 		// add yaw and pitch input to controller
+	// 		AddControllerYawInput(LookAxisVector.X);
+	// 		AddControllerPitchInput(LookAxisVector.Y);
+	// 	}
+	// }
+
+	// input is a Vector2D
+	// UE_LOG(LogTemp, Warning, TEXT("ServerLook: %f %f"), LookAxisVector.X, LookAxisVector.Y);
 
 	if (Controller != nullptr)
 	{
@@ -151,12 +220,38 @@ void AMTVS3_3rdCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+	
+}
+
+void AMTVS3_3rdCharacter::ServerLook_Implementation(FVector2D Axis)
+{
+
+	if (cube)
+		return ;
+	// input is a Vector2D
+	// UE_LOG(LogTemp, Warning, TEXT("ServerLook: %f %f"), Axis.X, Axis.Y);
+
+	if (Controller != nullptr)
+	{
+		// add yaw and pitch input to controller
+		MulticastLook(Axis);
+	}
+}
+
+void AMTVS3_3rdCharacter::MulticastLook_Implementation(FVector2D Axis)
+{
+	// UE_LOG(LogTemp, Warning, TEXT("MultiLook: %f %f"), Axis.X, Axis.Y);
+
+	AddControllerYawInput(Axis.X);
+	AddControllerPitchInput(Axis.Y);
 }
 
 void AMTVS3_3rdCharacter::Interact(const FInputActionValue& Value)
 {
 	if (CurrentActor)
+	{
 		CurrentActor->Interact(this);
+	}
 }
 
 void AMTVS3_3rdCharacter::InteractEnd(const FInputActionValue& Value)
