@@ -11,6 +11,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "Engine/LocalPlayer.h"
+#include "HJ/HintWidget.h"
 
 // Sets default values
 AHJ_Player::AHJ_Player()
@@ -40,12 +41,15 @@ void AHJ_Player::BeginPlay()
 {
 	Super::BeginPlay();
 	
+#pragma region UI
+	InitHintUI();
+#pragma endregion
 }
 
 // Called to bind functionality to input
 void AHJ_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	// Set up action bindings
+	// Set up action bindingsI
 	if ( UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent) )
 	{
 		// Jumping
@@ -59,6 +63,18 @@ void AHJ_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 		EnhancedInputComponent->BindAction(LookAction , ETriggerEvent::Triggered , this , &AHJ_Player::Look);
 	}
 }
+
+#pragma region UI
+void AHJ_Player::InitHintUI()
+{
+	HintUI = CastChecked<UHintWidget>(CreateWidget(GetWorld() , HintUIFactory));
+	if ( HintUI )
+	{
+		HintUI->AddToViewport();
+		HintUI->SetActiveHintPanel(true);
+	}
+}
+#pragma endregion
 
 void AHJ_Player::Move(const FInputActionValue& Value)
 {

@@ -65,4 +65,12 @@ public:
 	/** Returns FirstPersonCameraComponent subobject **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
+#pragma region UI
+	UPROPERTY(EditAnywhere, Category = UI)
+	TSubclassOf<class UHintWidget> HintUIFactory;
+	UPROPERTY()
+	class UHintWidget* HintUI;
+
+	void InitHintUI();
+#pragma endregion
 };

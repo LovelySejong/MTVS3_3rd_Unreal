@@ -38,10 +38,6 @@ public:
 	int RequiredCount = 2;
 #pragma endregion
 
-#pragma region UI
-	//
-#pragma endregion
-
 #pragma region 방 체크
 	// 튜토리얼 끝, 문제방1 진입
 	void OnQuiz1Start();
