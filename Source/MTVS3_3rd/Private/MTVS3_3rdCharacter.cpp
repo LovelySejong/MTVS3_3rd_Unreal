@@ -61,7 +61,6 @@ void AMTVS3_3rdCharacter::Tick(float DeltaSeconds)
 	FHitResult res;
 
 	bool bHit = GetWorld()->LineTraceSingleByChannel(res, start, end, ECC_Visibility);
-	DrawDebugLine(GetWorld(), start, end, FColor::Red, false, 0.5f);
 	if (bHit)
 	{
 		
