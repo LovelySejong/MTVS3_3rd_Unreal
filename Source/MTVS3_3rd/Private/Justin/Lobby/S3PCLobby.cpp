@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Net/UnrealNetwork.h"
 #include "Justin/Lobby/S3LobbyGMBase.h"
+#include "Justin/S3GameInstance.h"
 
 AS3PCLobby::AS3PCLobby()
 {
@@ -71,7 +72,12 @@ void AS3PCLobby::Server_CheckCanStart_Implementation()
 	if ( GM && GM->IsReadyToPlay() )
 	{
 		UE_LOG(LogTemp , Warning , TEXT("Start Game!"));
-		GetWorld()->ServerTravel("/Game/LovelySejong/PlayLevel?listen");
+
+		auto GI = GetWorld()->GetGameInstance<US3GameInstance>();
+		if ( GI )
+		{
+			GI->StartSession();
+		}	
 	}
 	else UE_LOG(LogTemp , Warning , TEXT("Players not ready!"));
 }

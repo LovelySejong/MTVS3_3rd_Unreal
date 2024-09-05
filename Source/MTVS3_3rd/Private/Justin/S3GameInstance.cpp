@@ -6,6 +6,7 @@
 #include "OnlineSessionSettings.h"
 #include "Online/OnlineSessionNames.h"
 #include "Kismet/GameplayStatics.h"
+#include "GameFramework/PlayerState.h"
 
 US3GameInstance::US3GameInstance()
 {
@@ -47,6 +48,15 @@ void US3GameInstance::Shutdown()
 	Super::Shutdown();
 }
 
+void US3GameInstance::OnStartSessionComplete(FName SessionName, bool bWasSuccessful)
+{
+	if (bWasSuccessful)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Start Session Success! SessionName %s"), *SessionName.ToString());
+		GetWorld()->ServerTravel("/Game/LovelySejong/PlayLevel?listen");
+	}
+}
+
 void US3GameInstance::CreateServer()
 {
 	UE_LOG(LogTemp , Warning , TEXT("Creating session Start "));
@@ -63,8 +73,14 @@ void US3GameInstance::CreateServer()
 	SessionSettings.bShouldAdvertise = true;
 	SessionSettings.bUsesPresence = true;
 	SessionSettings.NumPublicConnections = 2;
+	SessionSettings.Set("sPRsaUKm" , FString("f2WT04QT") , EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+	//SessionSettings.BuildUniqueId = 123;
 
-	SessionInterface->CreateSession(0 , "Justin's Session" , SessionSettings);
+	ULocalPlayer* Local = GetWorld()->GetFirstLocalPlayerFromController();
+	FString Test = GetWorld()->GetFirstPlayerController()->PlayerState->GetUniqueId().ToString();
+	UE_LOG(LogTemp, Warning, TEXT("LocalPlayer: %s , PlayerState: %s"), *Local->GetPreferredUniqueNetId().ToString(), *Test); //Same Unique Id
+	SessionInterface->CreateSession(*Local->GetPreferredUniqueNetId(), "Justin's Session", SessionSettings);
+	//SessionInterface->CreateSession(0 , "Justin's Session" , SessionSettings);
 }
 
 void US3GameInstance::FindServer()
@@ -90,6 +106,15 @@ void US3GameInstance::JoinServer(int32 Index)
 	UE_LOG(LogTemp , Warning , TEXT("Joining Server %s") , *Results[Index].GetSessionIdStr());
 
 	SessionInterface->JoinSession(0 , "Justin's Session" , Results[Index]);
+}
+
+void US3GameInstance::StartSession()
+{
+	if (SessionInterface)
+	{
+		SessionInterface->OnStartSessionCompleteDelegates.AddUObject(this, &US3GameInstance::OnStartSessionComplete);
+		SessionInterface->StartSession("Justin's Session");
+	}
 }
 
 void US3GameInstance::DestroyServer()
