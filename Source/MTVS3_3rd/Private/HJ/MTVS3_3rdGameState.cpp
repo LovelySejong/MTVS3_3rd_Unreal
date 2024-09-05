@@ -11,9 +11,9 @@ AMTVS3_3rdGameState::AMTVS3_3rdGameState()
 	LeverStates.Add(3 , false);
 	LeverStates.Add(4 , false);
 
-	// 문제방4 상태 초기화 (키: 1~2, 값: 모두 false로 시작)
-	Q4GimmickStates.Add(1 , false);
-	Q4GimmickStates.Add(2 , false);
+	// 문제방4 상태 초기화 (키: 1~2, 값: 모두 false로 시작) / 주석 처리
+	//Q4GimmickStates.Add(1 , false);
+	//Q4GimmickStates.Add(2 , false);
 }
 
 #pragma region 방 체크
