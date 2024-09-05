@@ -7,6 +7,7 @@
 #include "GameFramework/PlayerState.h"
 #include "Interfaces/OnlineIdentityInterface.h"
 #include "OnlineSubsystem.h"
+#include "HJ/StartWidget.h"
 
 // Sets default values
 ALoginPawn::ALoginPawn()
@@ -37,10 +38,14 @@ void ALoginPawn::BeginPlay()
 	}
 }
 
-void ALoginPawn::StartConnection()
+void ALoginPawn::StartConnection(UStartWidget* _StartWidget)
 {
 	if ( GI )
 	{
+		StartWidget = _StartWidget;
+
+		StartWidget->SetActiveRoadingUI(true);
+
 		GI->SessionInterface->OnFindSessionsCompleteDelegates.Clear();
 		GI->SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this , &ALoginPawn::OnFindSessionsCompleted);
 		GI->FindServer();
@@ -168,13 +173,11 @@ void ALoginPawn::OnJoinSessionCompleted(FName SessionName , EOnJoinSessionComple
 		case EOnJoinSessionCompleteResult::SessionIsFull:
 		{
 			UE_LOG(LogTemp , Warning , TEXT("Session is Full"));
-
 			break;
 		}
 		case EOnJoinSessionCompleteResult::AlreadyInSession:
 		{
 			UE_LOG(LogTemp , Warning , TEXT("Already in session"));
-
 			break;
 		}
 		default:
@@ -206,6 +209,11 @@ void ALoginPawn::OnNetworkFail(UWorld* World , UNetDriver* Driver , ENetworkFail
 	{
 		UE_LOG(LogTemp , Warning , TEXT("Default - Failure type: [%s]") , ENetworkFailure::ToString(Type));
 	}
+	}
+
+	if ( StartWidget )
+	{
+		StartWidget->SetActiveConnectFailUI(true);
 	}
 }
 
