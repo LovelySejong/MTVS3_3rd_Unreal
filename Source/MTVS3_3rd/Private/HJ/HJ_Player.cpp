@@ -12,6 +12,7 @@
 #include "InputActionValue.h"
 #include "Engine/LocalPlayer.h"
 #include "HJ/HintWidget.h"
+#include "HJ/QuizWidget.h"
 
 // Sets default values
 AHJ_Player::AHJ_Player()
@@ -42,7 +43,7 @@ void AHJ_Player::BeginPlay()
 	Super::BeginPlay();
 	
 #pragma region UI
-	InitHintUI();
+	InitQuizHintUI();
 #pragma endregion
 }
 
@@ -65,7 +66,7 @@ void AHJ_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent
 }
 
 #pragma region UI
-void AHJ_Player::InitHintUI()
+void AHJ_Player::InitQuizHintUI()
 {
 	HintUI = CastChecked<UHintWidget>(CreateWidget(GetWorld() , HintUIFactory));
 	if ( HintUI )
@@ -73,7 +74,15 @@ void AHJ_Player::InitHintUI()
 		HintUI->AddToViewport();
 		HintUI->SetActiveHintPanel(false);
 	}
+
+	QuizUI = CastChecked<UQuizWidget>(CreateWidget(GetWorld() , QuizUIFactory));
+	if ( QuizUI )
+	{
+		QuizUI->AddToViewport();
+		QuizUI->SetActiveQuizPanel(false);
+	}
 }
+
 void AHJ_Player::UseHint()
 {
 	bIsHintActive = !bIsHintActive;
