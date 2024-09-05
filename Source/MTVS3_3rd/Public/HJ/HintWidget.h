@@ -14,9 +14,20 @@ class MTVS3_3RD_API UHintWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
+public:
 	UPROPERTY(meta = (BindWidget))
-	class UImage* Image_BG1;
+	class UCanvasPanel* HintPanel;
 
 	UPROPERTY(meta = (BindWidget))
-	class UImage* Image_Hint1;
+	class UButton* Button_Quit;
+
+	UFUNCTION()
+	void OnQuitButtonClicked();
+
+	UPROPERTY(meta = (BindWidget))
+	class UOverlay* Hint1;
+
+	void SetActiveHintPanel(bool value);
+
+	void SetActiveHint1(bool value);
 };

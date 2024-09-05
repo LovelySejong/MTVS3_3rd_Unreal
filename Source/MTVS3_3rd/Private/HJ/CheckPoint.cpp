@@ -5,7 +5,7 @@
 #include "Components/BoxComponent.h"
 #include "HJ/HJ_Player.h"
 #include "Components/StaticMeshComponent.h"
-#include "MTVS3_3rdGameMode.h"
+#include "HJ/MTVS3_3rdGameState.h"
 
 // Sets default values
 ACheckPoint::ACheckPoint()
@@ -57,39 +57,39 @@ void ACheckPoint::Tick(float DeltaTime)
 
 void ACheckPoint::OnMyBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent , AActor* OtherActor , UPrimitiveComponent* OtherComp , int32 OtherBodyIndex , bool bFromSweep , const FHitResult& SweepResult)
 {
-	auto* gm = CastChecked<AMTVS3_3rdGameMode>(GetWorld()->GetAuthGameMode());
+	auto* gs = GetWorld()->GetGameState<AMTVS3_3rdGameState>();
 	if ( OtherActor->IsA<AHJ_Player>() )
 	{
 		if ( this->ActorHasTag(FName("TutorialEnd")) )
 		{
 			this->Destroy();
-			gm->OnQuiz1Start();
+			gs->OnQuiz1Start();
 		}
 		else if ( this->ActorHasTag(FName("Quiz1End")) )
 		{
 			this->Destroy();
-			gm->OnQuiz2Start();
+			gs->OnQuiz2Start();
 		}
 		else if ( this->ActorHasTag(FName("Quiz2End")) )
 		{
 			this->Destroy();
 			// 문제 발생: 플레이어가 
-			gm->OnMeetingStart();
+			gs->OnMeetingStart();
 		}
 		else if ( this->ActorHasTag(FName("MeetingEnd")) )
 		{
 			this->Destroy();
-			gm->OnQuiz3Start();
+			gs->OnQuiz3Start();
 		}
 		else if ( this->ActorHasTag(FName("Quiz3End")) )
 		{
 			this->Destroy();
-			gm->OnQuiz4Start();
+			gs->OnQuiz4Start();
 		}
 		else if ( this->ActorHasTag(FName("Quiz4End")) )
 		{
 			this->Destroy();
-			gm->OnGameClear();
+			gs->OnGameClear();
 		}
 	}
 }

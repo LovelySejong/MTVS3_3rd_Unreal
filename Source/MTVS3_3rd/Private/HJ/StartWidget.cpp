@@ -12,12 +12,15 @@ void UStartWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 	SetActiveLoginUI(false);
+	SetActiveRoadingUI(false);
+	SetActiveConnectFailUI(false);
 
 	Button_Start->OnClicked.AddDynamic(this , &UStartWidget::OnStartButtonClicked);
 	Button_Quit->OnClicked.AddDynamic(this , &UStartWidget::OnQuitButtonClicked);
 	Button_SignIn->OnClicked.AddDynamic(this , &UStartWidget::OnSignInButtonClicked);
 	Button_SignUp->OnClicked.AddDynamic(this , &UStartWidget::OnSignUpButtonClicked);
 	Button_X->OnClicked.AddDynamic(this , &UStartWidget::OnXButtonClicked);
+	Button_FailQuit->OnClicked.AddDynamic(this , &UStartWidget::OnFailQuitButtonClicked);
 }
 
 void UStartWidget::OnStartButtonClicked()
@@ -64,5 +67,23 @@ void UStartWidget::OnSignUpButtonClicked()
 void UStartWidget::OnXButtonClicked()
 {
 	SetActiveLoginUI(false);
+}
+
+void UStartWidget::SetActiveRoadingUI(bool value)
+{
+	if ( value ) RoadingPanel->SetVisibility(ESlateVisibility::Visible);
+	else RoadingPanel->SetVisibility(ESlateVisibility::Hidden);
+}
+
+void UStartWidget::SetActiveConnectFailUI(bool value)
+{
+	if ( value ) ConnectFailPanel->SetVisibility(ESlateVisibility::Visible);
+	else ConnectFailPanel->SetVisibility(ESlateVisibility::Hidden);
+}
+
+void UStartWidget::OnFailQuitButtonClicked()
+{
+	FString mapName = UGameplayStatics::GetCurrentLevelName(GetWorld());
+	UGameplayStatics::OpenLevel(GetWorld() , FName(*mapName));
 }
 

@@ -3,8 +3,8 @@
 
 #include "HJ/CarpetActor.h"
 #include "Components/BoxComponent.h"
-#include "MTVS3_3rdGameMode.h"
 #include "HJ/HJ_Player.h"
+#include "HJ/MTVS3_3rdGameState.h"
 
 // Sets default values
 ACarpetActor::ACarpetActor()
@@ -44,32 +44,32 @@ void ACarpetActor::Tick(float DeltaTime)
 
 void ACarpetActor::OnMyBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent , AActor* OtherActor , UPrimitiveComponent* OtherComp , int32 OtherBodyIndex , bool bFromSweep , const FHitResult& SweepResult)
 {
-	auto* gm = CastChecked<AMTVS3_3rdGameMode>(GetWorld()->GetAuthGameMode());
+	auto* gs = GetWorld()->GetGameState<AMTVS3_3rdGameState>();
 	if ( OtherActor->IsA<AHJ_Player>() )
 	{
 		if ( this->ActorHasTag(FName("Carpet1")) ) // MEETING_ROOM의 Carpet1 체크
 		{
-			gm->CheckCarpet(1, 1);
+			gs->CheckCarpet(1, 1);
 		}
 		else if ( this->ActorHasTag(FName("Carpet2")) ) // QUIZ3_ROOM의 Carpet2 체크
 		{
-			gm->CheckCarpet(2, 1);
+			gs->CheckCarpet(2, 1);
 		}
 	}
 }
 
 void ACarpetActor::OnMyBoxEndOverlap(UPrimitiveComponent* OverlappedComponent , AActor* OtherActor , UPrimitiveComponent* OtherComp , int32 OtherBodyIndex)
 {
-	auto* gm = CastChecked<AMTVS3_3rdGameMode>(GetWorld()->GetAuthGameMode());
+	auto* gs = GetWorld()->GetGameState<AMTVS3_3rdGameState>();
 	if ( OtherActor->IsA<AHJ_Player>() )
 	{
 		if ( this->ActorHasTag(FName("Carpet1")) ) // MEETING_ROOM의 Carpet1 체크
 		{
-			gm->CheckCarpet(1, -1);
+			gs->CheckCarpet(1, -1);
 		}
 		else if ( this->ActorHasTag(FName("Carpet2")) ) // QUIZ3_ROOM의 Carpet2 체크
 		{
-			gm->CheckCarpet(2, -1);
+			gs->CheckCarpet(2, -1);
 		}
 	}
 }

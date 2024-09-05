@@ -27,22 +27,22 @@ void ALoginPawn::BeginPlay()
 		OnlineIdentity = SubSystem->GetIdentityInterface();
 	}
 
-	if (GI && GI->SessionInterface.IsValid())
+	if ( GI && GI->SessionInterface.IsValid() )
 	{
-		GI->SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &ALoginPawn::OnCreateSessionCompleted);
-		GI->SessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this, &ALoginPawn::OnJoinSessionCompleted);
-		GI->SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &ALoginPawn::OnDestroySessionComplete);
-		
+		GI->SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this , &ALoginPawn::OnCreateSessionCompleted);
+		GI->SessionInterface->OnJoinSessionCompleteDelegates.AddUObject(this , &ALoginPawn::OnJoinSessionCompleted);
+		GI->SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this , &ALoginPawn::OnDestroySessionComplete);
+
 		GI->SessionInterface->RemoveNamedSession("Justin's Session");
 	}
 }
 
 void ALoginPawn::StartConnection()
 {
-	if (GI)
+	if ( GI )
 	{
 		GI->SessionInterface->OnFindSessionsCompleteDelegates.Clear();
-		GI->SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &ALoginPawn::OnFindSessionsCompleted);
+		GI->SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this , &ALoginPawn::OnFindSessionsCompleted);
 		GI->FindServer();
 	}
 }
@@ -55,18 +55,18 @@ void ALoginPawn::Test_CreateSession()
 void ALoginPawn::Test_JoinSession()
 {
 	GI->SessionInterface->OnFindSessionsCompleteDelegates.Clear();
-	GI->SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &ALoginPawn::Test_OnFindSessionsCompleted);
+	GI->SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this , &ALoginPawn::Test_OnFindSessionsCompleted);
 	GI->FindServer();
 }
 
 void ALoginPawn::Test_OnFindSessionsCompleted(bool bWasSuccessful)
 {
-	if (GI)
+	if ( GI )
 	{
-		if (bWasSuccessful)
+		if ( bWasSuccessful )
 		{
 			TArray<FOnlineSessionSearchResult> Results = GI->SessionSearch->SearchResults;
-			UE_LOG(LogTemp, Warning, TEXT("Sessions %d"), Results.Num());
+			UE_LOG(LogTemp , Warning , TEXT("Sessions %d") , Results.Num());
 			if ( Results.Num() )
 			{
 				auto nice = GetPlayerState()->GetUniqueId();
@@ -79,67 +79,73 @@ void ALoginPawn::Test_OnFindSessionsCompleted(bool bWasSuccessful)
 
 void ALoginPawn::OnFindSessionsCompleted(bool bWasSuccessful)
 {
-	if (GI)
+	if ( GI )
 	{
-		if (bWasSuccessful)
+		if ( bWasSuccessful )
 		{
 			TArray<FOnlineSessionSearchResult> Results = GI->SessionSearch->SearchResults;
-			UE_LOG(LogTemp, Warning, TEXT("Sessions %d"), Results.Num());
-			if (Results.Num() != 0)
+			UE_LOG(LogTemp , Warning , TEXT("Sessions %d") , Results.Num());
+			if ( Results.Num() != 0 )
 			{
 				bool bJoiningServer = false;
-				for (int i = 0; i < Results.Num(); ++i)
+				for ( int i = 0; i < Results.Num(); ++i )
 				{
-					UE_LOG(LogTemp, Warning, TEXT("OwningUserName %s"), *Results[i].Session.OwningUserName);
+					UE_LOG(LogTemp , Warning , TEXT("OwningUserName %s") , *Results[i].Session.OwningUserName);
 					//UE_LOG(LogTemp , Warning , TEXT("OwningUserName %s") , *Results[i].Session.SessionInfo);
 
 					int32 AvailablePublicSpots = Results[i].Session.NumOpenPublicConnections;
 					int32 MaxPublicSpots = Results[i].Session.SessionSettings.NumPublicConnections;
 					int32 AvailablePrivateSpots = Results[i].Session.NumOpenPrivateConnections;
 					int32 MaxPrivateSpots = Results[i].Session.SessionSettings.NumPrivateConnections;
-					UE_LOG(LogTemp, Warning, TEXT("NumOpenPublicConnections %d"), AvailablePublicSpots);
-					UE_LOG(LogTemp, Warning, TEXT("NumPublicConnections %d"), MaxPublicSpots);
-					UE_LOG(LogTemp, Warning, TEXT("NumOpenPrivateConnections %d"), AvailablePrivateSpots);
-					UE_LOG(LogTemp, Warning, TEXT("NumPrivateConnections %d"), MaxPrivateSpots);
-					UE_LOG(LogTemp, Warning, TEXT("Im inside OnFindSessionCompleted, %s"), *GetPlayerState()->GetUniqueId().ToString());
-					UE_LOG(LogTemp, Warning, TEXT("----------------------------"));
+					UE_LOG(LogTemp , Warning , TEXT("NumOpenPublicConnections %d") , AvailablePublicSpots);
+					UE_LOG(LogTemp , Warning , TEXT("NumPublicConnections %d") , MaxPublicSpots);
+					UE_LOG(LogTemp , Warning , TEXT("NumOpenPrivateConnections %d") , AvailablePrivateSpots);
+					UE_LOG(LogTemp , Warning , TEXT("NumPrivateConnections %d") , MaxPrivateSpots);
+					UE_LOG(LogTemp , Warning , TEXT("Im inside OnFindSessionCompleted, %s") , *GetPlayerState()->GetUniqueId().ToString());
+					UE_LOG(LogTemp , Warning , TEXT("----------------------------"));
 
-					if (AvailablePublicSpots <= 0) continue;
+					if ( AvailablePublicSpots <= 0 ) continue;
 
-					GI->JoinServer(i);
-					bJoiningServer = true;
-					break;
+					FString MatchType;
+					Results[i].Session.SessionSettings.Get(FName("sPRsaUKm") , MatchType);
+					if ( MatchType == FString("f2WT04QT") )
+					{
+						UE_LOG(LogTemp , Warning , TEXT("SessionSearch result MatchType: %s") , *MatchType);
+						GI->JoinServer(i);
+						bJoiningServer = true;
+						break;
+					}
 				}
-				if (!bJoiningServer) GI->CreateServer();
+				if ( !bJoiningServer ) GI->CreateServer();
 			}
 			else GI->CreateServer();
 		}
-		else UE_LOG(LogTemp, Warning, TEXT("Find Session Unsuccessful"));
+		else UE_LOG(LogTemp , Warning , TEXT("Find Session Unsuccessful"));
 	}
 }
 
-void ALoginPawn::OnCreateSessionCompleted(FName SessionName, bool bWasSuccessful)
+void ALoginPawn::OnCreateSessionCompleted(FName SessionName , bool bWasSuccessful)
 {
-	if (bWasSuccessful)
+	if ( bWasSuccessful )
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Create Session successful"));
-		GetWorld()->ServerTravel(TEXT("/Game/Justin/Lobby/LobbyLevel?listen")); //Matchmaking Test Level
+		UE_LOG(LogTemp , Warning , TEXT("Create Session successful"));
+		GetWorld()->ServerTravel(TEXT("/Game/LovelySejong/MatchingLevel?listen")); //Matchmaking Test Level
 		//GetWorld()->ServerTravel(TEXT("/Game/Justin/VoiceChat/Level_VoiceChatTest?listen")); //Voice Chat Test Level
 	}
-	else UE_LOG(LogTemp, Warning, TEXT("Create Session Unsuccessful"));
+	else UE_LOG(LogTemp , Warning , TEXT("Create Session Unsuccessful"));
 }
 
-void ALoginPawn::OnJoinSessionCompleted(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
+void ALoginPawn::OnJoinSessionCompleted(FName SessionName , EOnJoinSessionCompleteResult::Type Result)
 {
-	if (GI)
+	if ( GI )
 	{
-		UE_LOG(LogTemp, Warning, TEXT("OnJoinSessionComplete"));
+		UE_LOG(LogTemp , Warning , TEXT("OnJoinSessionComplete"));
 
-		switch (Result)
+		switch ( Result )
 		{
 		case EOnJoinSessionCompleteResult::Success:
 		{
-			if (APlayerController* PController = UGameplayStatics::GetPlayerController(GetWorld(), 0))
+			if ( APlayerController* PController = UGameplayStatics::GetPlayerController(GetWorld() , 0) )
 			{
 				FString JoinAddress;
 
@@ -161,19 +167,19 @@ void ALoginPawn::OnJoinSessionCompleted(FName SessionName, EOnJoinSessionComplet
 		}
 		case EOnJoinSessionCompleteResult::SessionIsFull:
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Session is Full"));
+			UE_LOG(LogTemp , Warning , TEXT("Session is Full"));
 
 			break;
 		}
 		case EOnJoinSessionCompleteResult::AlreadyInSession:
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Already in session"));
+			UE_LOG(LogTemp , Warning , TEXT("Already in session"));
 
 			break;
 		}
 		default:
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Default join result"));
+			UE_LOG(LogTemp , Warning , TEXT("Default join result"));
 			break;
 		}
 		}
@@ -185,33 +191,33 @@ void ALoginPawn::OnLoginCompleted(int32 LocalUserNum , bool bWasSuccessful , con
 	UE_LOG(LogTemp , Warning , TEXT("[%s]Error: %s") , *UserId.ToString() , *Error);
 }
 
-void ALoginPawn::OnNetworkFail(UWorld* World, UNetDriver* Driver, ENetworkFailure::Type Type, const FString& Error)
+void ALoginPawn::OnNetworkFail(UWorld* World , UNetDriver* Driver , ENetworkFailure::Type Type , const FString& Error)
 {
 	UE_LOG(LogTemp , Warning , TEXT("OnNetworkFail in LoginPawn"));
 	switch ( Type )
 	{
-		case ENetworkFailure::PendingConnectionFailure:
-		{
-			UE_LOG(LogTemp , Warning , TEXT("Failed to join Session: Max Players"));
-			if ( GI ) GI->SessionInterface->RemoveNamedSession("Justin's Session");
-			break;
-		}
-		default:
-		{
-			UE_LOG(LogTemp , Warning , TEXT("Default - Failure type: [%s]") , ENetworkFailure::ToString(Type));
-		}
+	case ENetworkFailure::PendingConnectionFailure:
+	{
+		UE_LOG(LogTemp , Warning , TEXT("Failed to join Session: Max Players"));
+		if ( GI ) GI->SessionInterface->RemoveNamedSession("Justin's Session");
+		break;
+	}
+	default:
+	{
+		UE_LOG(LogTemp , Warning , TEXT("Default - Failure type: [%s]") , ENetworkFailure::ToString(Type));
+	}
 	}
 }
 
-void ALoginPawn::OnDestroySessionComplete(FName SessionName, bool bWasSuccessful)
+void ALoginPawn::OnDestroySessionComplete(FName SessionName , bool bWasSuccessful)
 {
-	if (bWasSuccessful)
+	if ( bWasSuccessful )
 	{
-		UE_LOG(LogTemp, Warning, TEXT("OnDestroySessionComplete Success -- %s"), *SessionName.ToString());
+		UE_LOG(LogTemp , Warning , TEXT("OnDestroySessionComplete Success -- %s") , *SessionName.ToString());
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("OnDestroySessionComplete Fail"));
+		UE_LOG(LogTemp , Warning , TEXT("OnDestroySessionComplete Fail"));
 	}
 }
 

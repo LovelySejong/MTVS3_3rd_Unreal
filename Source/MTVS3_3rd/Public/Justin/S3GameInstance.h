@@ -30,11 +30,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void JoinServer(int32 Index);
 	UFUNCTION(BlueprintCallable)
+	void StartSession();
+	UFUNCTION(BlueprintCallable)
 	void DestroyServer();
 
 protected:
 	virtual void Init() override;
 	virtual void Shutdown() override;
+
+	void OnStartSessionComplete(FName SessionName, bool bWasSuccessful);
 private:
 	float MaxTime = 2.f;
 	float TotalTime = 0.f;

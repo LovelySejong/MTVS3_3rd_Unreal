@@ -19,7 +19,7 @@ class MTVS3_3RD_API AS3LobbyGMBase : public AGameModeBase
 	
 public:
 	AS3LobbyGMBase();
-	virtual void PreLogin(const FString& Options , const FString& Address , const FUniqueNetIdRepl& UniqueId , FString& ErrorMessage) override;
+	//virtual void PreLogin(const FString& Options , const FString& Address , const FUniqueNetIdRepl& UniqueId , FString& ErrorMessage) override;
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 	virtual void Logout(AController* Exiting) override;
 

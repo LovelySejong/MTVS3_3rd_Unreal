@@ -11,21 +11,22 @@ AS3LobbyGMBase::AS3LobbyGMBase()
 {
 	bHasHost = false;
 	bIsFull = false;
+	
 }
 
-void AS3LobbyGMBase::PreLogin(const FString& Options , const FString& Address , const FUniqueNetIdRepl& UniqueId , FString& ErrorMessage)
-{
-	if ( !bIsFull )
-	{
-		UE_LOG(LogTemp , Warning , TEXT("Login success %s") , *UniqueId.ToString());
-		Super::PreLogin(Options , Address , UniqueId , ErrorMessage);
-	}
-	else
-	{
-		ErrorMessage = TEXT("Server is full. Try again later.");
-		UE_LOG(LogTemp , Warning , TEXT("Login Failed %s") , *UniqueId.ToString());
-	}
-}
+//void AS3LobbyGMBase::PreLogin(const FString& Options , const FString& Address , const FUniqueNetIdRepl& UniqueId , FString& ErrorMessage)
+//{
+//	if ( !bIsFull )
+//	{
+//		UE_LOG(LogTemp , Warning , TEXT("Login success %s") , *UniqueId.ToString());
+//		Super::PreLogin(Options , Address , UniqueId , ErrorMessage);
+//	}
+//	else
+//	{
+//		ErrorMessage = TEXT("Server is full. Try again later.");
+//		UE_LOG(LogTemp , Warning , TEXT("Login Failed %s") , *UniqueId.ToString());
+//	}
+//}
 
 void AS3LobbyGMBase::PostLogin(APlayerController* NewPlayer)
 {
@@ -38,6 +39,7 @@ void AS3LobbyGMBase::PostLogin(APlayerController* NewPlayer)
 		if ( PC )
 		{
 			PC->AddPlayer();
+			bUseSeamlessTravel = true;
 		}
 		else UE_LOG(LogTemp , Warning , TEXT("ERROR"));
 	}
@@ -59,6 +61,7 @@ void AS3LobbyGMBase::Logout(AController* Exiting)
 			PC = Cast<AS3PCLobby>(HostPC);
 			PC->RemovePlayer();
 			bIsFull = false;
+			bUseSeamlessTravel = false;
 		}
 	}
 
