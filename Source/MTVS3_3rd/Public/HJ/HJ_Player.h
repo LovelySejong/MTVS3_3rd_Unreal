@@ -79,7 +79,10 @@ public:
 	void InitQuizHintUI();
 
 	bool bIsHintActive = false;
+
 	UFUNCTION(BlueprintCallable)
 	void UseHint();
+	UFUNCTION(BlueprintCallable)
+	void UseQuiz(int num);
 #pragma endregion
 };

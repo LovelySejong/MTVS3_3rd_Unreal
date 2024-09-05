@@ -19,6 +19,9 @@ public:
 	class UCanvasPanel* QuizPanel;
 
 	UPROPERTY(meta = (BindWidget))
+	class UButton* Btn_Black;
+
+	UPROPERTY(meta = (BindWidget))
 	class UOverlay* Quiz1;
 
 	UPROPERTY(meta = (BindWidget))
@@ -46,4 +49,7 @@ public:
 	void SetActiveQuizPanel(bool value, int num);
 
 	void SetAllQuizzesInactive();
+
+	UFUNCTION()
+	void OnBlackButtonClicked();
 };

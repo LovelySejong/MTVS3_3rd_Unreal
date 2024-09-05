@@ -88,6 +88,11 @@ void AHJ_Player::UseHint()
 	bIsHintActive = !bIsHintActive;
 	HintUI->SetActiveHintPanel(bIsHintActive);
 }
+
+void AHJ_Player::UseQuiz(int num)
+{
+	QuizUI->SetActiveQuizPanel(true, num);
+}
 #pragma endregion
 
 void AHJ_Player::Move(const FInputActionValue& Value)

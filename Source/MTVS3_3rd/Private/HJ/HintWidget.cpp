@@ -13,9 +13,6 @@ void UHintWidget::SetActiveHintPanel(bool value)
 	{
 		HintPanel->SetVisibility(ESlateVisibility::Visible);
 		SetAllHintsInactive();
-		//auto* pc = GetWorld()->GetFirstPlayerController();
-		//pc->SetInputMode(FInputModeUIOnly());
-		//pc->SetShowMouseCursor(true);
 
 		auto* gs = GetWorld()->GetGameState<AMTVS3_3rdGameState>();
 		if ( !gs ) return;
@@ -47,9 +44,6 @@ void UHintWidget::SetActiveHintPanel(bool value)
 	else
 	{
 		HintPanel->SetVisibility(ESlateVisibility::Hidden);
-		//auto* pc = GetWorld()->GetFirstPlayerController();
-		//pc->SetInputMode(FInputModeGameOnly());
-		//pc->SetShowMouseCursor(false);
 	}
 }
 
