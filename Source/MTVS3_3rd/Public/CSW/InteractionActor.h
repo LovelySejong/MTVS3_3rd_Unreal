@@ -34,4 +34,7 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void InteractEnd();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ForceOpen();
 };

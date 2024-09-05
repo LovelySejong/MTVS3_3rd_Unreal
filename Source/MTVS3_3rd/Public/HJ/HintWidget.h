@@ -19,15 +19,22 @@ public:
 	class UCanvasPanel* HintPanel;
 
 	UPROPERTY(meta = (BindWidget))
-	class UButton* Button_Quit;
-
-	UFUNCTION()
-	void OnQuitButtonClicked();
-
-	UPROPERTY(meta = (BindWidget))
 	class UOverlay* Hint1;
 
+	UPROPERTY(meta = (BindWidget))
+	class UOverlay* Hint2;
+
+	UPROPERTY(meta = (BindWidget))
+	class UOverlay* HintMeeting;
+
+	UPROPERTY(meta = (BindWidget))
+	class UOverlay* Hint3;
+
+	UPROPERTY(meta = (BindWidget))
+	class UOverlay* Hint4;
+
+	UFUNCTION(BlueprintCallable)
 	void SetActiveHintPanel(bool value);
 
-	void SetActiveHint1(bool value);
+	void SetAllHintsInactive();
 };
