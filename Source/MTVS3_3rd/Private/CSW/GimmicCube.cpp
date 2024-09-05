@@ -8,6 +8,9 @@
 #include "MTVS3_3rdCharacter.h"
 #include "Blueprint/UserWidget.h"
 
+#include "GameFramework/GameStateBase.h"
+#include "GameFramework/PlayerState.h"
+
 // Sets default values
 AGimmicCube::AGimmicCube()
 {
@@ -33,6 +36,8 @@ void AGimmicCube::Tick(float DeltaTime)
 void AGimmicCube::InteractCube(AMTVS3_3rdCharacter* character)
 {
 	this->Character = character;
+	/*if (!character->IsLocallyControlled())
+		return ;*/
 	if (APlayerController* PlayerController = Cast<APlayerController>(Character->GetController()))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
@@ -50,8 +55,8 @@ void AGimmicCube::InteractCube(AMTVS3_3rdCharacter* character)
 		}
 	}
 
-	if (CubeWidget)
-		CubeWidget->AddToViewport();
+	// if (CubeWidget)
+	// 	CubeWidget->AddToViewport();
 }
 
 
@@ -60,6 +65,7 @@ void AGimmicCube::Drag(const FInputActionValue& Value)
 {
 	FVector2D DragAxisVector = Value.Get<FVector2D>();
 
+	UE_LOG(LogTemp, Warning, TEXT("Drag: %d"), bPress);
 	if (bPress)
 	{
 		X = DragAxisVector.X;
@@ -70,12 +76,17 @@ void AGimmicCube::Drag(const FInputActionValue& Value)
 		X = 0;
 		Y = 0;
 	}
-		
+	
 }
 
 void AGimmicCube::Press(const FInputActionValue& Value)
 {
 	bPress = true;
+	TArray<APlayerState*> States = GetWorld()->GetGameState()->PlayerArray;
+	for(int i = 0; i < States.Num(); ++i)
+	{
+		UE_LOG(LogTemp,Warning, TEXT("[%d]Unique Id: %s"), i, *States[i]->GetUniqueId().ToString());
+	}
 }
 
 void AGimmicCube::Release(const FInputActionValue& Value)
@@ -98,8 +109,9 @@ void AGimmicCube::Close(const FInputActionValue& Value)
 		}
 	}
 	// Character->ResetPlayerInputComponent();
-	if (CubeWidget)
-		CubeWidget->RemoveFromParent();
+	// if (CubeWidget)
+	// 	CubeWidget->RemoveFromParent();
+	InteractCubeEnd();
 }
 
 

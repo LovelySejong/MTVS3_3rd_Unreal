@@ -12,18 +12,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3eed5c52-cdfd-4ebd-b988-ad429b4f78b1" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MTVS3_3rd/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MTVS3_3rd/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_DialNumber.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_DialNumber.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_DialPad.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_DialPad.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_Door.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_Door.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_GrabbedActor.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_GrabbedActor.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_NumCube.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_NumCube.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_RotDial.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_RotDial.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_RotDialPad.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_RotDialPad.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_Switch.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_Switch.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/UI/WBP_CubeRotation.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Blueprints/UI/WBP_CubeRotation.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/CSW/CSW_Map.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/CSW_Map.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/FirstPerson/Blueprints/BP_FirstPersonCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/FirstPerson/Blueprints/BP_FirstPersonCharacter.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/CSW/Maps/CSW_Proto.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Maps/CSW_Proto.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/CSW/Materials/M_Cube.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Materials/M_Cube.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/KMJ/Whitebox_Short/Objects/Bucket/Bucket_wooden_bucket_01.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/KMJ/Whitebox_Short/Objects/Bucket/Bucket_wooden_bucket_01.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/KMJ/Whitebox_Short/Objects/Fish/source/fish/fish.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/KMJ/Whitebox_Short/Objects/Fish/source/fish/fish.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/MTVS3_3rd/Private/CSW/GimmicCube.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MTVS3_3rd/Private/CSW/GimmicCube.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/MTVS3_3rd/Private/MTVS3_3rdCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MTVS3_3rd/Private/MTVS3_3rdCharacter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/MTVS3_3rd/Public/MTVS3_3rdCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MTVS3_3rd/Public/MTVS3_3rdCharacter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/MTVS3_3rd/Public/CSW/GimmicCube.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MTVS3_3rd/Public/CSW/GimmicCube.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/MTVS3_3rd/Public/CSW/InteractionActor.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MTVS3_3rd/Public/CSW/InteractionActor.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -533,6 +540,8 @@
       <workItem from="1725420312396" duration="2101000" />
       <workItem from="1725422443213" duration="490000" />
       <workItem from="1725425210968" duration="1413000" />
+      <workItem from="1725502509601" duration="2782000" />
+      <workItem from="1725513021587" duration="5119000" />
     </task>
     <servers />
   </component>

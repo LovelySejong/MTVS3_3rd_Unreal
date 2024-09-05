@@ -27,6 +27,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void InteractCube(AMTVS3_3rdCharacter* Character);
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void InteractCubeEnd();
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	float X;
 
@@ -60,6 +63,8 @@ private:
 	void Press(const struct FInputActionValue& Value);
 	void Release(const struct FInputActionValue& Value);
 	void Close(const struct FInputActionValue& Value);
+
+	
 	
 	bool bPress;
 };
