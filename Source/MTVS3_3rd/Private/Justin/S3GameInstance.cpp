@@ -48,15 +48,6 @@ void US3GameInstance::Shutdown()
 	Super::Shutdown();
 }
 
-void US3GameInstance::OnStartSessionComplete(FName SessionName, bool bWasSuccessful)
-{
-	if (bWasSuccessful)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Start Session Success! SessionName %s"), *SessionName.ToString());
-		GetWorld()->ServerTravel("/Game/LovelySejong/PlayLevel?listen");
-	}
-}
-
 void US3GameInstance::CreateServer()
 {
 	UE_LOG(LogTemp , Warning , TEXT("Creating session Start "));
@@ -114,6 +105,15 @@ void US3GameInstance::StartSession()
 	{
 		SessionInterface->OnStartSessionCompleteDelegates.AddUObject(this, &US3GameInstance::OnStartSessionComplete);
 		SessionInterface->StartSession("Justin's Session");
+	}
+}
+
+void US3GameInstance::OnStartSessionComplete(FName SessionName , bool bWasSuccessful)
+{
+	if ( bWasSuccessful )
+	{
+		UE_LOG(LogTemp , Warning , TEXT("Start Session Success! SessionName %s") , *SessionName.ToString());
+		GetWorld()->ServerTravel("/Game/LovelySejong/PlayLevel?listen");
 	}
 }
 

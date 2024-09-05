@@ -50,9 +50,9 @@ void AS3PCLobby::RemovePlayer()
 {
 	if ( bIsHost && LobbyWidget )
 	{
-		LobbyWidget->RemovePlayer();
 		bIsReady = false;
-		if(HasAuthority() ) OnRep_bIsReady();
+		if ( HasAuthority() ) OnRep_bIsReady();
+		LobbyWidget->RemovePlayer();		
 	}
 }
 

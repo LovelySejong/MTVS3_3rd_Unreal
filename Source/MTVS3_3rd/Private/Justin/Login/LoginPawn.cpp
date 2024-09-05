@@ -129,7 +129,7 @@ void ALoginPawn::OnCreateSessionCompleted(FName SessionName , bool bWasSuccessfu
 	if ( bWasSuccessful )
 	{
 		UE_LOG(LogTemp , Warning , TEXT("Create Session successful"));
-		GetWorld()->ServerTravel(TEXT("/Game/Justin/Lobby/LobbyLevel?listen")); //Matchmaking Test Level
+		GetWorld()->ServerTravel(TEXT("/Game/LovelySejong/MatchingLevel?listen")); //Matchmaking Test Level
 		//GetWorld()->ServerTravel(TEXT("/Game/Justin/VoiceChat/Level_VoiceChatTest?listen")); //Voice Chat Test Level
 	}
 	else UE_LOG(LogTemp , Warning , TEXT("Create Session Unsuccessful"));
