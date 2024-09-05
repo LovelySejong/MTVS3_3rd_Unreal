@@ -16,6 +16,8 @@ class MTVS3_3RD_API UStartWidget : public UUserWidget
 
 public:
 	void NativeConstruct() override;
+
+	// 시작
 	UPROPERTY(meta=(BindWidget))
 	class UCanvasPanel* StartPanel;
 	
@@ -31,6 +33,7 @@ public:
 	UFUNCTION()
 	void OnQuitButtonClicked();
 
+	// 로그인
 	UPROPERTY(meta=(BindWidget))
 	class UCanvasPanel* LoginPanel;
 
@@ -53,4 +56,22 @@ public:
 
 	UFUNCTION()
 	void OnXButtonClicked();
+
+	// 로딩
+	UPROPERTY(meta=(BindWidget))
+	class UCanvasPanel* RoadingPanel;
+
+	void SetActiveRoadingUI(bool value);
+	
+	// 연결 실패
+	UPROPERTY(meta=(BindWidget))
+	class UCanvasPanel* ConnectFailPanel;
+
+	void SetActiveConnectFailUI(bool value);
+
+	UPROPERTY(meta=(BindWidget))
+	class UButton* Button_FailQuit;
+
+	UFUNCTION()
+	void OnFailQuitButtonClicked();
 };

@@ -71,7 +71,7 @@ void AHJ_Player::InitHintUI()
 	if ( HintUI )
 	{
 		HintUI->AddToViewport();
-		HintUI->SetActiveHintPanel(true);
+		HintUI->SetActiveHintPanel(false);
 	}
 }
 #pragma endregion
