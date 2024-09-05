@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -14,4 +14,36 @@ class MTVS3_3RD_API UQuizWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
+public:
+	UPROPERTY(meta = (BindWidget))
+	class UCanvasPanel* QuizPanel;
+
+	UPROPERTY(meta = (BindWidget))
+	class UOverlay* Quiz1;
+
+	UPROPERTY(meta = (BindWidget))
+	class UOverlay* Quiz2;
+
+	UPROPERTY(meta = (BindWidget))
+	class UOverlay* Quiz3;
+
+	UPROPERTY(meta = (BindWidget))
+	class UOverlay* Quiz4;
+
+	UPROPERTY(meta = (BindWidget))
+	class UOverlay* Quiz5;
+
+	UPROPERTY(meta = (BindWidget))
+	class UOverlay* Quiz6;
+
+	UPROPERTY(meta = (BindWidget))
+	class UOverlay* Quiz7;
+
+	UPROPERTY(meta = (BindWidget))
+	class UOverlay* Quiz8;
+
+	UFUNCTION(BlueprintCallable)
+	void SetActiveQuizPanel(bool value, int num);
+
+	void SetAllQuizzesInactive();
 };

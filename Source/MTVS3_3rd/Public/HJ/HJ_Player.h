@@ -71,7 +71,12 @@ public:
 	UPROPERTY()
 	class UHintWidget* HintUI;
 
-	void InitHintUI();
+	UPROPERTY(EditAnywhere, Category = "Default|UI")
+	TSubclassOf<class UQuizWidget> QuizUIFactory;
+	UPROPERTY()
+	class UQuizWidget* QuizUI;
+
+	void InitQuizHintUI();
 
 	bool bIsHintActive = false;
 	UFUNCTION(BlueprintCallable)
