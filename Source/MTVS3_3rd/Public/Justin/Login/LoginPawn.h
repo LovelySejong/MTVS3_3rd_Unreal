@@ -9,6 +9,7 @@
 #include "LoginPawn.generated.h"
 
 class US3GameInstance;
+class UStartWidget;
 
 UCLASS()
 class MTVS3_3RD_API ALoginPawn : public APawn
@@ -20,7 +21,7 @@ public:
 	ALoginPawn();
 
 	UFUNCTION(BlueprintCallable)
-	void StartConnection();
+	void StartConnection(UStartWidget* _StartWidget);
 
 protected:
 	// Called when the game starts or when spawned
@@ -46,4 +47,5 @@ private:
 	void OnNetworkFail(UWorld* World , UNetDriver* Driver , ENetworkFailure::Type Type , const FString& Error);
 	TObjectPtr<US3GameInstance> GI;
 	int32 ResultIndex;
+	TObjectPtr<UStartWidget> StartWidget;
 };
