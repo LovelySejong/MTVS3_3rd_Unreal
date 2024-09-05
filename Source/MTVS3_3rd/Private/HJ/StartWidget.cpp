@@ -53,7 +53,7 @@ void UStartWidget::OnSignInButtonClicked()
 	auto Pawn = GetOwningPlayerPawn<ALoginPawn>();
 	if ( Pawn )
 	{
-		Pawn->StartConnection();
+		Pawn->StartConnection(this);
 	}
 	//else ask user to sign in	
 }
