@@ -55,6 +55,9 @@ public:
 	ERoomState State = ERoomState::TUTORIAL_ROOM;
 	void SetState(ERoomState NextState);
 
+	UFUNCTION(BlueprintCallable, Category = "GameState")
+    ERoomState GetCurrentRoomState() const { return State; }
+
 	// 개인 진행되는 문제방1,2 클리어 카운트
 	// RequiredCount와 같은 값이 되면 클리어 인정
 	UPROPERTY(VisibleAnywhere, Category = "Default|Game")

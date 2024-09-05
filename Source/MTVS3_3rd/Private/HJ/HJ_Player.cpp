@@ -74,6 +74,11 @@ void AHJ_Player::InitHintUI()
 		HintUI->SetActiveHintPanel(false);
 	}
 }
+void AHJ_Player::UseHint()
+{
+	bIsHintActive = !bIsHintActive;
+	HintUI->SetActiveHintPanel(bIsHintActive);
+}
 #pragma endregion
 
 void AHJ_Player::Move(const FInputActionValue& Value)

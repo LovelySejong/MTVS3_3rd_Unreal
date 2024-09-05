@@ -66,11 +66,15 @@ public:
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
 #pragma region UI
-	UPROPERTY(EditAnywhere, Category = UI)
+	UPROPERTY(EditAnywhere, Category = "Default|UI")
 	TSubclassOf<class UHintWidget> HintUIFactory;
 	UPROPERTY()
 	class UHintWidget* HintUI;
 
 	void InitHintUI();
+
+	bool bIsHintActive = false;
+	UFUNCTION(BlueprintCallable)
+	void UseHint();
 #pragma endregion
 };
