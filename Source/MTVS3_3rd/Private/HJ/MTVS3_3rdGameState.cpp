@@ -142,23 +142,26 @@ void AMTVS3_3rdGameState::CheckLever(int num , bool bIsCorrect)
 		MovingDownCarpet();
 	}
 }
-void AMTVS3_3rdGameState::CheckQuiz4(int num , bool bIsCorrect)
-{
-	// 모든 기믹이 정답인지 확인
-	bool bAllCorrect = true;
-	for ( const TPair<int , bool>& Pair : Q4GimmickStates )
-	{
-		if ( !Pair.Value )
-		{
-			bAllCorrect = false;
-			break;
-		}
-	}
+#pragma endregion
 
-	if ( bAllCorrect )
-	{
-		UE_LOG(LogTemp , Log , TEXT("Game Clear"));
-		// 엔딩방 문 열기
-	}
-}
+#pragma region 문제방4(주석 처리)
+//void AMTVS3_3rdGameState::CheckQuiz4(int num , bool bIsCorrect)
+//{
+//	// 모든 기믹이 정답인지 확인
+//	bool bAllCorrect = true;
+//	for ( const TPair<int , bool>& Pair : Q4GimmickStates )
+//	{
+//		if ( !Pair.Value )
+//		{
+//			bAllCorrect = false;
+//			break;
+//		}
+//	}
+//
+//	if ( bAllCorrect )
+//	{
+//		UE_LOG(LogTemp , Log , TEXT("Game Clear"));
+//		// 엔딩방 문 열기
+//	}
+//}
 #pragma endregion

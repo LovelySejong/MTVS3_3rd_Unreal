@@ -86,7 +86,7 @@ public:
 #pragma endregion
 
 #pragma region 문제방4
-	TMap<int , bool> Q4GimmickStates;  // 문제방4 기믹의 키와 상태를 저장하는 TMap
-	void CheckQuiz4(int num , bool bIsCorrect);
-#pragma endregion
+	//TMap<int , bool> Q4GimmickStates;  // 문제방4 기믹의 키와 상태를 저장하는 TMap
+	//void CheckQuiz4(int num , bool bIsCorrect);
+#pragma endregion(주석 처리)
 };
