@@ -24,8 +24,8 @@ void UQuizWidget::SetActiveQuizPanel(bool value , int num)
 	case 8:
 		break;
 	default:
+		break;
 	}
-		
 }
 
 void UQuizWidget::SetAllQuizzesInactive()

@@ -79,7 +79,7 @@ void AHJ_Player::InitQuizHintUI()
 	if ( QuizUI )
 	{
 		QuizUI->AddToViewport();
-		QuizUI->SetActiveQuizPanel(false);
+		QuizUI->SetActiveQuizPanel(false, 0);
 	}
 }
 
