@@ -2,6 +2,8 @@
 
 
 #include "HJ/MTVS3_3rdGameState.h"
+#include "Kismet/GameplayStatics.h"
+#include "CSW/InteractionActor.h"
 
 AMTVS3_3rdGameState::AMTVS3_3rdGameState()
 {
@@ -79,6 +81,13 @@ void AMTVS3_3rdGameState::CheckCarpet(int num , int value)
 		{
 			if ( DebugGimmickEnable ) GEngine->AddOnScreenDebugMessage(-1 , 5.f , FColor::Yellow , FString::Printf(TEXT("Carpet1 ON")));
 			// 문 열기 함수 호출
+			TArray<AActor*> OutputActor;
+			UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld() , AActor::StaticClass() , TEXT("DoorMeeting"), OutputActor);
+			if ( !OutputActor.IsEmpty() )
+			{
+				auto tempActor = Cast<AInteractionActor>(OutputActor.Top());
+				tempActor->ForceOpen();
+			}
 		}
 		else
 		{
@@ -92,13 +101,51 @@ void AMTVS3_3rdGameState::CheckCarpet(int num , int value)
 		{
 			if ( DebugGimmickEnable ) GEngine->AddOnScreenDebugMessage(-1 , 5.f , FColor::Yellow , FString::Printf(TEXT("Carpet2 ON")));
 			// 장롱 열리는 함수 호출
+			TArray<AActor*> OutputActor;
+			UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld() , AActor::StaticClass() , TEXT("ClosetDoor") , OutputActor);
+			if ( !OutputActor.IsEmpty() )
+			{
+				auto tempActor = Cast<AInteractionActor>(OutputActor.Top());
+				tempActor->ForceOpen();
+			}
 			// 문제 액자 등장 함수 호출
+			UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld() , AActor::StaticClass() , TEXT("Frame1") , OutputActor);
+			if ( !OutputActor.IsEmpty() )
+			{
+				auto tempActor = Cast<AInteractionActor>(OutputActor.Top());
+				tempActor->ForceAppear();
+			}
+			UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld() , AActor::StaticClass() , TEXT("Frame2") , OutputActor);
+			if ( !OutputActor.IsEmpty() )
+			{
+				auto tempActor = Cast<AInteractionActor>(OutputActor.Top());
+				tempActor->ForceAppear();
+			}
 		}
 		else
 		{
 			if ( DebugGimmickEnable ) GEngine->AddOnScreenDebugMessage(-1 , 5.f , FColor::Yellow , FString::Printf(TEXT("Carpet2 OFF")));
+			TArray<AActor*> OutputActor;
 			// 장롱 닫히는 함수 호출
+			UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld() , AActor::StaticClass() , TEXT("ClosetDoor") , OutputActor);
+			if ( !OutputActor.IsEmpty() )
+			{
+				auto tempActor = Cast<AInteractionActor>(OutputActor.Top());
+				tempActor->ForceClose();
+			}
 			// 문제 액자 숨겨지는 함수 호출
+			UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld() , AActor::StaticClass() , TEXT("Frame1") , OutputActor);
+			if ( !OutputActor.IsEmpty() )
+			{
+				auto tempActor = Cast<AInteractionActor>(OutputActor.Top());
+				tempActor->ForceDisapper();
+			}
+			UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld() , AActor::StaticClass() , TEXT("Frame2") , OutputActor);
+			if ( !OutputActor.IsEmpty() )
+			{
+				auto tempActor = Cast<AInteractionActor>(OutputActor.Top());
+				tempActor->ForceDisapper();
+			}
 		}
 	}
 }

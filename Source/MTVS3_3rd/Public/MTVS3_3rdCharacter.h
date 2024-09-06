@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
 #pragma once
 
@@ -49,6 +49,7 @@ class AMTVS3_3rdCharacter : public ACharacter
 	UPROPERTY()
 	class AInteractionActor* OutlineActor;
 
+public:
 #pragma region UI
 	UPROPERTY(EditAnywhere, Category = "Default|UI")
 	TSubclassOf<class UHintWidget> HintUIFactory;
