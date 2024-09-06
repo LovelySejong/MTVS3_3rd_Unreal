@@ -37,4 +37,13 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void ForceOpen();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ForceClose();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ForceAppear();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ForceDisapper();
 };
