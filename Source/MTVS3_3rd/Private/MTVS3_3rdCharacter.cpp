@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "MTVS3_3rdCharacter.h"
 
@@ -52,6 +52,8 @@ void AMTVS3_3rdCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+
+	InitQuizHintUI();
 }
 
 void AMTVS3_3rdCharacter::Tick(float DeltaSeconds)
