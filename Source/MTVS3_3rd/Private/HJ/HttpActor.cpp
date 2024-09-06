@@ -79,7 +79,7 @@ void AHttpActor::ReqPostLogin(const FText& ID , const FText& Password)
 	Request->OnProcessRequestComplete().BindUObject(this , &AHttpActor::OnResPostLogin);
 
 	// 서버 URL을 설정
-	Request->SetURL(TEXT("https://"));
+	Request->SetURL(TEXT("http://192.168.0.21:8080/api/auth/login"));
 	Request->SetVerb(TEXT("POST"));
 	Request->SetHeader(TEXT("Content-Type") , TEXT("application/json"));
 
@@ -87,8 +87,8 @@ void AHttpActor::ReqPostLogin(const FText& ID , const FText& Password)
 	FString ContentString;
 	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&ContentString);
 	Writer->WriteObjectStart();
-	Writer->WriteValue(TEXT("ID") , ID.ToString());
-	Writer->WriteValue(TEXT("Password") , Password.ToString());
+	Writer->WriteValue(TEXT("email") , ID.ToString());
+	Writer->WriteValue(TEXT("password") , Password.ToString());
 	Writer->WriteObjectEnd();
 	Writer->Close();
 
@@ -107,41 +107,60 @@ void AHttpActor::OnResPostLogin(FHttpRequestPtr Request , FHttpResponsePtr Respo
 		UE_LOG(LogTemp , Log , TEXT("Response Code: %d") , Response->GetResponseCode());
 		UE_LOG(LogTemp , Log , TEXT("Response Body: %s") , *Response->GetContentAsString());
 
-		if ( Response->GetResponseCode() == 200 ) // 로그인 성공 시 응답 코드가 200(OK)인 경우
+		if ( Response->GetResponseCode() == 200 ) // 응답 코드가 200(OK)인지 확인
 		{
-			// 응답 본문에서 토큰을 추출
+			// JSON 응답 파싱
 			FString ResponseBody = Response->GetContentAsString();
 			TSharedPtr<FJsonObject> JsonObject;
 			TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(ResponseBody);
 
 			if ( FJsonSerializer::Deserialize(Reader , JsonObject) && JsonObject.IsValid() )
 			{
-				FString Token = JsonObject->GetStringField("token"); // 예: "token" 필드에서 토큰 추출
+				// "response" 객체에 접근
+				TSharedPtr<FJsonObject> ResponseObject = JsonObject->GetObjectField("response");
 
-				if ( !Token.IsEmpty() )
+				if ( ResponseObject.IsValid() )
 				{
-					UE_LOG(LogTemp , Log , TEXT("Received Token: %s") , *Token);
-					StartUI->OnLoginSuccess();
+					// "accessToken"과 "nickname" 추출
+					FString AccessToken = ResponseObject->GetStringField("accessToken");
+					FString Nickname = ResponseObject->GetStringField("nickname");
+
+					if ( !AccessToken.IsEmpty() )
+					{
+						UE_LOG(LogTemp , Log , TEXT("Received Access Token: %s") , *AccessToken);
+						UE_LOG(LogTemp , Log , TEXT("Received Nickname: %s") , *Nickname);
+
+						// 로그인 성공 시 처리 (예: UI 업데이트)
+						StartUI->OnLoginSuccess();
+					}
+					else
+					{
+						UE_LOG(LogTemp , Warning , TEXT("Access Token is missing in the response."));
+						StartUI->OnLoginFail(1); // 로그인 실패 처리
+					}
 				}
 				else
 				{
-					UE_LOG(LogTemp , Warning , TEXT("Token is missing in the response."));
-					StartUI->OnLoginFail(1); // 토큰이 없는 경우 로그인 실패 처리
+					UE_LOG(LogTemp , Warning , TEXT("'response' 객체를 찾을 수 없습니다."));
+					StartUI->OnLoginFail(1); // 로그인 실패 처리
 				}
+			}
+			else
+			{
+				UE_LOG(LogTemp , Warning , TEXT("JSON 응답 파싱 실패."));
+				StartUI->OnLoginFail(1); // 로그인 실패 처리
 			}
 		}
 		else
 		{
-			// 로그인 실패 시 처리 (예: 잘못된 자격 증명)
-			UE_LOG(LogTemp , Warning , TEXT("Login failed with response code: %d") , Response->GetResponseCode());
+			UE_LOG(LogTemp , Warning , TEXT("로그인 실패, 응답 코드: %d") , Response->GetResponseCode());
 			StartUI->OnLoginFail(1); // 로그인 실패 처리
 		}
 	}
 	else
 	{
-		// 실패 처리
-		UE_LOG(LogTemp , Error , TEXT("Request failed or response invalid"));
-		StartUI->OnLoginFail(2);
+		UE_LOG(LogTemp , Error , TEXT("요청 실패 또는 응답이 유효하지 않음"));
+		StartUI->OnLoginFail(2); // 네트워크 오류 처리
 	}
 }
 
