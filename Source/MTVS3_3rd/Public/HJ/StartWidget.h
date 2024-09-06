@@ -39,6 +39,12 @@ public:
 
 	void SetActiveLoginUI(bool value);
 
+	UPROPERTY(meta = (BindWidget))
+	class UEditableText* EditableText_ID;
+
+	UPROPERTY(meta = (BindWidget))
+	class UEditableText* EditableText_PW;
+
 	UPROPERTY(meta=(BindWidget))
 	class UButton* Button_SignIn;
 
@@ -56,6 +62,20 @@ public:
 
 	UFUNCTION()
 	void OnXButtonClicked();
+
+	UPROPERTY(meta = (BindWidget))
+	class UOverlay* LoginFailUI;
+
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* FailText;
+
+	UPROPERTY(EditAnywhere, meta = (BindWidgetAnim), Transient)
+	class UWidgetAnimation* LoginFailAnim;
+
+	UFUNCTION()
+	void OnLoginFail(int num);
+
+	void OnLoginSuccess();
 
 	// 로딩
 	UPROPERTY(meta=(BindWidget))

@@ -5,6 +5,7 @@
 #include "Components/Overlay.h"
 #include "Components/CanvasPanel.h"
 #include "Components/Button.h"
+#include "Kismet/GameplayStatics.h"
 
 void UQuizWidget::SetActiveQuizPanel(bool value , int num)
 {
@@ -13,7 +14,7 @@ void UQuizWidget::SetActiveQuizPanel(bool value , int num)
 	{
 		QuizPanel->SetVisibility(ESlateVisibility::Visible);
 		SetAllQuizzesInactive();
-		auto* pc = GetWorld()->GetFirstPlayerController();
+		auto* pc = UGameplayStatics::GetPlayerController(this , 0);
 		pc->SetInputMode(FInputModeUIOnly());
 		pc->SetShowMouseCursor(true);
 		switch ( num )
@@ -49,7 +50,7 @@ void UQuizWidget::SetActiveQuizPanel(bool value , int num)
 	else
 	{
 		QuizPanel->SetVisibility(ESlateVisibility::Hidden);
-		auto* pc = GetWorld()->GetFirstPlayerController();
+		auto* pc = UGameplayStatics::GetPlayerController(this , 0);
 		pc->SetInputMode(FInputModeGameOnly());
 		pc->SetShowMouseCursor(false);
 	}	
