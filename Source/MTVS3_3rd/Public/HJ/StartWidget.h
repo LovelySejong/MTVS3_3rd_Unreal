@@ -33,6 +33,12 @@ public:
 	UFUNCTION()
 	void OnQuitButtonClicked();
 
+	UPROPERTY(meta=(BindWidget))
+	class UButton* Button_Guest;
+
+	UFUNCTION()
+	void OnGuestButtonClicked();
+
 	// 로그인
 	UPROPERTY(meta=(BindWidget))
 	class UCanvasPanel* LoginPanel;
