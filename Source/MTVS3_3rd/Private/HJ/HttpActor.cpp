@@ -145,3 +145,37 @@ void AHttpActor::OnResPostLogin(FHttpRequestPtr Request , FHttpResponsePtr Respo
 	}
 }
 
+void AHttpActor::ReqPostRoomState(int32 RoomNumber , const FString& RoomState)
+{
+	// HTTP module
+	FHttpModule* Http = &FHttpModule::Get();
+	if ( !Http ) { return; }
+
+	// Create HTTP request
+	TSharedRef<IHttpRequest , ESPMode::ThreadSafe> Request = Http->CreateRequest();
+	Request->OnProcessRequestComplete().BindUObject(this , &AHttpActor::OnResPostRoomState);
+
+	// Set URL
+	Request->SetURL(TEXT("https://yourserver.com/roomstate"));
+	Request->SetVerb(TEXT("POST"));
+	Request->SetHeader(TEXT("Content-Type") , TEXT("application/json"));
+
+	// Create JSON content
+	FString ContentString;
+	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&ContentString);
+	Writer->WriteObjectStart();
+	Writer->WriteValue(TEXT("RoomNumber") , RoomNumber);
+	Writer->WriteValue(TEXT("RoomState") , RoomState);
+	Writer->WriteObjectEnd();
+	Writer->Close();
+
+	// Set request content
+	Request->SetContentAsString(ContentString);
+
+	// Execute request
+	Request->ProcessRequest();
+}
+
+void AHttpActor::OnResPostRoomState(FHttpRequestPtr Request , FHttpResponsePtr Response , bool bWasSuccessful)
+{
+}
