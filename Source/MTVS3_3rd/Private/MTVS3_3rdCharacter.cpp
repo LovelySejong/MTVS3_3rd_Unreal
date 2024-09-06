@@ -1,6 +1,10 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "MTVS3_3rdCharacter.h"
+
+#include <HJ/HintWidget.h>
+#include <HJ/QuizWidget.h>
+
 #include "MTVS3_3rdProjectile.h"
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
@@ -9,6 +13,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "Blueprint/UserWidget.h"
 #include "CSW/GimmicCube.h"
 #include "CSW/InteractionActor.h"
 #include "Engine/LocalPlayer.h"
@@ -258,3 +263,33 @@ void AMTVS3_3rdCharacter::InteractEnd(const FInputActionValue& Value)
 	if (CurrentActor)
 		CurrentActor->InteractEnd();
 }
+
+#pragma region UI
+void AMTVS3_3rdCharacter::InitQuizHintUI()
+{
+	HintUI = CastChecked<UHintWidget>(CreateWidget(GetWorld() , HintUIFactory));
+	if ( HintUI )
+	{
+		HintUI->AddToViewport();
+		HintUI->SetActiveHintPanel(false);
+	}
+
+	QuizUI = CastChecked<UQuizWidget>(CreateWidget(GetWorld() , QuizUIFactory));
+	if ( QuizUI )
+	{
+		QuizUI->AddToViewport();
+		QuizUI->SetActiveQuizPanel(false, 0);
+	}
+}
+
+void AMTVS3_3rdCharacter::UseHint()
+{
+	bIsHintActive = !bIsHintActive;
+	HintUI->SetActiveHintPanel(bIsHintActive);
+}
+
+void AMTVS3_3rdCharacter::UseQuiz(int num)
+{
+	QuizUI->SetActiveQuizPanel(true, num);
+}
+#pragma endregion
