@@ -38,4 +38,8 @@ public:
 
 	// 응답 받을 함수
 	void OnResPostLogin(FHttpRequestPtr Request , FHttpResponsePtr Response , bool bConnectedSuccessfully);
+
+	void ReqPostRoomState(int32 RoomNumber , const FString& RoomState);
+
+	void OnResPostRoomState(FHttpRequestPtr Request , FHttpResponsePtr Response , bool bWasSuccessful);
 };

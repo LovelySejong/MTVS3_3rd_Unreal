@@ -4,6 +4,7 @@
 #include "HJ/MTVS3_3rdGameState.h"
 #include "Kismet/GameplayStatics.h"
 #include "CSW/InteractionActor.h"
+#include "HJ/HttpActor.h"
 
 AMTVS3_3rdGameState::AMTVS3_3rdGameState()
 {
@@ -23,6 +24,11 @@ AMTVS3_3rdGameState::AMTVS3_3rdGameState()
 void AMTVS3_3rdGameState::OnQuiz1Start()
 {
 	SetState(ERoomState::QUIZ1_ROOM);
+	AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
+	if ( HttpActor )
+	{
+		HttpActor->ReqPostRoomState(1 , "Quiz1 Started");
+	}
 }
 
 void AMTVS3_3rdGameState::OnQuiz2Start()
@@ -31,6 +37,11 @@ void AMTVS3_3rdGameState::OnQuiz2Start()
 	if ( Q1ClearCount == RequiredCount ) // 멀티플레이에서 Count가 2일 때 문제방1 종료 인정
 	{
 		SetState(ERoomState::QUIZ2_ROOM);
+	}
+	AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
+	if ( HttpActor )
+	{
+		HttpActor->ReqPostRoomState(2 , "Quiz2 Started");
 	}
 }
 
@@ -41,21 +52,41 @@ void AMTVS3_3rdGameState::OnMeetingStart()
 	{
 		SetState(ERoomState::MEETING_ROOM);
 	}
+	AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
+	if ( HttpActor )
+	{
+		HttpActor->ReqPostRoomState(3 , "MEETING Started");
+	}
 }
 
 void AMTVS3_3rdGameState::OnQuiz3Start()
 {
 	SetState(ERoomState::QUIZ3_ROOM);
+	AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
+	if ( HttpActor )
+	{
+		HttpActor->ReqPostRoomState(4 , "Quiz3 Started");
+	}
 }
 
 void AMTVS3_3rdGameState::OnQuiz4Start()
 {
 	SetState(ERoomState::QUIZ4_ROOM);
+	AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
+	if ( HttpActor )
+	{
+		HttpActor->ReqPostRoomState(5 , "Quiz4 Started");
+	}
 }
 
 void AMTVS3_3rdGameState::OnGameClear()
 {
 	SetState(ERoomState::ENDING_ROOM);
+	AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
+	if ( HttpActor )
+	{
+		HttpActor->ReqPostRoomState(6 , "ENDING Started");
+	}
 }
 
 void AMTVS3_3rdGameState::SetState(ERoomState NextState)

@@ -26,6 +26,7 @@ void UStartWidget::NativeConstruct()
 	Button_SignUp->OnClicked.AddDynamic(this , &UStartWidget::OnSignUpButtonClicked);
 	Button_X->OnClicked.AddDynamic(this , &UStartWidget::OnXButtonClicked);
 	Button_FailQuit->OnClicked.AddDynamic(this , &UStartWidget::OnFailQuitButtonClicked);
+	Button_Guest->OnClicked.AddDynamic(this , &UStartWidget::OnGuestButtonClicked);
 }
 
 void UStartWidget::OnStartButtonClicked()
@@ -37,6 +38,11 @@ void UStartWidget::OnQuitButtonClicked()
 {
 	auto* pc = UGameplayStatics::GetPlayerController(this , 0);
 	UKismetSystemLibrary::QuitGame(GetWorld() , pc , EQuitPreference::Quit , false);
+}
+
+void UStartWidget::OnGuestButtonClicked()
+{
+	OnLoginSuccess();
 }
 
 void UStartWidget::SetActiveLoginUI(bool value)
