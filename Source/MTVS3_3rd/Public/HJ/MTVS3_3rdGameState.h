@@ -82,9 +82,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void CheckLever(int num, bool bIsCorrect);
 
-	UFUNCTION(BlueprintImplementableEvent) // 카페트를 들어올리는 이벤트
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent) // 카페트를 들어올리는 이벤트
 	void MovingUpCarpet();
-	UFUNCTION(BlueprintImplementableEvent) // 카페트를 아래로 내리는 이벤트
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent) // 카페트를 아래로 내리는 이벤트
 	void MovingDownCarpet();
 #pragma endregion
 
