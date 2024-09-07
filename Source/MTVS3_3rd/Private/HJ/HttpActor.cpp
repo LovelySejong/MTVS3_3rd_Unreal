@@ -4,6 +4,7 @@
 #include "HJ/HttpActor.h"
 #include "HJ/StartWidget.h"
 #include "Kismet/GameplayStatics.h"
+#include "Justin/S3GameInstance.h"
 
 // Sets default values
 AHttpActor::AHttpActor()
@@ -124,6 +125,15 @@ void AHttpActor::OnResPostLogin(FHttpRequestPtr Request , FHttpResponsePtr Respo
 					// "accessToken"과 "nickname" 추출
 					FString AccessToken = ResponseObject->GetStringField("accessToken");
 					FString Nickname = ResponseObject->GetStringField("nickname");
+
+					if ( UWorld* World = GetWorld() )
+					{
+						US3GameInstance* GI = World->GetGameInstance<US3GameInstance>();
+						if ( GI )
+						{
+							//GI->SetPlayerNickname(Nickname);
+						}
+					}
 
 					if ( !AccessToken.IsEmpty() )
 					{

@@ -32,6 +32,29 @@ void US3GameInstance::Tick(float DeltaTime)
 	}
 }
 
+//void US3GameInstance::SetPlayerNickname(const FString& Nickname)
+//{
+//	if ( Nickname.IsEmpty() )
+//	{
+//		UE_LOG(LogTemp , Warning , TEXT("Nickname is empty, setting to default value."));
+//		PlayerNickname = TEXT("Player");
+//	}
+//	else
+//	{
+//		PlayerNickname = Nickname;
+//	}
+//}
+//
+//FString US3GameInstance::GetPlayerNickname() const
+//{
+//	if ( PlayerNickname.IsEmpty() )
+//	{
+//		UE_LOG(LogTemp , Warning , TEXT("PlayerNickname is empty, returning default value."));
+//		return TEXT("Player");
+//	}
+//	return PlayerNickname;
+//}
+
 void US3GameInstance::Init()
 {
 	if ( IOnlineSubsystem* SubSystem = IOnlineSubsystem::Get() )
