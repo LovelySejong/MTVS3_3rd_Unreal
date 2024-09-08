@@ -104,7 +104,7 @@ void UStartWidget::OnLoginFail(int num)
 	switch ( num )
 	{
 	case 0: // OnLoginFail(0) 호출 시 아이디, 비번 입력 안 함
-		FailText->SetText(FText::FromString(TEXT("아이디와 비밀번호를 모두 입력해주세요.")));
+		FailText->SetText(FText::FromString(TEXT("이메일과 비밀번호를 모두 입력해주세요.")));
 		break;
 	case 1: // 회원 정보 없음
 		FailText->SetText(FText::FromString(TEXT("회원 정보가 없습니다. 다시 확인해주세요.")));
