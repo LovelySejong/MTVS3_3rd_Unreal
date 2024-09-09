@@ -86,6 +86,8 @@ void AMTVS3_3rdGameState::OnGameClear()
 	if ( HttpActor )
 	{
 		HttpActor->ReqPostRoomState(6 , "ENDING Started");
+		FName LevelName = FName(TEXT("EndingLevel"));
+		UGameplayStatics::OpenLevel(this , LevelName);
 	}
 }
 

@@ -44,7 +44,11 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UCircularThrobber> NotReadyIcon;
 	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UTextBlock> Name1Text;
+	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UTextBlock> Name2Text;
+
+	void SetNameText(int num , const FString& Name);
 
 	//Buttons
 	UPROPERTY(meta = (BindWidget))

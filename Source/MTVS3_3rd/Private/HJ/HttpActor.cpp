@@ -4,6 +4,7 @@
 #include "HJ/HttpActor.h"
 #include "HJ/StartWidget.h"
 #include "Kismet/GameplayStatics.h"
+#include "Justin/S3GameInstance.h"
 
 // Sets default values
 AHttpActor::AHttpActor()
@@ -79,7 +80,7 @@ void AHttpActor::ReqPostLogin(const FText& ID , const FText& Password)
 	Request->OnProcessRequestComplete().BindUObject(this , &AHttpActor::OnResPostLogin);
 
 	// 서버 URL을 설정
-	Request->SetURL(TEXT("http://192.168.0.21:8080/api/auth/login"));
+	Request->SetURL(TEXT("http://125.132.216.190:7878/api/auth/login"));
 	Request->SetVerb(TEXT("POST"));
 	Request->SetHeader(TEXT("Content-Type") , TEXT("application/json"));
 
@@ -124,6 +125,15 @@ void AHttpActor::OnResPostLogin(FHttpRequestPtr Request , FHttpResponsePtr Respo
 					// "accessToken"과 "nickname" 추출
 					FString AccessToken = ResponseObject->GetStringField("accessToken");
 					FString Nickname = ResponseObject->GetStringField("nickname");
+
+					if ( UWorld* World = GetWorld() )
+					{
+						US3GameInstance* GI = World->GetGameInstance<US3GameInstance>();
+						if ( GI )
+						{
+							//GI->SetPlayerNickname(Nickname);
+						}
+					}
 
 					if ( !AccessToken.IsEmpty() )
 					{
