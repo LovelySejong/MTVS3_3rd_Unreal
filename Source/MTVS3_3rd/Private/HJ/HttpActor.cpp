@@ -80,7 +80,7 @@ void AHttpActor::ReqPostLogin(const FText& ID , const FText& Password)
 	Request->OnProcessRequestComplete().BindUObject(this , &AHttpActor::OnResPostLogin);
 
 	// 서버 URL을 설정
-	Request->SetURL(TEXT("http://192.168.0.21:8080/api/auth/login"));
+	Request->SetURL(TEXT("http://125.132.216.190:7878/api/auth/login"));
 	Request->SetVerb(TEXT("POST"));
 	Request->SetHeader(TEXT("Content-Type") , TEXT("application/json"));
 
