@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
 #pragma once
 
@@ -48,6 +48,28 @@ class AMTVS3_3rdCharacter : public ACharacter
 
 	UPROPERTY()
 	class AInteractionActor* OutlineActor;
+
+public:
+#pragma region UI
+	UPROPERTY(EditAnywhere, Category = "Default|UI")
+	TSubclassOf<class UHintWidget> HintUIFactory;
+	UPROPERTY()
+	class UHintWidget* HintUI;
+
+	UPROPERTY(EditAnywhere, Category = "Default|UI")
+	TSubclassOf<class UQuizWidget> QuizUIFactory;
+	UPROPERTY()
+	class UQuizWidget* QuizUI;
+
+	void InitQuizHintUI();
+
+	bool bIsHintActive = false;
+
+	UFUNCTION(BlueprintCallable)
+	void UseHint();
+	UFUNCTION(BlueprintCallable)
+	void UseQuiz(int num);
+#pragma endregion
 	
 public:
 	AMTVS3_3rdCharacter();

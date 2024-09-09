@@ -19,6 +19,10 @@ public:
 	US3GameInstance();
 	virtual TStatId GetStatId() const override;
 	virtual void Tick(float DeltaTime) override;
+
+	//void SetPlayerNickname(const FString& Nickname);
+	//FString GetPlayerNickname() const;
+	//FString PlayerNickname;
 public:
 	IOnlineSessionPtr SessionInterface;
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;

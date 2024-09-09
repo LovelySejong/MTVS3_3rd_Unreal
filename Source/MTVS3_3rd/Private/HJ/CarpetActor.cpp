@@ -3,8 +3,9 @@
 
 #include "HJ/CarpetActor.h"
 #include "Components/BoxComponent.h"
-#include "HJ/HJ_Player.h"
+//#include "HJ/HJ_Player.h"
 #include "HJ/MTVS3_3rdGameState.h"
+#include "MTVS3_3rdCharacter.h"
 
 // Sets default values
 ACarpetActor::ACarpetActor()
@@ -45,7 +46,7 @@ void ACarpetActor::Tick(float DeltaTime)
 void ACarpetActor::OnMyBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent , AActor* OtherActor , UPrimitiveComponent* OtherComp , int32 OtherBodyIndex , bool bFromSweep , const FHitResult& SweepResult)
 {
 	auto* gs = GetWorld()->GetGameState<AMTVS3_3rdGameState>();
-	if ( OtherActor->IsA<AHJ_Player>() )
+	if ( OtherActor->IsA<AMTVS3_3rdCharacter>() )
 	{
 		if ( this->ActorHasTag(FName("Carpet1")) ) // MEETING_ROOM의 Carpet1 체크
 		{
@@ -61,7 +62,7 @@ void ACarpetActor::OnMyBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent 
 void ACarpetActor::OnMyBoxEndOverlap(UPrimitiveComponent* OverlappedComponent , AActor* OtherActor , UPrimitiveComponent* OtherComp , int32 OtherBodyIndex)
 {
 	auto* gs = GetWorld()->GetGameState<AMTVS3_3rdGameState>();
-	if ( OtherActor->IsA<AHJ_Player>() )
+	if ( OtherActor->IsA<AMTVS3_3rdCharacter>() )
 	{
 		if ( this->ActorHasTag(FName("Carpet1")) ) // MEETING_ROOM의 Carpet1 체크
 		{

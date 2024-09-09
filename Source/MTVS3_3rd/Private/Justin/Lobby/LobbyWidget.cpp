@@ -8,6 +8,7 @@
 #include "Components/CircularThrobber.h"
 #include "Justin/Lobby/S3PCLobby.h"
 #include "Kismet/GameplayStatics.h"
+#include "Justin/S3GameInstance.h"
 
 void ULobbyWidget::Init(bool bHost)
 {
@@ -27,6 +28,12 @@ void ULobbyWidget::Init(bool bHost)
 
 	if ( bIsHost )
 	{
+		US3GameInstance* GI = GetWorld()->GetGameInstance<US3GameInstance>();
+		if ( GI )
+		{
+			//FString Nickname = GI->GetPlayerNickname();
+			//SetNameText(1 , Nickname); // 첫 번째 플레이어의 닉네임 설정
+		}
 		DisplayPlayerTwo(false);
 
 		DisplayButton(EButtonType::NOTSTART);
@@ -64,6 +71,18 @@ void ULobbyWidget::SetReady(bool bReady)
 	else
 	{
 		bReady ? DisplayButton(EButtonType::READY) : DisplayButton(EButtonType::NOTREADY);
+	}
+}
+
+void ULobbyWidget::SetNameText(int num , const FString& Name)
+{
+	if ( num == 1 && Name1Text )
+	{
+		Name1Text->SetText(FText::FromString(Name));
+	}
+	else if ( num == 2 && Name2Text )
+	{
+		Name2Text->SetText(FText::FromString(Name));
 	}
 }
 
@@ -167,6 +186,12 @@ void ULobbyWidget::DisplayButton(EButtonType Type)
 
 void ULobbyWidget::DisplayPlayerTwo(bool bDisplay)
 {
+	US3GameInstance* GI = GetWorld()->GetGameInstance<US3GameInstance>();
+	if ( GI )
+	{
+		//FString Nickname = GI->GetPlayerNickname();
+		//SetNameText(2 , Nickname); // 두 번째 플레이어의 닉네임 설정
+	}
 	if ( bDisplay )
 	{
 		Image_P2->SetVisibility(ESlateVisibility::Visible);
