@@ -78,15 +78,16 @@ void US3GameInstance::CreateServer()
 	FOnlineSessionSettings SessionSettings;
 	SessionSettings.bAllowJoinInProgress = false;
 	SessionSettings.bIsDedicated = false;
-	SessionSettings.bIsLANMatch = true;
-
-	/*if ( IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" )
+	
+	if ( IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" )
+		SessionSettings.bIsLANMatch = true;
 	else
-		SessionSettings.bIsLANMatch = false;*/
+		SessionSettings.bIsLANMatch = false;
 
 	SessionSettings.bShouldAdvertise = true;
 	SessionSettings.bUsesPresence = true;
 	SessionSettings.NumPublicConnections = 2;
+	SessionSettings.bUseLobbiesIfAvailable = true;
 	SessionSettings.Set("sPRsaUKm" , FString("f2WT04QT") , EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 	//SessionSettings.BuildUniqueId = 123;
 
@@ -102,11 +103,10 @@ void US3GameInstance::FindServer()
 	UE_LOG(LogTemp , Warning , TEXT("Find Sessions Start "));
 
 	SessionSearch = MakeShareable(new FOnlineSessionSearch());
-	SessionSearch->bIsLanQuery = true;
-	/*if ( IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" )
+	if ( IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" )
 		SessionSearch->bIsLanQuery = true;
 	else
-		SessionSearch->bIsLanQuery = false;*/
+		SessionSearch->bIsLanQuery = false;
 
 	SessionSearch->MaxSearchResults = 10000;
 	SessionSearch->QuerySettings.Set(SEARCH_PRESENCE , true , EOnlineComparisonOp::Equals);
@@ -136,7 +136,8 @@ void US3GameInstance::OnStartSessionComplete(FName SessionName , bool bWasSucces
 	if ( bWasSuccessful )
 	{
 		UE_LOG(LogTemp , Warning , TEXT("Start Session Success! SessionName %s") , *SessionName.ToString());
-		GetWorld()->ServerTravel("/Game/LovelySejong/PlayLevel?listen");
+		//GetWorld()->ServerTravel("/Game/LovelySejong/PlayLevel?listen");
+		GetWorld()->ServerTravel("/Game/Justin/Lobby/LobbyLevel?listen");
 	}
 }
 
