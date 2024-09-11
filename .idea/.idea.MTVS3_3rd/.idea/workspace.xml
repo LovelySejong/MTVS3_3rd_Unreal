@@ -13,31 +13,15 @@
   <component name="ChangeListManager">
     <list default="true" id="3eed5c52-cdfd-4ebd-b988-ad429b4f78b1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MTVS3_3rd/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MTVS3_3rd/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_3WayLever.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_3WayLever.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_3WayLeverPad.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_3WayLeverPad.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_ClosetDoor.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_ClosetDoor.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_ColorBlock.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_ColorBlock.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_Dial.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_DialNumber.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_DialNumber.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_DialPad.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_DialPad.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_FishBox.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_FishBox.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_FishBoxButton.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_FishBoxButton.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_Frame.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_Frame.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_GrabbedActor.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_Fish.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_Fish.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_NumCube.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_NumCube.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_RotDial.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_RotDial.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_RotDialPad.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_RotDialPad.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_Switch.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_Switch.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/CSW/CSW_Map.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/CSW_Map.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/UI/WBP_CubeRotation.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Blueprints/UI/WBP_CubeRotation.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/CSW/Maps/CSW_Proto.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Maps/CSW_Proto.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/CSW/Materials/M_OpacityZero.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Materials/M_OpacityZero.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/FirstPerson/Blueprints/BP_FirstPersonCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/FirstPerson/Blueprints/BP_FirstPersonCharacter.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PSH/Maps/C2_Map_1.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/PSH/Maps/C2_Map_1.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/StarterContent/Blueprints/Blueprint_CeilingLight.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/StarterContent/Blueprints/Blueprint_CeilingLight.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/StarterContent/HDRI/HDRI_Epic_Courtyard_Daylight.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/StarterContent/HDRI/HDRI_Epic_Courtyard_Daylight.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/StarterContent/Materials/M_Ceramic_Tile_Checker.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/StarterContent/Materials/M_Ceramic_Tile_Checker.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/StarterContent/Props/Materials/M_Chair.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/StarterContent/Props/Materials/M_Chair.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/StarterContent/Props/Materials/M_TableRound.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/StarterContent/Props/Materials/M_TableRound.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/MTVS3_3rd/Private/MTVS3_3rdCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/MTVS3_3rd/Private/MTVS3_3rdCharacter.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -553,7 +537,12 @@
       <workItem from="1725513021587" duration="7009000" />
       <workItem from="1725599677531" duration="733000" />
       <workItem from="1725774483823" duration="2302000" />
-      <workItem from="1725786037236" duration="2559000" />
+      <workItem from="1725786037236" duration="3965000" />
+      <workItem from="1725841545375" duration="728000" />
+      <workItem from="1725842797913" duration="2856000" />
+      <workItem from="1725872190540" duration="361000" />
+      <workItem from="1725948193219" duration="2596000" />
+      <workItem from="1726035371033" duration="1544000" />
     </task>
     <servers />
   </component>
