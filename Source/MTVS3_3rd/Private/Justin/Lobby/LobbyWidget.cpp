@@ -31,8 +31,8 @@ void ULobbyWidget::Init(bool bHost)
 		US3GameInstance* GI = GetWorld()->GetGameInstance<US3GameInstance>();
 		if ( GI )
 		{
-			//FString Nickname = GI->GetPlayerNickname();
-			//SetNameText(1 , Nickname); // 첫 번째 플레이어의 닉네임 설정
+			FString Nickname = GI->GetPlayerNickname();
+			SetNameText(1 , Nickname); // 첫 번째 플레이어의 닉네임 설정
 		}
 		DisplayPlayerTwo(false);
 
@@ -189,8 +189,8 @@ void ULobbyWidget::DisplayPlayerTwo(bool bDisplay)
 	US3GameInstance* GI = GetWorld()->GetGameInstance<US3GameInstance>();
 	if ( GI )
 	{
-		//FString Nickname = GI->GetPlayerNickname();
-		//SetNameText(2 , Nickname); // 두 번째 플레이어의 닉네임 설정
+		FString Nickname = GI->GetPlayerNickname();
+		SetNameText(2 , Nickname); // 두 번째 플레이어의 닉네임 설정
 	}
 	if ( bDisplay )
 	{

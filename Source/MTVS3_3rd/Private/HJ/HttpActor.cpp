@@ -131,7 +131,7 @@ void AHttpActor::OnResPostLogin(FHttpRequestPtr Request , FHttpResponsePtr Respo
 						US3GameInstance* GI = World->GetGameInstance<US3GameInstance>();
 						if ( GI )
 						{
-							//GI->SetPlayerNickname(Nickname);
+							GI->SetPlayerNickname(Nickname);
 						}
 					}
 
