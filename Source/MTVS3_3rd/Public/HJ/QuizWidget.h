@@ -45,6 +45,9 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UOverlay* Quiz8;
 
+	UPROPERTY(meta = (BindWidget))
+	class UOverlay* Quiz9;
+
 	UFUNCTION(BlueprintCallable)
 	void SetActiveQuizPanel(bool value, int num);
 
