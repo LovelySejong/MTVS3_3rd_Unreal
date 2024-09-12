@@ -43,6 +43,9 @@ void UQuizWidget::SetActiveQuizPanel(bool value , int num)
 		case 8:
 			Quiz8->SetVisibility(ESlateVisibility::Visible);
 			break;
+		case 9:
+			Quiz9->SetVisibility(ESlateVisibility::Visible);
+			break;
 		default:
 			break;
 		}
@@ -66,6 +69,7 @@ void UQuizWidget::SetAllQuizzesInactive()
 	Quiz6->SetVisibility(ESlateVisibility::Hidden);
 	Quiz7->SetVisibility(ESlateVisibility::Hidden);
 	Quiz8->SetVisibility(ESlateVisibility::Hidden);
+	Quiz9->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void UQuizWidget::OnBlackButtonClicked()
