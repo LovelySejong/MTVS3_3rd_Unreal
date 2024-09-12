@@ -7,6 +7,8 @@
 #include "Online/OnlineSessionNames.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerState.h"
+#include <HJ/MTVS3_3rdGameState.h>
+
 
 US3GameInstance::US3GameInstance()
 {
@@ -113,7 +115,20 @@ void US3GameInstance::OnStartSessionComplete(FName SessionName , bool bWasSucces
 	if ( bWasSuccessful )
 	{
 		UE_LOG(LogTemp , Warning , TEXT("Start Session Success! SessionName %s") , *SessionName.ToString());
-		GetWorld()->ServerTravel("/Game/LovelySejong/PlayLevel?listen");
+
+		auto GM = GetWorld()->GetAuthGameMode();
+
+		if ( GM )
+		{
+			auto GS = GM->GetGameState<AMTVS3_3rdGameState>();
+			if ( GS )
+			{
+				UE_LOG(LogTemp , Warning , TEXT("bTest :%d") , GS->bTest);
+				GS->bTest = true;
+			}
+		}
+
+		GetWorld()->ServerTravel(FString::Printf(TEXT("/Game/LovelySejong/PlayLevel?listen?IsHost=%s") , bIsHost));
 	}
 }
 
@@ -123,6 +138,11 @@ void US3GameInstance::DestroyServer()
 }
 
 #pragma region HJ 
+void US3GameInstance::SetHost(bool _bIsHost)
+{
+	bIsHost = _bIsHost;
+}
+
 void US3GameInstance::SetAccessToken(const FString& InAccessToken)
 {
 	AccessToken = InAccessToken;

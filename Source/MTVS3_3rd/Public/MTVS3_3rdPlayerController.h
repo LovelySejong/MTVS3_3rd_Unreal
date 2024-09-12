@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
 #pragma once
 
@@ -27,5 +27,11 @@ protected:
 
 	virtual void BeginPlay() override;
 
-	// End Actor interface
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+public:
+	UPROPERTY(ReplicatedUsing = OnRep_bIsHost)
+	bool bIsHost; 
+	
+	UFUNCTION()
+	void OnRep_bIsHost();
 };
