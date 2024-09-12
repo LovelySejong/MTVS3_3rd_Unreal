@@ -28,8 +28,11 @@ public:
 	// AccessToken을 저장할 변수 추가
     UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Authentication")
     FString AccessToken;
+	
+	bool bIsHost;
+	void SetHost(bool _bIsHost);
 
-    // AccessToken을 설정하는 함수
+	// AccessToken을 설정하는 함수
     UFUNCTION(BlueprintCallable, Category = "Authentication")
     void SetAccessToken(const FString& InAccessToken);
 #pragma endregion

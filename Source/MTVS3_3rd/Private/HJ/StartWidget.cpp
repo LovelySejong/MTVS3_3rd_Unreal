@@ -47,7 +47,7 @@ void UStartWidget::OnGuestButtonClicked()
 
 void UStartWidget::SetActiveLoginUI(bool value)
 {
-	if (value ) LoginPanel->SetVisibility(ESlateVisibility::Visible);
+	if ( value ) LoginPanel->SetVisibility(ESlateVisibility::Visible);
 	else LoginPanel->SetVisibility(ESlateVisibility::Hidden);
 }
 
@@ -71,7 +71,7 @@ void UStartWidget::OnSignInButtonClicked()
 
 		if ( !EnteredText_ID.IsEmpty() && !EnteredText_PW.IsEmpty() )
 		{
-			AHttpActor* HttpActor = CastChecked< AHttpActor>(UGameplayStatics::GetActorOfClass(this , AHttpActor::StaticClass()));
+			AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
 			if ( HttpActor )
 			{
 				HttpActor->ReqPostLogin(EnteredText_ID , EnteredText_PW);
@@ -100,7 +100,7 @@ void UStartWidget::OnXButtonClicked()
 }
 
 void UStartWidget::OnLoginFail(int num)
-{	
+{
 	switch ( num )
 	{
 	case 0: // OnLoginFail(0) 호출 시 아이디, 비번 입력 안 함
