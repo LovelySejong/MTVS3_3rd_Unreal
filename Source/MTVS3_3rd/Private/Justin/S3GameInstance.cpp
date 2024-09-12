@@ -32,29 +32,6 @@ void US3GameInstance::Tick(float DeltaTime)
 	}
 }
 
-void US3GameInstance::SetPlayerNickname(const FString& Nickname)
-{
-	if ( Nickname.IsEmpty() )
-	{
-		UE_LOG(LogTemp , Warning , TEXT("Nickname is empty, setting to default value."));
-		PlayerNickname = TEXT("Player");
-	}
-	else
-	{
-		PlayerNickname = Nickname;
-	}
-}
-
-FString US3GameInstance::GetPlayerNickname() const
-{
-	if ( PlayerNickname.IsEmpty() )
-	{
-		UE_LOG(LogTemp , Warning , TEXT("PlayerNickname is empty, returning default value."));
-		return TEXT("Player");
-	}
-	return PlayerNickname;
-}
-
 void US3GameInstance::Init()
 {
 	if ( IOnlineSubsystem* SubSystem = IOnlineSubsystem::Get() )
@@ -92,8 +69,8 @@ void US3GameInstance::CreateServer()
 
 	ULocalPlayer* Local = GetWorld()->GetFirstLocalPlayerFromController();
 	FString Test = GetWorld()->GetFirstPlayerController()->PlayerState->GetUniqueId().ToString();
-	UE_LOG(LogTemp, Warning, TEXT("LocalPlayer: %s , PlayerState: %s"), *Local->GetPreferredUniqueNetId().ToString(), *Test); //Same Unique Id
-	SessionInterface->CreateSession(*Local->GetPreferredUniqueNetId(), "Justin's Session", SessionSettings);
+	UE_LOG(LogTemp , Warning , TEXT("LocalPlayer: %s , PlayerState: %s") , *Local->GetPreferredUniqueNetId().ToString() , *Test); //Same Unique Id
+	SessionInterface->CreateSession(*Local->GetPreferredUniqueNetId() , "Justin's Session" , SessionSettings);
 	//SessionInterface->CreateSession(0 , "Justin's Session" , SessionSettings);
 }
 
@@ -124,9 +101,9 @@ void US3GameInstance::JoinServer(int32 Index)
 
 void US3GameInstance::StartSession()
 {
-	if (SessionInterface)
+	if ( SessionInterface )
 	{
-		SessionInterface->OnStartSessionCompleteDelegates.AddUObject(this, &US3GameInstance::OnStartSessionComplete);
+		SessionInterface->OnStartSessionCompleteDelegates.AddUObject(this , &US3GameInstance::OnStartSessionComplete);
 		SessionInterface->StartSession("Justin's Session");
 	}
 }
@@ -145,3 +122,32 @@ void US3GameInstance::DestroyServer()
 	SessionInterface->DestroySession("Justin's Session");
 }
 
+#pragma region HJ 
+void US3GameInstance::SetAccessToken(const FString& InAccessToken)
+{
+	AccessToken = InAccessToken;
+}
+
+void US3GameInstance::SetPlayerNickname(const FString& Nickname)
+{
+	if ( Nickname.IsEmpty() )
+	{
+		UE_LOG(LogTemp , Warning , TEXT("Nickname is empty, setting to default value."));
+		PlayerNickname = TEXT("Player");
+	}
+	else
+	{
+		PlayerNickname = Nickname;
+	}
+}
+
+FString US3GameInstance::GetPlayerNickname() const
+{
+	if ( PlayerNickname.IsEmpty() )
+	{
+		UE_LOG(LogTemp , Warning , TEXT("PlayerNickname is empty, returning default value."));
+		return TEXT("Player");
+	}
+	return PlayerNickname;
+}
+#pragma endregion

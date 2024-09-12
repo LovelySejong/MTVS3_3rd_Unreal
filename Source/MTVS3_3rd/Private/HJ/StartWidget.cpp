@@ -126,6 +126,11 @@ void UStartWidget::OnLoginFail(int num)
 
 void UStartWidget::OnLoginSuccess()
 {
+	//FName LevelName = FName(TEXT("PlayLevel"));
+	//UGameplayStatics::OpenLevel(this , LevelName);
+	//auto* pc = UGameplayStatics::GetPlayerController(this , 0);
+	//pc->SetInputMode(FInputModeGameOnly());
+
 	// ** 로그인 성공 시 연결
 	//check if User successfully logged in.
 	//if yes, allow player to connect
