@@ -39,11 +39,18 @@ void AS3PCLobby::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 
 void AS3PCLobby::SetHost(bool _bIsHost)
 {
-	US3GameInstance* GI = Cast<US3GameInstance>(UGameplayStatics::GetGameInstance(this));
-	if ( !GI ) return;
-	GI->SetHost(_bIsHost);
 	bIsHost = _bIsHost;
+
+	//if ( HasAuthority() )
+	//{
+	//	Client_SetHost(_bIsHost);
+	//}
 }
+
+//void AS3PCLobby::Client_SetHost_Implementation(bool _bIsHost)
+//{
+//	SetHost(_bIsHost);
+//}
 
 bool AS3PCLobby::IsHost() const
 {

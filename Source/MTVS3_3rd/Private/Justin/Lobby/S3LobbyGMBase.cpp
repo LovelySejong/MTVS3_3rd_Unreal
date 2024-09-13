@@ -6,12 +6,24 @@
 #include "GameFramework/GameSession.h"
 #include "Net/UnrealNetwork.h"
 #include "Justin/S3GameInstance.h"
+#include "Kismet/GameplayStatics.h"
 
 AS3LobbyGMBase::AS3LobbyGMBase()
 {
 	bHasHost = false;
 	bIsFull = false;
 	
+}
+APlayerController* AS3LobbyGMBase::Login(UPlayer* NewPlayer , ENetRole InRemoteRole , const FString& Portal , const FString& Options , const FUniqueNetIdRepl& UniqueId , FString& ErrorMessage)
+{
+	FString Temp = TEXT("username");
+	FString Username = UGameplayStatics::ParseOption(Options , Temp);
+
+	PlayersJoined.Add(UniqueId->ToString() , Username);
+
+	UE_LOG(LogTemp , Warning , TEXT("NewPlayer :%s, Username: %s, PlayersJoined Size: %d") , *UniqueId->ToString(), *Username, PlayersJoined.Num());
+
+	return Super::Login(NewPlayer , InRemoteRole , Portal , Options , UniqueId , ErrorMessage);
 }
 
 //void AS3LobbyGMBase::PreLogin(const FString& Options , const FString& Address , const FUniqueNetIdRepl& UniqueId , FString& ErrorMessage)
@@ -84,6 +96,9 @@ bool AS3LobbyGMBase::IsReadyToPlay()
 void AS3LobbyGMBase::HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer)
 {
 	auto PC = CastChecked<AS3PCLobby>(NewPlayer);
+	// Host의 게임 인스턴스 bIsHost에는 true를 저장하고
+	// Guest의 게임 인스턴스 bIsHost에는 false를 저장
+
 	if ( PC )
 	{
 		if ( bHasHost )

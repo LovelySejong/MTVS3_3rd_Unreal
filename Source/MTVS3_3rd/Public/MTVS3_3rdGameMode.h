@@ -13,10 +13,10 @@ class AMTVS3_3rdGameMode : public AGameModeBase
 
 public:
 	AMTVS3_3rdGameMode();
-protected:
-	virtual APlayerController* Login(UPlayer* NewPlayer , ENetRole InRemoteRole , const FString& Portal , const FString& Options , const FUniqueNetIdRepl& UniqueId , FString& ErrorMessage) override;
-
-	virtual void PostLogin(APlayerController* NewPlayer) override;
+//protected:
+//	virtual APlayerController* Login(UPlayer* NewPlayer , ENetRole InRemoteRole , const FString& Portal , const FString& Options , const FUniqueNetIdRepl& UniqueId , FString& ErrorMessage) override;
+//
+//	virtual void PostLogin(APlayerController* NewPlayer) override;
 public:
 	virtual AActor* ChoosePlayerStart_Implementation(AController* Player) override;
 
