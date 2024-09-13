@@ -39,7 +39,8 @@ public:
 	// 응답 받을 함수
 	void OnResPostLogin(FHttpRequestPtr Request , FHttpResponsePtr Response , bool bConnectedSuccessfully);
 
-	void ReqPostRoomState(int32 RoomNumber , const FString& RoomState);
+	UFUNCTION(BlueprintCallable, Category = "HTTP")
+	void ReqPostRoomState(const FString& AccessToken , int32 RoomNumber);
 
 	void OnResPostRoomState(FHttpRequestPtr Request , FHttpResponsePtr Response , bool bWasSuccessful);
 };

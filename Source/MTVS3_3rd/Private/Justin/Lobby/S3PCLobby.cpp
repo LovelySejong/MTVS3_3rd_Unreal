@@ -7,6 +7,7 @@
 #include "Net/UnrealNetwork.h"
 #include "Justin/Lobby/S3LobbyGMBase.h"
 #include "Justin/S3GameInstance.h"
+#include "Kismet/GameplayStatics.h"
 
 AS3PCLobby::AS3PCLobby()
 {
@@ -38,6 +39,9 @@ void AS3PCLobby::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 
 void AS3PCLobby::SetHost(bool _bIsHost)
 {
+	US3GameInstance* GI = Cast<US3GameInstance>(UGameplayStatics::GetGameInstance(this));
+	if ( !GI ) return;
+	GI->SetHost(_bIsHost);
 	bIsHost = _bIsHost;
 }
 
