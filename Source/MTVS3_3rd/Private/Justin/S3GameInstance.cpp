@@ -116,19 +116,20 @@ void US3GameInstance::OnStartSessionComplete(FName SessionName , bool bWasSucces
 	{
 		UE_LOG(LogTemp , Warning , TEXT("Start Session Success! SessionName %s") , *SessionName.ToString());
 
-		auto GM = GetWorld()->GetAuthGameMode();
+		//auto GM = GetWorld()->GetAuthGameMode();
 
-		if ( GM )
-		{
-			auto GS = GM->GetGameState<AMTVS3_3rdGameState>();
-			if ( GS )
-			{
-				UE_LOG(LogTemp , Warning , TEXT("bTest :%d") , GS->bTest);
-				GS->bTest = true;
-			}
-		}
+		//if ( GM )
+		//{
+		//	auto GS = GM->GetGameState<AMTVS3_3rdGameState>();
+		//	if ( GS )
+		//	{
+		//		UE_LOG(LogTemp , Warning , TEXT("bTest :%d") , GS->bTest);
+		//		GS->bTest = true;
+		//	}
+		//}
 
-		GetWorld()->ServerTravel(FString::Printf(TEXT("/Game/LovelySejong/PlayLevel?listen?IsHost=%s") , bIsHost));
+		//GetWorld()->ServerTravel(FString::Printf(TEXT("/Game/LovelySejong/PlayLevel?listen?IsHost=%s") , bIsHost));
+		GetWorld()->ServerTravel("/Game/LovelySejong/PlayLevel?listen");
 	}
 }
 
@@ -137,10 +138,13 @@ void US3GameInstance::DestroyServer()
 	SessionInterface->DestroySession("Justin's Session");
 }
 
-#pragma region HJ 
+#pragma region HJ
 void US3GameInstance::SetHost(bool _bIsHost)
 {
 	bIsHost = _bIsHost;
+	//PlayerNum += PlayerCount;
+	//bIsHost = PlayerNum == 2 ? 1 : 0;
+	//UE_LOG(LogTemp , Warning , TEXT("===== Player Num is %d"), PlayerNum);
 }
 
 void US3GameInstance::SetAccessToken(const FString& InAccessToken)
@@ -153,7 +157,7 @@ void US3GameInstance::SetPlayerNickname(const FString& Nickname)
 	if ( Nickname.IsEmpty() )
 	{
 		UE_LOG(LogTemp , Warning , TEXT("Nickname is empty, setting to default value."));
-		PlayerNickname = TEXT("Player");
+		PlayerNickname = TEXT("Player")	;
 	}
 	else
 	{

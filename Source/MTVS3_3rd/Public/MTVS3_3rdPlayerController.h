@@ -27,11 +27,11 @@ protected:
 
 	virtual void BeginPlay() override;
 
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	//virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 public:
-	UPROPERTY(ReplicatedUsing = OnRep_bIsHost)
-	bool bIsHost; 
-	
-	UFUNCTION()
-	void OnRep_bIsHost();
+	//UPROPERTY(ReplicatedUsing = OnRep_bIsHost)
+	//bool bIsHost; 
+	//
+	//UFUNCTION()
+	//void OnRep_bIsHost();
 };
