@@ -1,0 +1,1 @@
+"C:\Program Files\Epic Games\UE_5.4\Engine\Binaries\Win64\UnrealEditor.exe" "C:\Projects\Unreal\ThirdMTVS\MTVS3_3rd_Unreal\MTVS3_3rd.uproject" -game -ResX=960 -ResY=540 -WinX=0 -WinY=20 -log

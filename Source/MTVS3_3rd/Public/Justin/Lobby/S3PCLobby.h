@@ -7,7 +7,7 @@
 #include "S3PCLobby.generated.h"
 
 /**
- * 
+ *
  */
 
 class ULobbyWidget;
@@ -17,11 +17,15 @@ UCLASS()
 class MTVS3_3RD_API AS3PCLobby : public APlayerController
 {
 	GENERATED_BODY()
-	
+
 public:
 	AS3PCLobby();
 
 	void SetHost(bool _bIsHost);
+
+	//UFUNCTION(Client, Reliable)
+	//void Client_SetHost(bool _bIsHost);
+
 	bool IsHost() const;
 	bool IsReady() const;
 
@@ -30,7 +34,7 @@ public:
 	void AddPlayer();
 	//---------------------
 
-	UFUNCTION(Server, Reliable)
+	UFUNCTION(Server , Reliable)
 	void Server_CheckCanStart();
 
 	UFUNCTION(Server , Reliable)

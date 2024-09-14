@@ -9,6 +9,7 @@
 #include "Justin/Lobby/S3PCLobby.h"
 #include "Kismet/GameplayStatics.h"
 #include "Justin/S3GameInstance.h"
+#include "HJ/MTVS3_3rdPlayerState.h"
 
 void ULobbyWidget::Init(bool bHost)
 {
@@ -28,12 +29,10 @@ void ULobbyWidget::Init(bool bHost)
 
 	if ( bIsHost )
 	{
-		US3GameInstance* GI = GetWorld()->GetGameInstance<US3GameInstance>();
-		if ( GI )
-		{
-			FString Nickname = GI->GetPlayerNickname();
-			SetNameText(1 , Nickname); // 첫 번째 플레이어의 닉네임 설정
-		}
+		AMTVS3_3rdPlayerState* PS = Cast<AMTVS3_3rdPlayerState>(PC->PlayerState);
+		if ( !PS ) return;
+		FString Nickname = PS->GetPlayerNickname();
+		SetNameText(1 , Nickname);
 		DisplayPlayerTwo(false);
 
 		DisplayButton(EButtonType::NOTSTART);
@@ -186,11 +185,13 @@ void ULobbyWidget::DisplayButton(EButtonType Type)
 
 void ULobbyWidget::DisplayPlayerTwo(bool bDisplay)
 {
-	US3GameInstance* GI = GetWorld()->GetGameInstance<US3GameInstance>();
-	if ( GI )
+	AS3PCLobby* PC = Cast<AS3PCLobby>(GetWorld()->GetFirstPlayerController());
+	if ( PC )
 	{
-		FString Nickname = GI->GetPlayerNickname();
-		SetNameText(2 , Nickname); // 두 번째 플레이어의 닉네임 설정
+		AMTVS3_3rdPlayerState* PS = Cast<AMTVS3_3rdPlayerState>(PC->PlayerState);
+		if ( !PS ) return;
+		FString Nickname = PS->GetPlayerNickname();
+		SetNameText(2 , Nickname);
 	}
 	if ( bDisplay )
 	{

@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "CSW/InteractionActor.h"
 #include "HJ/HttpActor.h"
+#include "Justin/S3GameInstance.h"
 
 AMTVS3_3rdGameState::AMTVS3_3rdGameState()
 {
@@ -24,10 +25,15 @@ AMTVS3_3rdGameState::AMTVS3_3rdGameState()
 void AMTVS3_3rdGameState::OnQuiz1Start()
 {
 	SetState(ERoomState::QUIZ1_ROOM);
+
+	US3GameInstance* GI = Cast<US3GameInstance>(UGameplayStatics::GetGameInstance(this));
+	if ( !GI ) return;
+
+	FString AccessToken = GI->AccessToken;
 	AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
 	if ( HttpActor )
 	{
-		HttpActor->ReqPostRoomState(1 , "Quiz1 Started");
+		HttpActor->ReqPostRoomState(AccessToken , 1);
 	}
 }
 
@@ -38,10 +44,15 @@ void AMTVS3_3rdGameState::OnQuiz2Start()
 	{
 		SetState(ERoomState::QUIZ2_ROOM);
 	}
+
+	US3GameInstance* GI = Cast<US3GameInstance>(UGameplayStatics::GetGameInstance(this));
+	if ( !GI ) return;
+
+	FString AccessToken = GI->AccessToken;
 	AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
 	if ( HttpActor )
 	{
-		HttpActor->ReqPostRoomState(2 , "Quiz2 Started");
+		HttpActor->ReqPostRoomState(AccessToken , 2);
 	}
 }
 
@@ -52,42 +63,60 @@ void AMTVS3_3rdGameState::OnMeetingStart()
 	{
 		SetState(ERoomState::MEETING_ROOM);
 	}
+	
+	US3GameInstance* GI = Cast<US3GameInstance>(UGameplayStatics::GetGameInstance(this));
+	if ( !GI ) return;
+
+	FString AccessToken = GI->AccessToken;
 	AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
 	if ( HttpActor )
 	{
-		HttpActor->ReqPostRoomState(3 , "MEETING Started");
+		HttpActor->ReqPostRoomState(AccessToken , 3);
 	}
 }
 
 void AMTVS3_3rdGameState::OnQuiz3Start()
 {
 	SetState(ERoomState::QUIZ3_ROOM);
+	
+	US3GameInstance* GI = Cast<US3GameInstance>(UGameplayStatics::GetGameInstance(this));
+	if ( !GI ) return;
+
+	FString AccessToken = GI->AccessToken;
 	AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
 	if ( HttpActor )
 	{
-		HttpActor->ReqPostRoomState(4 , "Quiz3 Started");
+		HttpActor->ReqPostRoomState(AccessToken , 4);
 	}
 }
 
 void AMTVS3_3rdGameState::OnQuiz4Start()
 {
 	SetState(ERoomState::QUIZ4_ROOM);
+	
+	US3GameInstance* GI = Cast<US3GameInstance>(UGameplayStatics::GetGameInstance(this));
+	if ( !GI ) return;
+
+	FString AccessToken = GI->AccessToken;
 	AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
 	if ( HttpActor )
 	{
-		HttpActor->ReqPostRoomState(5 , "Quiz4 Started");
+		HttpActor->ReqPostRoomState(AccessToken , 5);
 	}
 }
 
 void AMTVS3_3rdGameState::OnGameClear()
 {
 	SetState(ERoomState::ENDING_ROOM);
+	
+	US3GameInstance* GI = Cast<US3GameInstance>(UGameplayStatics::GetGameInstance(this));
+	if ( !GI ) return;
+
+	FString AccessToken = GI->AccessToken;
 	AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
 	if ( HttpActor )
 	{
-		HttpActor->ReqPostRoomState(6 , "ENDING Started");
-		FName LevelName = FName(TEXT("EndingLevel"));
-		UGameplayStatics::OpenLevel(this , LevelName);
+		HttpActor->ReqPostRoomState(AccessToken , 6);
 	}
 }
 

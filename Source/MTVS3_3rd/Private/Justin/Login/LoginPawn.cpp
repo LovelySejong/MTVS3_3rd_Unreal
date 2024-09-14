@@ -134,6 +134,14 @@ void ALoginPawn::OnCreateSessionCompleted(FName SessionName , bool bWasSuccessfu
 	if ( bWasSuccessful )
 	{
 		UE_LOG(LogTemp , Warning , TEXT("Create Session successful"));
+
+		auto GI = GetWorld()->GetGameInstance<US3GameInstance>();
+		if(GI ) 
+		{
+			GI->SetHost(true);
+			UE_LOG(LogTemp , Warning , TEXT("Set Host in Create Session: %d") , GI->bIsHost);
+		}
+		
 		GetWorld()->ServerTravel(TEXT("/Game/LovelySejong/MatchingLevel?listen?username")); //Matchmaking Test Level
 		//GetWorld()->ServerTravel(TEXT("/Game/Justin/VoiceChat/Level_VoiceChatTest?listen")); //Voice Chat Test Level
 	}
@@ -160,7 +168,20 @@ void ALoginPawn::OnJoinSessionCompleted(FName SessionName , EOnJoinSessionComple
 
 					//OnlineIdentity->AddOnLoginCompleteDelegate_Handle(0 , FOnLoginComplete::FDelegate::CreateUObject(this , &ALoginPawn::OnLoginCompleted));
 					GEngine->OnNetworkFailure().AddUObject(this , &ALoginPawn::OnNetworkFail);
-					PController->ClientTravel(JoinAddress , ETravelType::TRAVEL_Absolute);
+
+					auto GI = GetWorld()->GetGameInstance<US3GameInstance>();
+					if ( GI )
+					{
+						GI->SetHost(false);
+						UE_LOG(LogTemp , Warning , TEXT("Set Host in Login Completed: %d") , GI->bIsHost);
+
+						FString Address = FString::Printf(TEXT("%s?username=%s"), *JoinAddress, *GI->GetPlayerNickname());
+						PController->ClientTravel(Address , ETravelType::TRAVEL_Relative);
+					}
+
+					
+
+
 				}
 				else
 				{
@@ -197,6 +218,15 @@ void ALoginPawn::OnLoginCompleted(int32 LocalUserNum , bool bWasSuccessful , con
 void ALoginPawn::OnNetworkFail(UWorld* World , UNetDriver* Driver , ENetworkFailure::Type Type , const FString& Error)
 {
 	UE_LOG(LogTemp , Warning , TEXT("OnNetworkFail in LoginPawn"));
+
+	auto GI = GetWorld()->GetGameInstance<US3GameInstance>();
+	if ( GI ) 
+	{
+		GI->SetHost(false);
+		UE_LOG(LogTemp , Warning , TEXT("Resetting Host state: %d") , GI->bIsHost);
+	}
+	
+
 	switch ( Type )
 	{
 	case ENetworkFailure::PendingConnectionFailure:
