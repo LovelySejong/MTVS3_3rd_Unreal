@@ -135,7 +135,7 @@ void ALoginPawn::OnCreateSessionCompleted(FName SessionName , bool bWasSuccessfu
 	{
 		UE_LOG(LogTemp , Warning , TEXT("Create Session successful"));
 
-		auto GI = GetWorld()->GetGameInstance<US3GameInstance>();
+		GI = GetWorld()->GetGameInstance<US3GameInstance>();
 		if(GI ) 
 		{
 			GI->SetHost(true);
@@ -169,7 +169,7 @@ void ALoginPawn::OnJoinSessionCompleted(FName SessionName , EOnJoinSessionComple
 					//OnlineIdentity->AddOnLoginCompleteDelegate_Handle(0 , FOnLoginComplete::FDelegate::CreateUObject(this , &ALoginPawn::OnLoginCompleted));
 					GEngine->OnNetworkFailure().AddUObject(this , &ALoginPawn::OnNetworkFail);
 
-					auto GI = GetWorld()->GetGameInstance<US3GameInstance>();
+					GI = GetWorld()->GetGameInstance<US3GameInstance>();
 					if ( GI )
 					{
 						GI->SetHost(false);
@@ -179,7 +179,7 @@ void ALoginPawn::OnJoinSessionCompleted(FName SessionName , EOnJoinSessionComple
 						PController->ClientTravel(Address , ETravelType::TRAVEL_Relative);
 					}
 
-					
+
 
 
 				}
@@ -219,7 +219,7 @@ void ALoginPawn::OnNetworkFail(UWorld* World , UNetDriver* Driver , ENetworkFail
 {
 	UE_LOG(LogTemp , Warning , TEXT("OnNetworkFail in LoginPawn"));
 
-	auto GI = GetWorld()->GetGameInstance<US3GameInstance>();
+	GI = GetWorld()->GetGameInstance<US3GameInstance>();
 	if ( GI ) 
 	{
 		GI->SetHost(false);

@@ -126,22 +126,17 @@ void AHttpActor::OnResPostLogin(FHttpRequestPtr Request , FHttpResponsePtr Respo
 					FString AccessToken = ResponseObject->GetStringField("accessToken");
 					FString Nickname = ResponseObject->GetStringField("nickname");
 
-					if ( UWorld* World = GetWorld() )
-					{
-						US3GameInstance* GI = World->GetGameInstance<US3GameInstance>();
-						if ( GI )
-						{
-							GI->SetPlayerNickname(Nickname);
-						}
-					}
+					US3GameInstance* GI = GetWorld()->GetGameInstance<US3GameInstance>();
+					if ( !GI ) return;
+					GI->SetPlayerNickname(Nickname);
 
 					if ( !AccessToken.IsEmpty() )
 					{
 						UE_LOG(LogTemp , Log , TEXT("Received Access Token: %s") , *AccessToken);
 						UE_LOG(LogTemp , Log , TEXT("Received Nickname: %s") , *Nickname);
 
-						// 로그인 성공 시 처리 (예: UI 업데이트)
-						US3GameInstance* GI = Cast<US3GameInstance>(UGameplayStatics::GetGameInstance(this));
+						// 로그인 성공 시 처리
+						GI = GetWorld()->GetGameInstance<US3GameInstance>();
 						if ( !GI ) return;
 						GI->SetAccessToken(AccessToken);
 						StartUI->OnLoginSuccess();
