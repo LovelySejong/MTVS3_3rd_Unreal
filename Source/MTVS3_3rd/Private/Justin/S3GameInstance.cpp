@@ -129,6 +129,7 @@ void US3GameInstance::OnStartSessionComplete(FName SessionName , bool bWasSucces
 		//}
 
 		//GetWorld()->ServerTravel(FString::Printf(TEXT("/Game/LovelySejong/PlayLevel?listen?IsHost=%s") , bIsHost));
+		
 		GetWorld()->ServerTravel("/Game/LovelySejong/PlayLevel?listen");
 	}
 }

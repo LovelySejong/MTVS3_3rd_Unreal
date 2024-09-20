@@ -58,6 +58,8 @@ AActor* AMTVS3_3rdGameMode::ChoosePlayerStart_Implementation(AController* Player
         //}
         //else UE_LOG(LogTemp , Warning , TEXT("Cast to GameState failed"));
 
+    UE_LOG(LogTemp,Warning,TEXT("ChoosePlayerStart_Implementation"));
+
     AMTVS3_3rdPlayerController* PC = Cast<AMTVS3_3rdPlayerController>(GetWorld()->GetFirstPlayerController());
     if ( !PC ) return Super::ChoosePlayerStart_Implementation(Player);
     AMTVS3_3rdPlayerState* PS = Cast<AMTVS3_3rdPlayerState>(PC->PlayerState);
@@ -85,15 +87,33 @@ AActor* AMTVS3_3rdGameMode::ChoosePlayerStart_Implementation(AController* Player
 
 UClass* AMTVS3_3rdGameMode::GetDefaultPawnClassForController_Implementation(AController* InController)
 {
-    AMTVS3_3rdPlayerController* PC = Cast<AMTVS3_3rdPlayerController>(GetWorld()->GetFirstPlayerController());
+
+    UE_LOG(LogTemp,Warning,TEXT("----------GetDefaultPawnClassForController_Implementation---------"));
+
+    /*AMTVS3_3rdPlayerController* PC = Cast<AMTVS3_3rdPlayerController>(GetWorld()->GetFirstPlayerController());
     if ( !PC ) return Super::GetDefaultPawnClassForController_Implementation(InController);;
     AMTVS3_3rdPlayerState* PS = Cast<AMTVS3_3rdPlayerState>(PC->PlayerState);
-    if ( !PS ) return Super::GetDefaultPawnClassForController_Implementation(InController);
+    if ( !PS ) return Super::GetDefaultPawnClassForController_Implementation(InController);*/
         
     UClass* CharacterClassToReturn = nullptr;
+        
+    TArray<AActor*> ActorList;
+    GetSeamlessTravelActorList(false, ActorList);
+    for(auto& Actor : ActorList)
+    {      
+        auto PS = Cast<AMTVS3_3rdPlayerState>(Actor);
+        if(PS && PS->GetUniqueId().ToString() == InController->PlayerState->GetUniqueId().ToString())
+        {
+            CharacterClassToReturn = PS->bIsHost ? HostCharacter : GuestCharacter;
+
+            UE_LOG(LogTemp,Warning,TEXT("[GetDefaultPawnClassForController_Implementation] %s"), *GetNameSafe(CharacterClassToReturn));
+            return CharacterClassToReturn;
+        }
+        else UE_LOG(LogTemp,Warning,TEXT("PS not valid"));
+    }
 
     // bIsHost 값에 따라 다른 캐릭터 블루프린트를 반환
-    if ( PS->bIsHost )
+    /*if ( PS->bIsHost )
     {
         CharacterClassToReturn = StaticLoadClass(APawn::StaticClass() , nullptr , TEXT("/Game/KHJ/Blueprints/BP_HJHost.BP_HJHost_C"));
     }
@@ -107,8 +127,47 @@ UClass* AMTVS3_3rdGameMode::GetDefaultPawnClassForController_Implementation(ACon
         UE_LOG(LogTemp , Warning , TEXT("Character blueprint loaded successfully: %s") , *CharacterClassToReturn->GetName());
         return CharacterClassToReturn;
     }
-    else UE_LOG(LogTemp , Warning , TEXT("Character blueprint loaded unsuccessful"));
+    else UE_LOG(LogTemp , Warning , TEXT("Character blueprint loaded unsuccessful"));*/
 
+    UE_LOG(LogTemp,Warning,TEXT("[GetDefaultPawnClassForController_Implementation] Failed to get pawn class"));
     // 기본 동작으로 돌아가서 기본 Pawn 클래스를 반환
     return Super::GetDefaultPawnClassForController_Implementation(InController);
+}
+
+void AMTVS3_3rdGameMode::HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer)
+{
+	// If players should start as spectators, leave them in the spectator state
+	if (!bStartPlayersAsSpectators && !MustSpectate(NewPlayer) && PlayerCanRestart(NewPlayer))
+	{
+		// Otherwise spawn their pawn immediately
+		//RestartPlayer(NewPlayer);
+        Super::HandleStartingNewPlayer_Implementation(NewPlayer);
+        
+        UE_LOG(LogTemp,Warning,TEXT("=========HandleStartingNewPlayer_Implementation=========="));
+        
+        if(auto pawn = Cast<AMTVS3_3rdPlayerState>(NewPlayer->GetPawn()))
+        {
+            UE_LOG(LogTemp,Warning,TEXT("[AMTVS3_3RdGameMode] Pawn possessed: %s"), *GetNameSafe(pawn));
+        }
+        else UE_LOG(LogTemp,Warning,TEXT("[AMTVS3_3RdGameMode] No Pawn possessed"));
+        
+        if(auto nice = Cast<AMTVS3_3rdPlayerState>(NewPlayer->PlayerState))
+        {
+            UE_LOG(LogTemp,Warning,TEXT("[%s]NewPlayer PlayerState: %s"), *nice->GetUniqueId().ToString(),*nice->AccessToken);
+        }
+        else UE_LOG(LogTemp,Warning,TEXT("NewPlayer PlayerState: no player state"));
+
+        TArray<AActor*> ActorList;
+        GetSeamlessTravelActorList(false, ActorList);
+        for(auto& P : ActorList)
+        {
+            auto nice = Cast<AMTVS3_3rdPlayerState>(P);
+
+            if(nice)
+            {
+                UE_LOG(LogTemp,Warning,TEXT("[%s] ActorList: %s"), *nice->GetUniqueId().ToString(), *nice->AccessToken);
+            }
+            else UE_LOG(LogTemp,Warning,TEXT("ActorList not valid"));
+        }
+	}
 }

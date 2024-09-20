@@ -7,6 +7,7 @@
 #include "Net/UnrealNetwork.h"
 #include "Justin/S3GameInstance.h"
 #include "Kismet/GameplayStatics.h"
+#include "HJ/MTVS3_3rdPlayerState.h"
 
 AS3LobbyGMBase::AS3LobbyGMBase()
 {
@@ -101,22 +102,44 @@ void AS3LobbyGMBase::HandleStartingNewPlayer_Implementation(APlayerController* N
 	Super::HandleStartingNewPlayer_Implementation(NewPlayer);
 
 	auto Pawn = NewPlayer->GetPawn();
+
 	UE_LOG(LogTemp , Warning , TEXT("[HandleStartingNewPlayer] PlayerCharacter: %s") , *GetNameSafe(Pawn));
+	UE_LOG(LogTemp , Warning , TEXT("----------[HandleStartingNewPlayer]---------"));
 
 	auto PC = CastChecked<AS3PCLobby>(NewPlayer);
 	// Host의 게임 인스턴스 bIsHost에는 true를 저장하고
 	// Guest의 게임 인스턴스 bIsHost에는 false를 저장
+
+	if(auto pawn = Cast<AMTVS3_3rdPlayerState>(NewPlayer->GetPawn()))
+    {
+        UE_LOG(LogTemp,Warning,TEXT("[AS3LobbyGMBase] Pawn possessed: %s"), *GetNameSafe(pawn));
+    }
+    else UE_LOG(LogTemp,Warning,TEXT("[AS3LobbyGMBase] No Pawn possessed"));
 
 	if ( PC )
 	{
 		if ( bHasHost )
 		{
 			PC->SetHost(false);
+			
+			if(auto PS = PC->GetPlayerState<AMTVS3_3rdPlayerState>())
+			{
+				PS->SetHost(false);
+				UE_LOG(LogTemp,Warning,TEXT("[PreClientTravel] bIsHost:%d"), PS->bIsHost);
+			}
 		}
 		else
 		{
 			bHasHost = true;
 			PC->SetHost(true);
+			
+			if(auto PS = PC->GetPlayerState<AMTVS3_3rdPlayerState>())
+			{
+				PS->SetHost(true);
+				UE_LOG(LogTemp,Warning,TEXT("[PreClientTravel] bIsHost: %d"), PS->bIsHost);
+			}
 		}
 	}
+
+
 }
