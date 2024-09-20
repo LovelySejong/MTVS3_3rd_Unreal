@@ -44,6 +44,9 @@ void AS3LobbyGMBase::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
 
+	auto Pawn = NewPlayer->GetPawn();
+	UE_LOG(LogTemp , Warning , TEXT("[PostLogin] PlayerCharacter: %s") , *GetNameSafe(Pawn));
+
 	if ( !Cast<AS3PCLobby>(NewPlayer)->IsHost() ) // is Client 
 	{
 		bIsFull = true;
@@ -95,6 +98,11 @@ bool AS3LobbyGMBase::IsReadyToPlay()
 
 void AS3LobbyGMBase::HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer)
 {
+	Super::HandleStartingNewPlayer_Implementation(NewPlayer);
+
+	auto Pawn = NewPlayer->GetPawn();
+	UE_LOG(LogTemp , Warning , TEXT("[HandleStartingNewPlayer] PlayerCharacter: %s") , *GetNameSafe(Pawn));
+
 	auto PC = CastChecked<AS3PCLobby>(NewPlayer);
 	// Host의 게임 인스턴스 bIsHost에는 true를 저장하고
 	// Guest의 게임 인스턴스 bIsHost에는 false를 저장
@@ -111,6 +119,4 @@ void AS3LobbyGMBase::HandleStartingNewPlayer_Implementation(APlayerController* N
 			PC->SetHost(true);
 		}
 	}
-
-	Super::HandleStartingNewPlayer_Implementation(NewPlayer);
 }
