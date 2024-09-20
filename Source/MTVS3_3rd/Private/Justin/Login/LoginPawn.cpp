@@ -8,6 +8,7 @@
 #include "Interfaces/OnlineIdentityInterface.h"
 #include "OnlineSubsystem.h"
 #include "HJ/StartWidget.h"
+#include "MTVS3_3rd.h"
 
 // Sets default values
 ALoginPawn::ALoginPawn()
@@ -21,6 +22,13 @@ ALoginPawn::ALoginPawn()
 void ALoginPawn::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if ( HasAuthority() )
+	{
+		FString Test = REMOTEROLE;
+		UE_LOG(LogTemp , Warning , TEXT("Testing: %s") , *Test);
+	}	
+
 	GI = GetWorld()->GetGameInstance<US3GameInstance>();
 
 	if ( IOnlineSubsystem* SubSystem = IOnlineSubsystem::Get() )
@@ -36,6 +44,8 @@ void ALoginPawn::BeginPlay()
 
 		GI->SessionInterface->RemoveNamedSession("Justin's Session");
 	}
+
+	GetNetConnection();
 }
 
 void ALoginPawn::StartConnection(UStartWidget* _StartWidget)
