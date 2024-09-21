@@ -99,7 +99,7 @@ UClass* AMTVS3_3rdGameMode::GetDefaultPawnClassForController_Implementation(ACon
     }
     else
     {
-        CharacterClassToReturn = StaticLoadClass(APawn::StaticClass() , nullptr , TEXT("/Game/KHJ/Blueprints/BP_HJGuest.BP_HJGuest_C"));
+        CharacterClassToReturn = StaticLoadClass(APawn::StaticClass() , nullptr , TEXT("/Game/FirstPerson/Blueprints/BP_FirstPersonCharacter_SchoolBoy_C"));
     }
 
     if ( CharacterClassToReturn )
