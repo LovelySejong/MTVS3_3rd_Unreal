@@ -90,7 +90,7 @@ void UStartWidget::OnSignInButtonClicked()
 
 void UStartWidget::OnSignUpButtonClicked()
 {
-	FString URL = TEXT("https://descriptive-manchego-543.notion.site/In-Sink-aa4edfa5ebde4cf29cd7dc89c1ec014b?pvs=4");
+	FString URL = TEXT("http://125.132.216.190:5173/signup");
 	FPlatformProcess::LaunchURL(*URL , nullptr , nullptr);
 }
 
