@@ -15,7 +15,7 @@ void UQuizWidget::SetActiveQuizPanel(bool value , int num)
 		QuizPanel->SetVisibility(ESlateVisibility::Visible);
 		SetAllQuizzesInactive();
 		auto* pc = UGameplayStatics::GetPlayerController(this , 0);
-		pc->SetInputMode(FInputModeUIOnly());
+		pc->SetInputMode(FInputModeGameAndUI());
 		pc->SetShowMouseCursor(true);
 		switch ( num )
 		{
