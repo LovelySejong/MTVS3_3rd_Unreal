@@ -134,6 +134,11 @@ UClass* AMTVS3_3rdGameMode::GetDefaultPawnClassForController_Implementation(ACon
     return Super::GetDefaultPawnClassForController_Implementation(InController);
 }
 
+void AMTVS3_3rdGameMode::OnGameClear()
+{
+    GetWorld()->ServerTravel("/Game/LovelySejong/EndingLevel?listen");
+}
+
 void AMTVS3_3rdGameMode::HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer)
 {
 	// If players should start as spectators, leave them in the spectator state

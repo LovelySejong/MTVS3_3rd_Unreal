@@ -22,6 +22,7 @@ public:
 
 	virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) override;
 
+	void OnGameClear();
 
 
 protected:

@@ -6,6 +6,7 @@
 #include "CSW/InteractionActor.h"
 #include "HJ/HttpActor.h"
 #include "Justin/S3GameInstance.h"
+#include "MTVS3_3rdGameMode.h"
 
 AMTVS3_3rdGameState::AMTVS3_3rdGameState()
 {
@@ -63,7 +64,7 @@ void AMTVS3_3rdGameState::OnMeetingStart()
 	{
 		SetState(ERoomState::MEETING_ROOM);
 	}
-	
+
 	US3GameInstance* GI = Cast<US3GameInstance>(UGameplayStatics::GetGameInstance(this));
 	if ( !GI ) return;
 
@@ -78,7 +79,7 @@ void AMTVS3_3rdGameState::OnMeetingStart()
 void AMTVS3_3rdGameState::OnQuiz3Start()
 {
 	SetState(ERoomState::QUIZ3_ROOM);
-	
+
 	US3GameInstance* GI = Cast<US3GameInstance>(UGameplayStatics::GetGameInstance(this));
 	if ( !GI ) return;
 
@@ -93,7 +94,7 @@ void AMTVS3_3rdGameState::OnQuiz3Start()
 void AMTVS3_3rdGameState::OnQuiz4Start()
 {
 	SetState(ERoomState::QUIZ4_ROOM);
-	
+
 	US3GameInstance* GI = Cast<US3GameInstance>(UGameplayStatics::GetGameInstance(this));
 	if ( !GI ) return;
 
@@ -108,7 +109,7 @@ void AMTVS3_3rdGameState::OnQuiz4Start()
 void AMTVS3_3rdGameState::OnGameClear()
 {
 	SetState(ERoomState::ENDING_ROOM);
-	
+
 	US3GameInstance* GI = Cast<US3GameInstance>(UGameplayStatics::GetGameInstance(this));
 	if ( !GI ) return;
 
@@ -117,6 +118,13 @@ void AMTVS3_3rdGameState::OnGameClear()
 	if ( HttpActor )
 	{
 		HttpActor->ReqPostRoomState(AccessToken , 6);
+	}
+
+	auto GM = Cast<AMTVS3_3rdGameMode>(GetWorld()->GetAuthGameMode());
+
+	if ( GM )
+	{
+		GM->OnGameClear();
 	}
 }
 
@@ -144,7 +152,7 @@ void AMTVS3_3rdGameState::CheckCarpet(int num , int value)
 			if ( DebugGimmickEnable ) GEngine->AddOnScreenDebugMessage(-1 , 5.f , FColor::Yellow , FString::Printf(TEXT("Carpet1 ON")));
 			// 문 열기 함수 호출
 			TArray<AActor*> OutputActor;
-			UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld() , AActor::StaticClass() , TEXT("DoorMeeting"), OutputActor);
+			UGameplayStatics::GetAllActorsOfClassWithTag(GetWorld() , AActor::StaticClass() , TEXT("DoorMeeting") , OutputActor);
 			if ( !OutputActor.IsEmpty() )
 			{
 				auto tempActor = Cast<AInteractionActor>(OutputActor.Top());
