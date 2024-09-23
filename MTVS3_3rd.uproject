@@ -61,6 +61,14 @@
 		{
 			"Name": "OnlineSubsystemSteam",
 			"Enabled": true
+		},
+		{
+			"Name": "Buoyancy",
+			"Enabled": true
+		},
+		{
+			"Name": "Water",
+			"Enabled": true
 		}
 	]
 }
