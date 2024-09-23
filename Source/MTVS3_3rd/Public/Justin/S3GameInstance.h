@@ -20,9 +20,6 @@ public:
 	virtual TStatId GetStatId() const override;
 	virtual void Tick(float DeltaTime) override;
 
-	//void SetPlayerNickname(const FString& Nickname);
-	//FString GetPlayerNickname() const;
-	//FString PlayerNickname;
 public:
 	IOnlineSessionPtr SessionInterface;
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
@@ -37,6 +34,23 @@ public:
 	void StartSession();
 	UFUNCTION(BlueprintCallable)
 	void DestroyServer();
+
+#pragma region HJ 
+	void SetPlayerNickname(const FString& Nickname);
+	FString GetPlayerNickname() const;
+	FString PlayerNickname;
+	
+	// AccessToken을 저장할 변수 추가
+    UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Authentication")
+    FString AccessToken;
+
+	bool bIsHost;
+	void SetHost(bool _bIsHost);
+
+	// AccessToken을 설정하는 함수
+    UFUNCTION(BlueprintCallable, Category = "Authentication")
+    void SetAccessToken(const FString& InAccessToken);
+#pragma endregion
 
 protected:
 	virtual void Init() override;

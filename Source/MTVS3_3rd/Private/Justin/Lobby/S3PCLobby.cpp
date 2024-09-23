@@ -7,6 +7,7 @@
 #include "Net/UnrealNetwork.h"
 #include "Justin/Lobby/S3LobbyGMBase.h"
 #include "Justin/S3GameInstance.h"
+#include "Kismet/GameplayStatics.h"
 
 AS3PCLobby::AS3PCLobby()
 {
@@ -39,7 +40,17 @@ void AS3PCLobby::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 void AS3PCLobby::SetHost(bool _bIsHost)
 {
 	bIsHost = _bIsHost;
+
+	//if ( HasAuthority() )
+	//{
+	//	Client_SetHost(_bIsHost);
+	//}
 }
+
+//void AS3PCLobby::Client_SetHost_Implementation(bool _bIsHost)
+//{
+//	SetHost(_bIsHost);
+//}
 
 bool AS3PCLobby::IsHost() const
 {

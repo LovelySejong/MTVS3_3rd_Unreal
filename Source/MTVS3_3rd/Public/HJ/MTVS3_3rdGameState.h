@@ -24,6 +24,8 @@ class MTVS3_3RD_API AMTVS3_3rdGameState : public AGameStateBase
 	GENERATED_BODY()
 	
 public:
+	//bool bTest = false;
+
 	AMTVS3_3rdGameState();
 
 	#pragma region Default

@@ -47,7 +47,7 @@ void UStartWidget::OnGuestButtonClicked()
 
 void UStartWidget::SetActiveLoginUI(bool value)
 {
-	if (value ) LoginPanel->SetVisibility(ESlateVisibility::Visible);
+	if ( value ) LoginPanel->SetVisibility(ESlateVisibility::Visible);
 	else LoginPanel->SetVisibility(ESlateVisibility::Hidden);
 }
 
@@ -71,7 +71,7 @@ void UStartWidget::OnSignInButtonClicked()
 
 		if ( !EnteredText_ID.IsEmpty() && !EnteredText_PW.IsEmpty() )
 		{
-			AHttpActor* HttpActor = CastChecked< AHttpActor>(UGameplayStatics::GetActorOfClass(this , AHttpActor::StaticClass()));
+			AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
 			if ( HttpActor )
 			{
 				HttpActor->ReqPostLogin(EnteredText_ID , EnteredText_PW);
@@ -90,7 +90,7 @@ void UStartWidget::OnSignInButtonClicked()
 
 void UStartWidget::OnSignUpButtonClicked()
 {
-	FString URL = TEXT("https://descriptive-manchego-543.notion.site/In-Sink-aa4edfa5ebde4cf29cd7dc89c1ec014b?pvs=4");
+	FString URL = TEXT("http://125.132.216.190:5173/signup");
 	FPlatformProcess::LaunchURL(*URL , nullptr , nullptr);
 }
 
@@ -100,7 +100,7 @@ void UStartWidget::OnXButtonClicked()
 }
 
 void UStartWidget::OnLoginFail(int num)
-{	
+{
 	switch ( num )
 	{
 	case 0: // OnLoginFail(0) 호출 시 아이디, 비번 입력 안 함
@@ -126,6 +126,11 @@ void UStartWidget::OnLoginFail(int num)
 
 void UStartWidget::OnLoginSuccess()
 {
+	//FName LevelName = FName(TEXT("PlayLevel"));
+	//UGameplayStatics::OpenLevel(this , LevelName);
+	//auto* pc = UGameplayStatics::GetPlayerController(this , 0);
+	//pc->SetInputMode(FInputModeGameOnly());
+
 	// ** 로그인 성공 시 연결
 	//check if User successfully logged in.
 	//if yes, allow player to connect

@@ -100,9 +100,9 @@ void AHttpActor::ReqPostLogin(const FText& ID , const FText& Password)
 	Request->ProcessRequest();
 }
 
-void AHttpActor::OnResPostLogin(FHttpRequestPtr Request , FHttpResponsePtr Response , bool bConnectedSuccessfully)
+void AHttpActor::OnResPostLogin(FHttpRequestPtr Request , FHttpResponsePtr Response , bool bWasSuccessful)
 {
-	if ( bConnectedSuccessfully && Response.IsValid() )
+	if ( bWasSuccessful && Response.IsValid() )
 	{
 		// 응답 본문을 로그에 출력
 		UE_LOG(LogTemp , Log , TEXT("Response Code: %d") , Response->GetResponseCode());
@@ -126,21 +126,19 @@ void AHttpActor::OnResPostLogin(FHttpRequestPtr Request , FHttpResponsePtr Respo
 					FString AccessToken = ResponseObject->GetStringField("accessToken");
 					FString Nickname = ResponseObject->GetStringField("nickname");
 
-					if ( UWorld* World = GetWorld() )
-					{
-						US3GameInstance* GI = World->GetGameInstance<US3GameInstance>();
-						if ( GI )
-						{
-							//GI->SetPlayerNickname(Nickname);
-						}
-					}
+					US3GameInstance* GI = GetWorld()->GetGameInstance<US3GameInstance>();
+					if ( !GI ) return;
+					GI->SetPlayerNickname(Nickname);
 
 					if ( !AccessToken.IsEmpty() )
 					{
 						UE_LOG(LogTemp , Log , TEXT("Received Access Token: %s") , *AccessToken);
 						UE_LOG(LogTemp , Log , TEXT("Received Nickname: %s") , *Nickname);
 
-						// 로그인 성공 시 처리 (예: UI 업데이트)
+						// 로그인 성공 시 처리
+						GI = GetWorld()->GetGameInstance<US3GameInstance>();
+						if ( !GI ) return;
+						GI->SetAccessToken(AccessToken);
 						StartUI->OnLoginSuccess();
 					}
 					else
@@ -174,8 +172,11 @@ void AHttpActor::OnResPostLogin(FHttpRequestPtr Request , FHttpResponsePtr Respo
 	}
 }
 
-void AHttpActor::ReqPostRoomState(int32 RoomNumber , const FString& RoomState)
+void AHttpActor::ReqPostRoomState(const FString& AccessToken , int32 RoomNumber)
 {
+	// AccessToken과 RoomNumber를 로그로 출력
+	UE_LOG(LogTemp , Warning , TEXT("AccessToken: %s, RoomNumber: %d") , *AccessToken , RoomNumber);
+
 	// HTTP module
 	FHttpModule* Http = &FHttpModule::Get();
 	if ( !Http ) { return; }
@@ -184,27 +185,92 @@ void AHttpActor::ReqPostRoomState(int32 RoomNumber , const FString& RoomState)
 	TSharedRef<IHttpRequest , ESPMode::ThreadSafe> Request = Http->CreateRequest();
 	Request->OnProcessRequestComplete().BindUObject(this , &AHttpActor::OnResPostRoomState);
 
-	// Set URL
-	Request->SetURL(TEXT("https://yourserver.com/roomstate"));
+	Request->SetURL(TEXT("http://125.132.216.190:7878/api/log/clear"));
 	Request->SetVerb(TEXT("POST"));
-	Request->SetHeader(TEXT("Content-Type") , TEXT("application/json"));
 
-	// Create JSON content
+	Request->SetHeader(TEXT("Content-Type") , TEXT("application/json"));
+	Request->SetHeader(TEXT("Authorization") , FString::Printf(TEXT("Bearer %s") , *AccessToken));
+
 	FString ContentString;
 	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&ContentString);
 	Writer->WriteObjectStart();
-	Writer->WriteValue(TEXT("RoomNumber") , RoomNumber);
-	Writer->WriteValue(TEXT("RoomState") , RoomState);
+	Writer->WriteValue(TEXT("roomNumber") , RoomNumber);
 	Writer->WriteObjectEnd();
 	Writer->Close();
 
-	// Set request content
 	Request->SetContentAsString(ContentString);
 
-	// Execute request
 	Request->ProcessRequest();
+
+	//Request->SetHeader(TEXT("Content-Type") , TEXT("application/json"));
+
+	//// Create JSON content
+	//FString ContentString;
+	//TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&ContentString);
+	//Writer->WriteObjectStart();
+	//Writer->WriteValue(TEXT("AccessToken") , AccessToken);
+	//Writer->WriteValue(TEXT("RoomNumber") , RoomNumber);
+	//Writer->WriteObjectEnd();
+	//Writer->Close();
+
+	//// Set request content
+	//Request->SetContentAsString(ContentString);
+
+	//// Execute request
+	//Request->ProcessRequest();
 }
 
 void AHttpActor::OnResPostRoomState(FHttpRequestPtr Request , FHttpResponsePtr Response , bool bWasSuccessful)
 {
+	if ( bWasSuccessful && Response.IsValid() )
+	{
+		// 응답 본문을 로그에 출력
+		UE_LOG(LogTemp , Log , TEXT("Response Code: %d") , Response->GetResponseCode());
+		UE_LOG(LogTemp , Log , TEXT("Response Body: %s") , *Response->GetContentAsString());
+
+		if ( Response->GetResponseCode() == 200 ) // 응답 코드가 200(OK)인지 확인
+		{
+			// JSON 응답 파싱
+			FString ResponseBody = Response->GetContentAsString();
+			TSharedPtr<FJsonObject> JsonObject;
+			TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(ResponseBody);
+
+			if ( FJsonSerializer::Deserialize(Reader , JsonObject) && JsonObject.IsValid() )
+			{
+				// "response" 객체에 접근
+				TSharedPtr<FJsonObject> ResponseObject = JsonObject->GetObjectField("response");
+
+				if ( ResponseObject.IsValid() )
+				{
+					// "accessToken" 추출
+					FString AccessToken = ResponseObject->GetStringField("accessToken");
+
+					if ( !AccessToken.IsEmpty() )
+					{
+						UE_LOG(LogTemp , Log , TEXT("Received Access Token: %s") , *AccessToken);
+					}
+					else
+					{
+						UE_LOG(LogTemp , Warning , TEXT("Access Token is missing in the response."));
+					}
+				}
+				else
+				{
+					UE_LOG(LogTemp , Warning , TEXT("'response' 객체를 찾을 수 없습니다."));
+				}
+			}
+			else
+			{
+				UE_LOG(LogTemp , Warning , TEXT("JSON 응답 파싱 실패."));
+			}
+		}
+		else
+		{
+			UE_LOG(LogTemp , Warning , TEXT("로그인 실패, 응답 코드: %d") , Response->GetResponseCode());
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp , Error , TEXT("요청 실패 또는 응답이 유효하지 않음"));
+	}
 }
