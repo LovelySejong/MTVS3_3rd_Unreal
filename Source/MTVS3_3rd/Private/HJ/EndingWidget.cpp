@@ -20,7 +20,7 @@ void UEndingWidget::NativeConstruct()
 
 void UEndingWidget::OnWebButtonClicked()
 {
-    FString URL = TEXT("http://125.132.216.190:5173/quiz");
+    FString URL = TEXT("http://125.132.216.190:7979/quiz");
     FPlatformProcess::LaunchURL(*URL , nullptr , nullptr);
 }
 
