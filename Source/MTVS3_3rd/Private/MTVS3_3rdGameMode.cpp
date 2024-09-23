@@ -13,7 +13,7 @@
 AMTVS3_3rdGameMode::AMTVS3_3rdGameMode()
 	: Super()
 {
-    static ConstructorHelpers::FClassFinder<APawn> PlayerPawnClassFinder(TEXT("/Game/FirstPerson/Blueprints/BP_FirstPersonCharacter_SchoolBoy"));
+    static ConstructorHelpers::FClassFinder<APawn> PlayerPawnClassFinder(TEXT("/Game/FirstPerson/Blueprints/BP_FirstPersonCharacter_SchoolBoy.BP_FirstPersonCharacter_SchoolBoy_C"));
     DefaultPawnClass = PlayerPawnClassFinder.Class;
 }
 
