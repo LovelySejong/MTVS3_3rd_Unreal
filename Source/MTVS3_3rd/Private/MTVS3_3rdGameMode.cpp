@@ -72,14 +72,14 @@ AActor* AMTVS3_3rdGameMode::ChoosePlayerStart_Implementation(AController* Player
 		{
 			for ( AActor* PlayerStart : PlayerStarts )
 			{
-				if ( PS->bIsHost && PlayerStart->Tags.Contains("PlayerStart_Host") )
+				if ( PS->bIsHost && PlayerStart->Tags.Contains("Host") )
 				{
-					UE_LOG(LogTemp , Warning , TEXT("return: PlayerStart_Host"));
+					UE_LOG(LogTemp , Warning , TEXT("return: PlayerStart : Host"));
 					return PlayerStart; // Return the PlayerStart for the host
 				}
-				else if ( !PS->bIsHost && PlayerStart->Tags.Contains("PlayerStart_Guest") )
+				else if ( !PS->bIsHost && PlayerStart->Tags.Contains("Guest") )
 				{
-					UE_LOG(LogTemp , Warning , TEXT("return: PlayerStart_Guest"));
+					UE_LOG(LogTemp , Warning , TEXT("return: PlayerStart : Guest"));
 					return PlayerStart; // Return the PlayerStart for the client
 				}
 				else UE_LOG(LogTemp , Warning , TEXT("PlayerStart loaded unsuccessful"));
