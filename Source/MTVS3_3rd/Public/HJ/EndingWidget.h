@@ -23,6 +23,12 @@ public:
 	UFUNCTION()
 	void OnWebButtonClicked();
 
+	UPROPERTY(meta = (BindWidget))
+	class UButton* Btn_Quit;
+
+	//UFUNCTION()
+	//void OnQuitButtonClicked();
+
 	UPROPERTY(EditAnywhere, meta = (BindWidgetAnim), Transient)
 	class UWidgetAnimation* EndingAnim;
 };
