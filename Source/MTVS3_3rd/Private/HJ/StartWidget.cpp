@@ -90,7 +90,7 @@ void UStartWidget::OnSignInButtonClicked()
 
 void UStartWidget::OnSignUpButtonClicked()
 {
-	FString URL = TEXT("http://125.132.216.190:5173/signup");
+	FString URL = TEXT("http://125.132.216.190:7979/signup");
 	FPlatformProcess::LaunchURL(*URL , nullptr , nullptr);
 }
 
