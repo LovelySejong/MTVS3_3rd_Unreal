@@ -37,10 +37,16 @@ public:
 	void ReqPostLogin(const FText& ID , const FText& Password);
 
 	// 응답 받을 함수
-	void OnResPostLogin(FHttpRequestPtr Request , FHttpResponsePtr Response , bool bConnectedSuccessfully);
+	void OnResPostLogin(FHttpRequestPtr Request , FHttpResponsePtr Response , bool bWasSuccessful);
+
+	// 매칭 상태 요청 함수
+	void ReqPostMatchState(const FString& AccessToken , const FString& PartnerID);
+
+	// 매칭 상태 응답 처리 함수
+	void OnResPostMatchState(FHttpRequestPtr Request , FHttpResponsePtr Response , bool bWasSuccessful);
 
 	UFUNCTION(BlueprintCallable, Category = "HTTP")
-	void ReqPostRoomState(const FString& AccessToken , const FString& PartnerID , int32 RoomNumber);
+	void ReqPostRoomState(const FString& AccessToken , const FString& GameID , int32 RoomNumber);
 
 	void OnResPostRoomState(FHttpRequestPtr Request , FHttpResponsePtr Response , bool bWasSuccessful);
 };

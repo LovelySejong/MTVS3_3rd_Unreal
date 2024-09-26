@@ -6,6 +6,8 @@
 #include "Net/UnrealNetwork.h"
 #include "Justin/Lobby/LobbyWidget.h"
 #include "HJ/MTVS3_3rdGameState.h"
+#include "HJ/HttpActor.h"
+#include "Kismet/GameplayStatics.h"
 
 #pragma region HJ 
 void AMTVS3_3rdPlayerState::CopyProperties(APlayerState* NewPlayerState)
@@ -17,16 +19,16 @@ void AMTVS3_3rdPlayerState::CopyProperties(APlayerState* NewPlayerState)
 		UE_LOG(LogTemp , Warning , TEXT("AMTVS3_3rdPlayerState::CopyProperties"));
 		// 기존 PlayerState의 데이터를 새로운 PlayerState로 복사
 		MyNewPlayerState->bIsHost = bIsHost;
-		MyNewPlayerState->HostID = HostID;
-		MyNewPlayerState->GuestID = GuestID;
+		//MyNewPlayerState->HostID = HostID;
+		//MyNewPlayerState->GuestID = GuestID;
 
-		UE_LOG(LogTemp , Warning , TEXT("[%s] bIshost: %d, HostId: %s, GuestID: %s"), 
-			*GetUniqueId().ToString(),
-		bIsHost, *HostID, *GuestID);
+		//UE_LOG(LogTemp , Warning , TEXT("[%s] bIshost: %d, HostId: %s, GuestID: %s"), 
+		//	*GetUniqueId().ToString(),
+		//bIsHost, *HostID, *GuestID);
 
-		auto GS = Cast<AMTVS3_3rdGameState>(GetWorld()->GetGameState());
-		GS->SetHostID(MyNewPlayerState->HostID);
-		GS->SetGuestID(MyNewPlayerState->GuestID);
+		//auto GS = Cast<AMTVS3_3rdGameState>(GetWorld()->GetGameState());
+		//GS->SetHostID(MyNewPlayerState->HostID);
+		//GS->SetGuestID(MyNewPlayerState->GuestID);
 	}
 }
 
@@ -96,6 +98,38 @@ FString AMTVS3_3rdPlayerState::GetGuestID() const
 	}
 	return GuestID;
 }
+
+void AMTVS3_3rdPlayerState::SetHostToken(const FString& hostToken)
+{
+	HostToken = hostToken;
+	UE_LOG(LogTemp , Log , TEXT("AMTVS3_3rdPlayerState::SetHostToken(): %s") , *HostToken);
+}
+
+FString AMTVS3_3rdPlayerState::GetHostToken() const
+{
+	if ( HostToken.IsEmpty() )
+	{
+		UE_LOG(LogTemp , Warning , TEXT("HostToken is empty, returning default value."));
+		return TEXT("HostToken");
+	}
+	return HostToken;
+}
+
+void AMTVS3_3rdPlayerState::SetGuestToken(const FString& guestToken)
+{
+	GuestToken = guestToken;
+	UE_LOG(LogTemp , Log , TEXT("AMTVS3_3rdPlayerState::SetGuestToken(): %s") , *GuestToken);
+}
+
+FString AMTVS3_3rdPlayerState::GetGuestToken() const
+{
+	if ( GuestToken.IsEmpty() )
+	{
+		UE_LOG(LogTemp , Warning , TEXT("GuestToken is empty, returning default value."));
+		return TEXT("GuestToken");
+	}
+	return GuestToken;
+}
 #pragma endregion
 
 # pragma region HJ 멀티플레이
@@ -106,17 +140,50 @@ void AMTVS3_3rdPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 	DOREPLIFETIME(AMTVS3_3rdPlayerState , bIsHost);
 	DOREPLIFETIME(AMTVS3_3rdPlayerState , HostID);
 	DOREPLIFETIME(AMTVS3_3rdPlayerState , GuestID);
+	DOREPLIFETIME(AMTVS3_3rdPlayerState , HostToken);
+	DOREPLIFETIME(AMTVS3_3rdPlayerState , GuestToken);
 }
 
-void AMTVS3_3rdPlayerState::ServerRPCSetGuestId_Implementation(const FString& guestId)
+void AMTVS3_3rdPlayerState::ServerRPCSetHostToken_Implementation(const FString& _hostToken)
 {
-	SetGuestID(guestId);
+	UE_LOG(LogTemp , Warning , TEXT("HostToken Set in Server"));
+	SetHostToken(_hostToken);
+
+	auto GS = Cast<AMTVS3_3rdGameState>(GetWorld()->GetGameState());
+	if ( !GS ) return;
+	GS->SetHostToken(GetHostToken());
+
+	AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
+	if ( !HttpActor ) return;
+
+	HttpActor->ReqPostMatchState(GS->GetHostToken() , GS->GetHostID());
+	HttpActor->ReqPostMatchState(GS->GetGuestToken() , GS->GetGuestID());
 }
 
-void AMTVS3_3rdPlayerState::ServerRPCSetHostId_Implementation(const FString& hostId)
+void AMTVS3_3rdPlayerState::ServerRPCSetGuestToken_Implementation(const FString& _guestToken)
+{
+	UE_LOG(LogTemp , Warning , TEXT("GuestToken Set in Server"));
+	SetGuestToken(_guestToken);
+
+	auto GS = Cast<AMTVS3_3rdGameState>(GetWorld()->GetGameState());
+	GS->SetGuestToken(GetGuestToken());
+}
+
+void AMTVS3_3rdPlayerState::ServerRPCSetHostID_Implementation(const FString& hostId)
 {
 	UE_LOG(LogTemp , Warning , TEXT("HostID Set in Server"));
 	SetHostID(hostId);
+
+	auto GS = Cast<AMTVS3_3rdGameState>(GetWorld()->GetGameState());
+	GS->SetHostID(GetHostID());
+}
+
+void AMTVS3_3rdPlayerState::ServerRPCSetGuestID_Implementation(const FString& guestId)
+{
+	SetGuestID(guestId);
+
+	auto GS = Cast<AMTVS3_3rdGameState>(GetWorld()->GetGameState());
+	GS->SetGuestID(GetGuestID());
 }
 
 // Host 닉네임 RPC

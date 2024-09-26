@@ -64,32 +64,38 @@ void ACheckPoint::OnMyBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent ,
 		if ( this->ActorHasTag(FName("TutorialEnd")) )
 		{
 			this->Destroy();
-			if ( HasAuthority() ) gs->OnQuiz1Start();
+			//if ( HasAuthority() ) gs->OnQuiz1Start();
+			gs->OnQuiz1Start();
 		}
 		else if ( this->ActorHasTag(FName("Quiz1End")) )
 		{
 			this->Destroy();
-			if ( HasAuthority() ) gs->OnQuiz2Start();
+			//if ( HasAuthority() ) gs->OnQuiz2Start();
+			gs->OnQuiz2Start();
 		}
 		else if ( this->ActorHasTag(FName("Quiz2End")) )
 		{
 			this->Destroy();
-			if ( HasAuthority() ) gs->OnMeetingStart();
+			//if ( HasAuthority() ) gs->OnMeetingStart();
+			gs->OnMeetingStart();
 		}
 		else if ( this->ActorHasTag(FName("MeetingEnd")) )
 		{
 			this->Destroy();
-			if ( HasAuthority() ) gs->OnQuiz3Start();
+			//if ( HasAuthority() ) gs->OnQuiz3Start();
+			gs->OnQuiz3Start();
 		}
 		else if ( this->ActorHasTag(FName("Quiz3End")) )
 		{
 			this->Destroy();
-			if ( HasAuthority() ) gs->OnQuiz4Start();
+			//if ( HasAuthority() ) gs->OnQuiz4Start();
+			gs->OnQuiz4Start();
 		}
 		else if ( this->ActorHasTag(FName("Quiz4End")) )
 		{
 			this->Destroy();
-			if ( HasAuthority() ) gs->OnGameClear();
+			//if ( HasAuthority() ) gs->OnGameClear();
+			gs->OnGameClear();
 		}
 	}
 

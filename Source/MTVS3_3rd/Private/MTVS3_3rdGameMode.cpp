@@ -24,34 +24,34 @@ void AMTVS3_3rdGameMode::BeginPlay()
 	TArray<AActor*> ActorList;
 	GetSeamlessTravelActorList(false , ActorList);
 
-	auto GS = GetGameState<AMTVS3_3rdGameState>();
-	if ( GS )
-	{
-		for ( auto CurrPS : GS->PlayerArray )
-		{
-			for ( auto& Actor : ActorList )
-			{
-				auto PS = Cast<AMTVS3_3rdPlayerState>(Actor);
-				if ( PS )
-				{
-					UE_LOG(LogTemp , Log , TEXT("AMTVS3_3rdGameState::BeginPlay() bIsHost: %d") , PS->bIsHost);
-					UE_LOG(LogTemp , Log , TEXT("AMTVS3_3rdGameState::BeginPlay() HostID: %s") , *PS->HostID);
-					UE_LOG(LogTemp , Log , TEXT("AMTVS3_3rdGameState::BeginPlay() GuestID: %s") , *PS->GuestID);
+	//auto GS = GetGameState<AMTVS3_3rdGameState>();
+	//if ( GS )
+	//{
+	//	for ( auto CurrPS : GS->PlayerArray )
+	//	{
+	//		for ( auto& Actor : ActorList )
+	//		{
+	//			auto PS = Cast<AMTVS3_3rdPlayerState>(Actor);
+	//			if ( PS )
+	//			{
+	//				UE_LOG(LogTemp , Log , TEXT("AMTVS3_3rdGameState::BeginPlay() bIsHost: %d") , PS->bIsHost);
+	//				UE_LOG(LogTemp , Log , TEXT("AMTVS3_3rdGameState::BeginPlay() HostID: %s") , *PS->HostID);
+	//				UE_LOG(LogTemp , Log , TEXT("AMTVS3_3rdGameState::BeginPlay() GuestID: %s") , *PS->GuestID);
 
-					if ( PS->bIsHost )
-					{
-						GS->SetHostID(PS->GetHostID());
-					}
-					else GS->SetGuestID(PS->GetGuestID());
+	//				if ( PS->bIsHost )
+	//				{
+	//					GS->SetHostID(PS->GetHostID());
+	//				}
+	//				else GS->SetGuestID(PS->GetGuestID());
 
-					if ( CurrPS->GetUniqueId().ToString() == PS->GetUniqueId().ToString() )
-					{
-						UE_LOG(LogTemp,Warning, TEXT("Same UniqueId [%s]"), *CurrPS->GetUniqueId().ToString());
-					}
-				}
-			}
-		}	
-	}	
+	//				if ( CurrPS->GetUniqueId().ToString() == PS->GetUniqueId().ToString() )
+	//				{
+	//					UE_LOG(LogTemp,Warning, TEXT("Same UniqueId [%s]"), *CurrPS->GetUniqueId().ToString());
+	//				}
+	//			}
+	//		}
+	//	}	
+	//}	
 }
 
 # pragma region 주석 처리

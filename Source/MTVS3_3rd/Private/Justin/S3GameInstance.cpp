@@ -129,7 +129,7 @@ void US3GameInstance::OnStartSessionComplete(FName SessionName , bool bWasSucces
 		//}
 
 		//GetWorld()->ServerTravel(FString::Printf(TEXT("/Game/LovelySejong/PlayLevel?listen?IsHost=%s") , bIsHost));
-		
+
 		GetWorld()->ServerTravel("/Game/LovelySejong/PlayLevel?listen");
 	}
 }
@@ -146,6 +146,21 @@ void US3GameInstance::SetHost(bool _bIsHost)
 	//PlayerNum += PlayerCount;
 	//bIsHost = PlayerNum == 2 ? 1 : 0;
 	//UE_LOG(LogTemp , Warning , TEXT("===== Player Num is %d"), PlayerNum);
+}
+
+void US3GameInstance::SetGameID(const FString& _gameID)
+{
+	GameID = _gameID;
+}
+
+FString US3GameInstance::GetGameID() const
+{
+	if ( GameID.IsEmpty() )
+	{
+		UE_LOG(LogTemp , Warning , TEXT("GameID is empty , returning default value."));
+		return TEXT("GameID");
+	}
+	return GameID;
 }
 
 void US3GameInstance::SetPlayerID(const FString& id)
@@ -189,5 +204,14 @@ FString US3GameInstance::GetPlayerNickname() const
 void US3GameInstance::SetAccessToken(const FString& InAccessToken)
 {
 	AccessToken = InAccessToken;
+}
+FString US3GameInstance::GetAccessToken() const
+{
+	if ( AccessToken.IsEmpty() )
+	{
+		UE_LOG(LogTemp , Warning , TEXT("AccessToken is empty, returning default value."));
+		return TEXT("AccessToken");
+	}
+	return AccessToken;
 }
 #pragma endregion

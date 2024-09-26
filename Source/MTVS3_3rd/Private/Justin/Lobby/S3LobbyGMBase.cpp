@@ -8,6 +8,7 @@
 #include "Justin/S3GameInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "HJ/MTVS3_3rdPlayerState.h"
+#include "HJ/MTVS3_3rdGameState.h"
 
 AS3LobbyGMBase::AS3LobbyGMBase()
 {
@@ -60,6 +61,12 @@ void AS3LobbyGMBase::PostLogin(APlayerController* NewPlayer)
 		else UE_LOG(LogTemp , Warning , TEXT("ERROR"));
 	}
 	else HostPC = NewPlayer;
+
+	//auto GS = GetGameState<AMTVS3_3rdGameState>();
+	//if ( GS && GS->PlayerArray.Num() == 2 )
+	//{
+	//	GS->MatchingState();
+	//}
 }
 
 void AS3LobbyGMBase::Logout(AController* Exiting)

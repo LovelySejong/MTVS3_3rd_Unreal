@@ -62,6 +62,16 @@ void SetHostNickname(const FString& hostNickname);
 	FString GetGuestID() const;
 	UPROPERTY(Replicated , BlueprintReadOnly , Category = Authentication)
 	FString GuestID;
+
+	void SetHostToken(const FString& hostToken);
+	FString GetHostToken() const;
+	UPROPERTY(Replicated , BlueprintReadOnly , Category = Authentication)
+	FString HostToken;
+
+	void SetGuestToken(const FString& guestToken);
+	FString GetGuestToken() const;
+	UPROPERTY(ReplicatedUsing = OnRep_GuestToken , BlueprintReadOnly , Category = Authentication)
+	FString GuestToken;
 #pragma endregion
 
 # pragma region HJ 멀티플레이
@@ -76,6 +86,13 @@ void SetHostNickname(const FString& hostNickname);
 	void OnRep_GuestNickname();
 
 	void UpdateGuestUI(const FString& guestName);
+
+	//UFUNCTION()
+	//void OnRep_HostID();
+	UFUNCTION()
+	void OnRep_GuestToken();
+
+	void MatchingState();
 # pragma endregion
 
 #pragma region 방 체크

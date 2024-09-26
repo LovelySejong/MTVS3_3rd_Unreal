@@ -39,6 +39,16 @@ public:
 	FString GetGuestID() const;
 	UPROPERTY(Replicated , BlueprintReadOnly , Category = Authentication)
 	FString GuestID;
+
+	void SetHostToken(const FString& hostToken);
+	FString GetHostToken() const;
+	UPROPERTY(Replicated , BlueprintReadOnly , Category = Authentication)
+	FString HostToken;
+
+	void SetGuestToken(const FString& guestToken);
+	FString GetGuestToken() const;
+	UPROPERTY(Replicated , BlueprintReadOnly , Category = Authentication)
+	FString GuestToken;
 #pragma endregion
 
 # pragma region HJ 멀티플레이
@@ -49,12 +59,17 @@ public:
 	void ServerRPCSetHostNickname(const FString& hostName);
 
 	UFUNCTION(Server , Reliable)
-	void ServerRPCSetHostId(const FString& _hostId);
+	void ServerRPCSetHostID(const FString& _hostId);
 	UFUNCTION(Server , Reliable)
-	void ServerRPCSetGuestId(const FString& _guestId);
+	void ServerRPCSetGuestID(const FString& _guestId);
 
 	// Guest 닉네임 RPC
 	UFUNCTION(Server , Reliable)
 	void ServerRPCSetGuestNickname(const FString& guestName);
+
+	UFUNCTION(Server , Reliable)
+	void ServerRPCSetHostToken(const FString& _hostToken);
+	UFUNCTION(Server , Reliable)
+	void ServerRPCSetGuestToken(const FString& _guestToken);
 # pragma endregion
 };

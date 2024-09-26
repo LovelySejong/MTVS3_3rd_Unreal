@@ -40,6 +40,12 @@ public:
 	void SetHost(bool _bIsHost);
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Authentication")
+    FString GameID;
+	UFUNCTION(BlueprintCallable, Category = "Authentication")
+    void SetGameID(const FString& _gameID);
+	FString GetGameID() const;
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Authentication")
     FString PlayerID;
 	UFUNCTION(BlueprintCallable, Category = "Authentication")
     void SetPlayerID(const FString& id);
@@ -55,6 +61,7 @@ public:
 	// AccessToken을 설정하는 함수
     UFUNCTION(BlueprintCallable, Category = "Authentication")
     void SetAccessToken(const FString& InAccessToken);
+	FString GetAccessToken() const;
 #pragma endregion
 
 protected:

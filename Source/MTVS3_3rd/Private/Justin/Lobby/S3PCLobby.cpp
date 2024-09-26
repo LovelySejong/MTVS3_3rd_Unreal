@@ -10,6 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "HJ/MTVS3_3rdPlayerState.h"
 #include "HJ/MTVS3_3rdGameState.h"
+#include "HJ/HttpActor.h"
 
 AS3PCLobby::AS3PCLobby()
 {
@@ -38,11 +39,20 @@ void AS3PCLobby::BeginPlay()
 		}
 		auto GI = Cast<US3GameInstance>(GetWorld()->GetGameInstance());
 		if ( !GI ) return;
+		auto GS = Cast<AMTVS3_3rdGameState>(GetWorld()->GetGameState());
+		if ( !GS ) return;
 		if ( PS->bIsHost )
 		{
 			PS->ServerRPCSetHostNickname(GI->GetPlayerNickname());
-			PS->ServerRPCSetHostId(GI->GetPlayerID());			
+			//PS->ServerRPCSetHostId(GI->GetPlayerID());	
+			// PS ServerRPC함수에서 ID 설정
+			PS->ServerRPCSetHostID(GI->GetPlayerID());
+			// 그 안에서 GS의 ID 변경
+			// PS ServerRPC함수에서 토큰 설정
+			PS->ServerRPCSetHostToken(GI->GetAccessToken());
+			// 그 안에서 GS의 토큰 변경
 		}
+		//GS->SetHostID(GI->GetPlayerID());
 	}
 }
 
@@ -72,7 +82,12 @@ void AS3PCLobby::OnRep_PlayerState()
 		auto GI = Cast<US3GameInstance>(GetWorld()->GetGameInstance());
 		if ( !GI ) return;
 		PS->ServerRPCSetGuestNickname(GI->GetPlayerNickname());
-		PS->ServerRPCSetGuestId(GI->GetPlayerID());
+		// PS ServerRPC함수에서 ID 설정
+		PS->ServerRPCSetGuestID(GI->GetPlayerID());
+		// 그 안에서 GS의 ID 변경
+		// PS ServerRPC함수에서 토큰 설정
+		PS->ServerRPCSetGuestToken(GI->GetAccessToken());
+		// 그 안에서 GS의 토큰 변경
 		
 		//if ( false == PS->bIsHost )
 		//{
