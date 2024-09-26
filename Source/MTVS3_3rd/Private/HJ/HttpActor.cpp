@@ -5,6 +5,7 @@
 #include "HJ/StartWidget.h"
 #include "Kismet/GameplayStatics.h"
 #include "Justin/S3GameInstance.h"
+#include "HJ/MTVS3_3rdPlayerState.h"
 
 // Sets default values
 AHttpActor::AHttpActor()
@@ -172,7 +173,7 @@ void AHttpActor::OnResPostLogin(FHttpRequestPtr Request , FHttpResponsePtr Respo
 	}
 }
 
-void AHttpActor::ReqPostMatchState(const FString& AccessToken , const FString& PartnerID)
+void AHttpActor::ReqPostMatchState(const FString& AccessToken , const FString& PartnerID , AMTVS3_3rdPlayerState* PS)
 {
 	// AccessToken과 PartnerID를 로그로 출력
 	UE_LOG(LogTemp , Warning , TEXT("AHttpActor::ReqPostMatchState AccessToken: %s, PartnerID: %s") , *AccessToken , *PartnerID);
@@ -183,7 +184,10 @@ void AHttpActor::ReqPostMatchState(const FString& AccessToken , const FString& P
 
 	// HTTP 요청 생성
 	TSharedRef<IHttpRequest , ESPMode::ThreadSafe> Request = Http->CreateRequest();
-	Request->OnProcessRequestComplete().BindUObject(this , &AHttpActor::OnResPostMatchState);
+
+	Request->OnProcessRequestComplete().BindUObject(PS , &AMTVS3_3rdPlayerState::OnResPostMatchState);
+
+	//Request->OnProcessRequestComplete().BindUObject(this , &AHttpActor::OnResPostMatchState);
 
 	Request->SetURL(TEXT("http://125.132.216.190:7878/api/game")); // 매칭 상태 URL
 	Request->SetVerb(TEXT("POST"));
@@ -204,67 +208,6 @@ void AHttpActor::ReqPostMatchState(const FString& AccessToken , const FString& P
 
 	// HTTP 요청 전송
 	Request->ProcessRequest();
-}
-
-void AHttpActor::OnResPostMatchState(FHttpRequestPtr Request , FHttpResponsePtr Response , bool bWasSuccessful)
-{
-	if ( !bWasSuccessful || !Response.IsValid() )
-	{
-		UE_LOG(LogTemp , Error , TEXT("Request failed."));
-		return;
-	}
-
-	// 응답 상태 코드 확인
-	if ( Response->GetResponseCode() != 200 )
-	{
-		UE_LOG(LogTemp , Error , TEXT("Request failed with status code: %d") , Response->GetResponseCode());
-		return;
-	}
-
-	// 응답 본문을 로그에 출력
-	UE_LOG(LogTemp , Log , TEXT("Response Code: %d") , Response->GetResponseCode());
-	UE_LOG(LogTemp , Log , TEXT("Response Body: %s") , *Response->GetContentAsString());
-
-	// JSON 응답 파싱
-	TSharedPtr<FJsonObject> JsonObject;
-	TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(Response->GetContentAsString());
-
-	if ( FJsonSerializer::Deserialize(Reader , JsonObject) )
-	{
-		// 'response' 객체에서 'gameId' 값을 가져옴
-		if ( JsonObject->HasTypedField<EJson::Object>(TEXT("response")) )
-		{
-			TSharedPtr<FJsonObject> ResponseObject = JsonObject->GetObjectField(TEXT("response"));
-			if ( ResponseObject->HasTypedField<EJson::Number>(TEXT("gameId")) )
-			{
-				int32 GameID = ResponseObject->GetIntegerField(TEXT("gameId"));
-				UE_LOG(LogTemp , Log , TEXT("gameId received: %d") , GameID);
-
-				// GameInstance에 GameID 저장
-				auto GI = GetWorld()->GetGameInstance<US3GameInstance>();
-				if ( GI )
-				{
-					GI->SetGameID(GameID);
-				}
-				else
-				{
-					UE_LOG(LogTemp , Error , TEXT("GameInstance is null."));
-				}
-			}
-			else
-			{
-				UE_LOG(LogTemp , Error , TEXT("Failed to find 'gameId' in 'response' object."));
-			}
-		}
-		else
-		{
-			UE_LOG(LogTemp , Error , TEXT("Failed to find 'response' object in JSON."));
-		}
-	}
-	else
-	{
-		UE_LOG(LogTemp , Error , TEXT("Failed to parse JSON response."));
-	}
 }
 
 void AHttpActor::ReqPostRoomState(const FString& AccessToken , const int32& GameID , int32 RoomNumber)

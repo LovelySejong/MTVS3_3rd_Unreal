@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerState.h"
+#include "Http.h"
 #include "MTVS3_3rdPlayerState.generated.h"
 
 /**
@@ -32,17 +33,13 @@ public:
 
 	void SetHostID(const FString& hostID);
 	FString GetHostID() const;
-	UPROPERTY(ReplicatedUsing = OnRep_HostID , BlueprintReadOnly , Category = Authentication)
+	UPROPERTY(Replicated, BlueprintReadOnly , Category = Authentication)
 	FString HostID;
-	UFUNCTION()
-	void OnRep_HostID();
 
 	void SetGuestID(const FString& guestID);
 	FString GetGuestID() const;
-	UPROPERTY(ReplicatedUsing = OnRep_GuestID , BlueprintReadOnly , Category = Authentication)
+	UPROPERTY(Replicated, BlueprintReadOnly , Category = Authentication)
 	FString GuestID;
-	UFUNCTION()
-	void OnRep_GuestID();
 
 	void SetHostToken(const FString& hostToken);
 	FString GetHostToken() const;
@@ -57,6 +54,11 @@ public:
 
 # pragma region HJ 멀티플레이
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
+	
+	UFUNCTION(Server , Reliable)
+	void ServerRPCSetHostID(const FString& _hostId, const FString& AccessToken);
+	UFUNCTION(Server , Reliable)
+	void ServerRPCSetGuestID(const FString& _guestId, const FString& AccessToken);
 
 	// Host 닉네임 RPC
 	UFUNCTION(Server , Reliable)
@@ -65,6 +67,8 @@ public:
 	// Guest 닉네임 RPC
 	UFUNCTION(Server , Reliable)
 	void ServerRPCSetGuestNickname(const FString& guestName);
-
+	
+	// 매칭 상태 응답 처리 함수
+	void OnResPostMatchState(FHttpRequestPtr Request , FHttpResponsePtr Response , bool bWasSuccessful);
 # pragma endregion
 };

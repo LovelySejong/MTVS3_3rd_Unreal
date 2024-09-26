@@ -43,11 +43,8 @@ public:
 #pragma endregion
 
 #pragma region 매칭
-	UFUNCTION(Server , Reliable)
-	void ServerRPCSetHostID(const FString& _hostId);
-	UFUNCTION(Server , Reliable)
-	void ServerRPCSetGuestID(const FString& _guestId);
-		
+
+
 	//UFUNCTION(Server , Reliable)
 	//void ServerRPCSetHostToken(const FString& _hostToken);
 	//UFUNCTION(Server , Reliable)
@@ -65,12 +62,12 @@ public:
 
 	void SetHostID(const FString& hostID);
 	FString GetHostID() const;
-	UPROPERTY(Replicated , BlueprintReadOnly , Category = Authentication)
+	UPROPERTY(Replicated, BlueprintReadOnly , Category = Authentication)
 	FString HostID;
 
 	void SetGuestID(const FString& guestID);
 	FString GetGuestID() const;
-	UPROPERTY(Replicated , BlueprintReadOnly , Category = Authentication)
+	UPROPERTY(Replicated, BlueprintReadOnly , Category = Authentication)
 	FString GuestID;
 
 	void SetHostToken(const FString& hostToken);
@@ -102,7 +99,7 @@ public:
 	UFUNCTION()
 	void OnRep_GuestToken();
 
-	void MatchingState();
+	//void MatchingState();
 # pragma endregion
 
 #pragma region 방 체크

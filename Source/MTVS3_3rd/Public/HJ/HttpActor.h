@@ -7,6 +7,8 @@
 #include "Http.h"
 #include "HttpActor.generated.h"
 
+class AMTVS3_3rdPlayerState;
+
 UCLASS()
 class MTVS3_3RD_API AHttpActor : public AActor
 {
@@ -40,10 +42,7 @@ public:
 	void OnResPostLogin(FHttpRequestPtr Request , FHttpResponsePtr Response , bool bWasSuccessful);
 
 	// 매칭 상태 요청 함수
-	void ReqPostMatchState(const FString& AccessToken , const FString& PartnerID);
-
-	// 매칭 상태 응답 처리 함수
-	void OnResPostMatchState(FHttpRequestPtr Request , FHttpResponsePtr Response , bool bWasSuccessful);
+	void ReqPostMatchState(const FString& AccessToken , const FString& PartnerID, AMTVS3_3rdPlayerState* PS);
 
 	UFUNCTION(BlueprintCallable, Category = "HTTP")
 	void ReqPostRoomState(const FString& AccessToken , const int32& GameID , int32 RoomNumber);
