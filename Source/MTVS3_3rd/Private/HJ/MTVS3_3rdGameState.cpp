@@ -129,10 +129,12 @@ void AMTVS3_3rdGameState::SetGuestID(const FString& guestID)
 	//auto PS = PC->GetPlayerState<AMTVS3_3rdPlayerState>();
 	//if ( !PC || !PS ) return;
 	//if ( !PS->GuestID.IsEmpty() ) GuestID = PS->GetHostID();
-	UE_LOG(LogTemp , Log , TEXT("[%s] AMTVS3_3rdGameState::SetGuestID: %s") , 
+	UE_LOG(LogTemp , Log , TEXT("[%s] AMTVS3_3rdGameState::SetGuestID: %s, HostID: %s") , 
 		GetWorld()->GetNetMode() == NM_Client ? TEXT("CLIENT") : TEXT("SERVER"),
-		*GuestID);
-
+		*GuestID,
+		*HostID
+		);
+	
 	if ( HostID != TEXT("") && GuestID != TEXT("") )
 	{
 		AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
