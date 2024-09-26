@@ -184,23 +184,23 @@ void AMTVS3_3rdGameMode::HandleStartingNewPlayer_Implementation(APlayerControlle
 		}
 		else UE_LOG(LogTemp , Warning , TEXT("[AMTVS3_3RdGameMode] No Pawn possessed"));
 
-		if ( auto nice = Cast<AMTVS3_3rdPlayerState>(NewPlayer->PlayerState) )
-		{
-			UE_LOG(LogTemp , Warning , TEXT("[%s]NewPlayer PlayerState: %s") , *nice->GetUniqueId().ToString() , *nice->AccessToken);
-		}
-		else UE_LOG(LogTemp , Warning , TEXT("NewPlayer PlayerState: no player state"));
+		//if ( auto nice = Cast<AMTVS3_3rdPlayerState>(NewPlayer->PlayerState) )
+		//{
+		//	UE_LOG(LogTemp , Warning , TEXT("[%s]NewPlayer PlayerState: %s") , *nice->GetUniqueId().ToString() , *nice->AccessToken);
+		//}
+		//else UE_LOG(LogTemp , Warning , TEXT("NewPlayer PlayerState: no player state"));
 
 		TArray<AActor*> ActorList;
 		GetSeamlessTravelActorList(false , ActorList);
-		for ( auto& P : ActorList )
-		{
-			auto nice = Cast<AMTVS3_3rdPlayerState>(P);
+		//for ( auto& P : ActorList )
+		//{
+		//	auto nice = Cast<AMTVS3_3rdPlayerState>(P);
 
-			if ( nice )
-			{
-				UE_LOG(LogTemp , Warning , TEXT("[%s] ActorList: %s") , *nice->GetUniqueId().ToString() , *nice->AccessToken);
-			}
-			else UE_LOG(LogTemp , Warning , TEXT("ActorList not valid"));
-		}
+		//	if ( nice )
+		//	{
+		//		UE_LOG(LogTemp , Warning , TEXT("[%s] ActorList: %s") , *nice->GetUniqueId().ToString() , *nice->AccessToken);
+		//	}
+		//	else UE_LOG(LogTemp , Warning , TEXT("ActorList not valid"));
+		//}
 	}
 }

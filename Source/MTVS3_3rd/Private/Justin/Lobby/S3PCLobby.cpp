@@ -8,6 +8,7 @@
 #include "Justin/Lobby/S3LobbyGMBase.h"
 #include "Justin/S3GameInstance.h"
 #include "Kismet/GameplayStatics.h"
+#include "HJ/MTVS3_3rdPlayerState.h"
 
 AS3PCLobby::AS3PCLobby()
 {
@@ -26,6 +27,23 @@ void AS3PCLobby::BeginPlay()
 		{
 			LobbyWidget->Init(bIsHost);
 			LobbyWidget->AddToViewport();
+		}
+		// 서버 rpc
+		auto PS = GetPlayerState<AMTVS3_3rdPlayerState>();
+		if ( !PS )
+		{
+			UE_LOG(LogTemp , Warning , TEXT("PS is null in AS3PCLobby::BeginPlay()"));
+			return;
+		}
+		auto GI = Cast<US3GameInstance>(GetWorld()->GetGameInstance());
+		if ( !GI ) return;
+		if ( PS->bIsHost )
+		{
+			PS->ServerRPCSetHostNickname(GI->GetPlayerNickname());
+		}
+		else
+		{
+			PS->ServerRPCSetGuestNickname(GI->GetPlayerNickname());
 		}
 	}
 }
@@ -63,7 +81,7 @@ void AS3PCLobby::RemovePlayer()
 	{
 		bIsReady = false;
 		if ( HasAuthority() ) OnRep_bIsReady();
-		LobbyWidget->RemovePlayer();		
+		LobbyWidget->RemovePlayer();
 	}
 }
 
@@ -88,7 +106,7 @@ void AS3PCLobby::Server_CheckCanStart_Implementation()
 		if ( GI )
 		{
 			GI->StartSession();
-		}	
+		}
 	}
 	else UE_LOG(LogTemp , Warning , TEXT("Players not ready!"));
 }

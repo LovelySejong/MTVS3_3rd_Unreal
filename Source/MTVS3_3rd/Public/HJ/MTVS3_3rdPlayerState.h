@@ -7,31 +7,65 @@
 #include "MTVS3_3rdPlayerState.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class MTVS3_3RD_API AMTVS3_3rdPlayerState : public APlayerState
 {
 	GENERATED_BODY()
-	
+
 public:
 #pragma region HJ 
-	void SetPlayerNickname(const FString& Nickname);
-	FString GetPlayerNickname() const;
-	FString PlayerNickname;
-	
-	// AccessToken을 저장할 변수 추가
-    UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Authentication")
-    FString AccessToken;
-	
-	int32 PlayerNum = 0;
+	//int32 PlayerNum = 0;
+	UPROPERTY(Replicated , BlueprintReadOnly , Category = Authentication)
 	bool bIsHost;
-	void CopyProperties(APlayerState* NewPlayerState);
+	//void CopyProperties(APlayerState* NewPlayerState);
 	void SetHost(bool _bIsHost);
 
-	// AccessToken을 설정하는 함수
-    UFUNCTION(BlueprintCallable, Category = "Authentication")
-    void SetAccessToken(const FString& InAccessToken);
+	void SetHostNickname(const FString& hostNickname);
+	FString GetHostNickname() const;
+	UPROPERTY(ReplicatedUsing = OnRep_HostNickname , BlueprintReadOnly , Category = Authentication)
+	FString HostNickname;
+
+	void SetGuestNickname(const FString& guestNickname);
+	FString GetGuestNickname() const;
+	UPROPERTY(ReplicatedUsing = OnRep_GuestNickname , BlueprintReadOnly , Category = Authentication)
+	FString GuestNickname;
+
+	void SetHostID(const FString& hostID);
+	FString GetHostID() const;
+	FString HostID;
+
+	void SetGuestID(const FString& guestID);
+	FString GetGuestID() const;
+	FString GuestID;
 #pragma endregion
 
+# pragma region HJ 멀티플레이
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
+
+	// Host 닉네임 RPC
+	UFUNCTION(Server , Reliable)
+	void ServerRPCSetHostNickname(const FString& hostName);
+
+	UFUNCTION(NetMulticast , Reliable)
+	void MulticastRPCSetHostNickname(const FString& hostName);
+
+	UFUNCTION()
+	void OnRep_HostNickname();
+
+	void UpdateHostUI(const FString& hostName);
+
+	// Guest 닉네임 RPC
+	UFUNCTION(Server , Reliable)
+	void ServerRPCSetGuestNickname(const FString& guestName);
+
+	UFUNCTION(NetMulticast , Reliable)
+	void MulticastRPCSetGuestNickname(const FString& guestName);
+
+	UFUNCTION()
+	void OnRep_GuestNickname();
+
+	void UpdateGuestUI(const FString& guestName);
+# pragma endregion
 };

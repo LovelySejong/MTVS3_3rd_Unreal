@@ -148,9 +148,19 @@ void US3GameInstance::SetHost(bool _bIsHost)
 	//UE_LOG(LogTemp , Warning , TEXT("===== Player Num is %d"), PlayerNum);
 }
 
-void US3GameInstance::SetAccessToken(const FString& InAccessToken)
+void US3GameInstance::SetPlayerID(const FString& id)
 {
-	AccessToken = InAccessToken;
+	PlayerID = id;
+}
+
+FString US3GameInstance::GetPlayerID() const
+{
+	if ( PlayerID.IsEmpty() )
+	{
+		UE_LOG(LogTemp , Warning , TEXT("PlayerID is empty , returning default value."));
+		return TEXT("PlayerID");
+	}
+	return PlayerID;
 }
 
 void US3GameInstance::SetPlayerNickname(const FString& Nickname)
@@ -158,7 +168,7 @@ void US3GameInstance::SetPlayerNickname(const FString& Nickname)
 	if ( Nickname.IsEmpty() )
 	{
 		UE_LOG(LogTemp , Warning , TEXT("Nickname is empty, setting to default value."));
-		PlayerNickname = TEXT("Player")	;
+		PlayerNickname = TEXT("Player");
 	}
 	else
 	{
@@ -174,5 +184,10 @@ FString US3GameInstance::GetPlayerNickname() const
 		return TEXT("Player");
 	}
 	return PlayerNickname;
+}
+
+void US3GameInstance::SetAccessToken(const FString& InAccessToken)
+{
+	AccessToken = InAccessToken;
 }
 #pragma endregion

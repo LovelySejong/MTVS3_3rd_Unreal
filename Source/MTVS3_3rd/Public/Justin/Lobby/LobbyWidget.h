@@ -34,6 +34,7 @@ public:
 	void AddPlayer();
 	
 	void SetReady(bool bReady);
+	void SetNameText(int num , const FString& Name);
 
 protected:
 	//Player 2
@@ -47,8 +48,6 @@ protected:
 	TObjectPtr<UTextBlock> Name1Text;
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UTextBlock> Name2Text;
-
-	void SetNameText(int num , const FString& Name);
 
 	//Buttons
 	UPROPERTY(meta = (BindWidget))

@@ -40,6 +40,8 @@ public:
 	UFUNCTION(Server , Reliable)
 	void Server_SetReady();
 
+	TObjectPtr<ULobbyWidget> LobbyWidget;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -49,7 +51,6 @@ protected:
 	TSubclassOf<ULobbyWidget> LobbyWidgetClass;
 
 private:
-	TObjectPtr<ULobbyWidget> LobbyWidget;
 	bool bIsHost;
 
 	UPROPERTY(ReplicatedUsing = OnRep_bIsReady)
