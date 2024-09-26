@@ -13,9 +13,8 @@
   <component name="ChangeListManager">
     <list default="true" id="3eed5c52-cdfd-4ebd-b988-ad429b4f78b1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MTVS3_3rd/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MTVS3_3rd/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_DialPad.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_DialPad.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/CSW/Sound/CSW_Attenuation.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Sound/CSW_Attenuation.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/CSW/Sound/WrongSound_Cue.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Sound/WrongSound_Cue.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_FishBox.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Blueprints/BP_FishBox.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/CSW/Maps/CSW_Proto.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CSW/Maps/CSW_Proto.umap" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -540,6 +539,7 @@
       <workItem from="1726213059432" duration="2200000" />
       <workItem from="1727158685458" duration="870000" />
       <workItem from="1727167859820" duration="740000" />
+      <workItem from="1727250669709" duration="2786000" />
     </task>
     <servers />
   </component>

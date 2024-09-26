@@ -29,10 +29,10 @@ void ULobbyWidget::Init(bool bHost)
 
 	if ( bIsHost )
 	{
-		AMTVS3_3rdPlayerState* PS = Cast<AMTVS3_3rdPlayerState>(PC->PlayerState);
-		if ( !PS ) return;
-		FString Nickname = PS->GetPlayerNickname();
-		SetNameText(1 , Nickname);
+		//AMTVS3_3rdPlayerState* PS = Cast<AMTVS3_3rdPlayerState>(PC->PlayerState);
+		//if ( !PS ) return;
+		//FString Nickname = PS->GetHostNickname();
+		//SetNameText(1 , Nickname);
 		DisplayPlayerTwo(false);
 
 		DisplayButton(EButtonType::NOTSTART);
@@ -185,14 +185,14 @@ void ULobbyWidget::DisplayButton(EButtonType Type)
 
 void ULobbyWidget::DisplayPlayerTwo(bool bDisplay)
 {
-	AS3PCLobby* PC = Cast<AS3PCLobby>(GetWorld()->GetFirstPlayerController());
-	if ( PC )
-	{
-		AMTVS3_3rdPlayerState* PS = Cast<AMTVS3_3rdPlayerState>(PC->PlayerState);
-		if ( !PS ) return;
-		FString Nickname = PS->GetPlayerNickname();
-		SetNameText(2 , Nickname);
-	}
+	//AS3PCLobby* PC = Cast<AS3PCLobby>(GetWorld()->GetFirstPlayerController());
+	//if ( PC )
+	//{
+	//	AMTVS3_3rdPlayerState* PS = Cast<AMTVS3_3rdPlayerState>(PC->PlayerState);
+	//	if ( !PS ) return;
+	//	FString Nickname = PS->GetGuestNickname();
+	//	SetNameText(2 , Nickname);
+	//}
 	if ( bDisplay )
 	{
 		Image_P2->SetVisibility(ESlateVisibility::Visible);

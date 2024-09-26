@@ -40,6 +40,32 @@ public:
 	int RequiredCount = 2;
 #pragma endregion
 
+#pragma region 매칭
+void SetHostNickname(const FString& hostNickname);
+	FString GetHostNickname() const;
+	UPROPERTY(ReplicatedUsing = OnRep_HostNickname , BlueprintReadOnly , Category = Authentication)
+	FString HostNickname;
+
+	void SetGuestNickname(const FString& guestNickname);
+	FString GetGuestNickname() const;
+	UPROPERTY(ReplicatedUsing = OnRep_GuestNickname , BlueprintReadOnly , Category = Authentication)
+	FString GuestNickname;
+#pragma endregion
+
+# pragma region HJ 멀티플레이
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
+
+	UFUNCTION()
+	void OnRep_HostNickname();
+
+	void UpdateHostUI(const FString& hostName);
+
+	UFUNCTION()
+	void OnRep_GuestNickname();
+
+	void UpdateGuestUI(const FString& guestName);
+# pragma endregion
+
 #pragma region 방 체크
 	// 튜토리얼 끝, 문제방1 진입
 	void OnQuiz1Start();

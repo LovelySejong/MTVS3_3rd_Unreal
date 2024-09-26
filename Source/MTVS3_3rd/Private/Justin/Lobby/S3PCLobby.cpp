@@ -8,6 +8,8 @@
 #include "Justin/Lobby/S3LobbyGMBase.h"
 #include "Justin/S3GameInstance.h"
 #include "Kismet/GameplayStatics.h"
+#include "HJ/MTVS3_3rdPlayerState.h"
+#include "HJ/MTVS3_3rdGameState.h"
 
 AS3PCLobby::AS3PCLobby()
 {
@@ -27,6 +29,19 @@ void AS3PCLobby::BeginPlay()
 			LobbyWidget->Init(bIsHost);
 			LobbyWidget->AddToViewport();
 		}
+		// 서버 rpc
+		auto PS = GetPlayerState<AMTVS3_3rdPlayerState>();
+		if ( !PS )
+		{
+			UE_LOG(LogTemp , Warning , TEXT("PS is null in AS3PCLobby::BeginPlay()"));
+			return;
+		}
+		auto GI = Cast<US3GameInstance>(GetWorld()->GetGameInstance());
+		if ( !GI ) return;
+		if ( PS->bIsHost )
+		{
+			PS->ServerRPCSetHostNickname(GI->GetPlayerNickname());
+		}
 	}
 }
 
@@ -36,6 +51,33 @@ void AS3PCLobby::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 
 	DOREPLIFETIME(AS3PCLobby , bIsReady);
 }
+
+#pragma region HJ
+void AS3PCLobby::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+
+	if ( PlayerState )
+	{
+		UE_LOG(LogTemp , Log , TEXT("PlayerState has been replicated to the client!"));
+		// PlayerState가 클라이언트에 복제되었을 때의 로직 추가
+		// 서버 rpc
+		auto PS = GetPlayerState<AMTVS3_3rdPlayerState>();
+		if ( !PS )
+		{
+			UE_LOG(LogTemp , Warning , TEXT("PS is null in AS3PCLobby::OnRep_PlayerState()"));
+			return;
+		}
+		auto GI = Cast<US3GameInstance>(GetWorld()->GetGameInstance());
+		if ( !GI ) return;
+		PS->ServerRPCSetGuestNickname(GI->GetPlayerNickname());
+		//if ( false == PS->bIsHost )
+		//{
+		//	GS->ServerRPCSetGuestNickname(GI->GetPlayerNickname());
+		//}
+	}
+}
+#pragma endregion
 
 void AS3PCLobby::SetHost(bool _bIsHost)
 {
@@ -63,7 +105,7 @@ void AS3PCLobby::RemovePlayer()
 	{
 		bIsReady = false;
 		if ( HasAuthority() ) OnRep_bIsReady();
-		LobbyWidget->RemovePlayer();		
+		LobbyWidget->RemovePlayer();
 	}
 }
 
@@ -88,7 +130,7 @@ void AS3PCLobby::Server_CheckCanStart_Implementation()
 		if ( GI )
 		{
 			GI->StartSession();
-		}	
+		}
 	}
 	else UE_LOG(LogTemp , Warning , TEXT("Players not ready!"));
 }

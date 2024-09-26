@@ -11,6 +11,7 @@
 #include "Components/TextBlock.h"
 #include "Components/EditableText.h"
 #include "HJ/HttpActor.h"
+#include "Justin/S3GameInstance.h"
 
 void UStartWidget::NativeConstruct()
 {
@@ -64,7 +65,12 @@ void UStartWidget::OnSignInButtonClicked()
 	{
 		// 현재 텍스트를 가져와 로그에 출력하거나 필요한 작업 수행
 		FText EnteredText_ID = EditableText_ID->GetText();
-		UE_LOG(LogTemp , Log , TEXT("Entered Text_ID: %s") , *EnteredText_ID.ToString());
+		// GI에 이메일 저장
+		US3GameInstance* GI = GetWorld()->GetGameInstance<US3GameInstance>();
+		if ( !GI ) return;
+		GI->SetPlayerID(*EnteredText_ID.ToString());
+		//UE_LOG(LogTemp , Log , TEXT("Entered Text_ID: %s") , *EnteredText_ID.ToString());
+		UE_LOG(LogTemp , Log , TEXT("GI PlayerID: %s") , *GI->GetPlayerID());
 
 		FText EnteredText_PW = EditableText_PW->GetText();
 		UE_LOG(LogTemp , Log , TEXT("Entered Text_PW: %s") , *EnteredText_PW.ToString());
