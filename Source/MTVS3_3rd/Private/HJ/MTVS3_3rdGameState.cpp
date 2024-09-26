@@ -42,6 +42,64 @@ void AMTVS3_3rdGameState::BeginPlay()
 }
 
 #pragma region 매칭
+
+//void AMTVS3_3rdPlayerState::ServerRPCSetGuestToken_Implementation(const FString& _guestToken)
+//{
+//	UE_LOG(LogTemp , Warning , TEXT("GuestToken Set in Server"));
+//	SetGuestToken(_guestToken);
+//
+//	auto GS = Cast<AMTVS3_3rdGameState>(GetWorld()->GetGameState());
+//	GS->SetGuestToken(GetGuestToken());
+//}
+
+//void AMTVS3_3rdPlayerState::ServerRPCSetHostToken_Implementation(const FString& _hostToken)
+//{
+//	UE_LOG(LogTemp , Warning , TEXT("HostToken Set in Server"));
+//	SetHostToken(_hostToken);
+//
+//	auto GS = Cast<AMTVS3_3rdGameState>(GetWorld()->GetGameState());
+//	if ( !GS ) return;
+//	GS->SetHostToken(GetHostToken());
+//
+//	AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
+//	if ( !HttpActor ) return;
+//
+//	HttpActor->ReqPostMatchState(GS->GetHostToken() , GS->GetHostID());
+//	HttpActor->ReqPostMatchState(GS->GetGuestToken() , GS->GetGuestID());
+//}
+
+void AMTVS3_3rdGameState::ServerRPCSetHostID_Implementation(const FString& hostId)
+{
+	UE_LOG(LogTemp , Warning , TEXT("HostID Set in Server"));
+	SetHostID(hostId);
+
+	for ( auto PState : PlayerArray )
+	{
+		auto PS = Cast<AMTVS3_3rdPlayerState>(PState);
+		if ( PS )
+		{
+			PS->SetHostID(GetHostID());
+			PS->OnRep_HostID();
+		}
+	}
+}
+
+void AMTVS3_3rdGameState::ServerRPCSetGuestID_Implementation(const FString& guestId)
+{
+	UE_LOG(LogTemp , Warning , TEXT("GuestID Set in Server"));
+	SetGuestID(guestId);
+
+	for ( auto PState : PlayerArray )
+	{
+		auto PS = Cast<AMTVS3_3rdPlayerState>(PState);
+		if ( PS )
+		{
+			PS->SetGuestID(GetGuestID());
+			PS->OnRep_GuestID();
+		}			
+	}
+}
+
 void AMTVS3_3rdGameState::SetHostNickname(const FString& hostNickname)
 {
 	HostNickname = hostNickname;
@@ -90,7 +148,7 @@ FString AMTVS3_3rdGameState::GetHostID() const
 	if ( HostID.IsEmpty() )
 	{
 		UE_LOG(LogTemp , Warning , TEXT("HostID is empty, returning default value."));
-		return TEXT("HostID");
+		return TEXT("");
 	}
 	return HostID;
 }
@@ -110,7 +168,7 @@ FString AMTVS3_3rdGameState::GetGuestID() const
 	if ( GuestID.IsEmpty() )
 	{
 		UE_LOG(LogTemp , Warning , TEXT("GuestID is empty, returning default value."));
-		return TEXT("GuestID");
+		return TEXT("");
 	}
 	return GuestID;
 }
@@ -124,7 +182,7 @@ FString AMTVS3_3rdGameState::GetHostToken() const
 	if ( HostToken.IsEmpty() )
 	{
 		UE_LOG(LogTemp , Warning , TEXT("HostToken is empty, returning default value."));
-		return TEXT("HostToken");
+		return TEXT("");
 	}
 	return HostToken;
 }
@@ -139,7 +197,7 @@ FString AMTVS3_3rdGameState::GetGuestToken() const
 	if ( GuestToken.IsEmpty() )
 	{
 		UE_LOG(LogTemp , Warning , TEXT("GuestToken is empty, returning default value."));
-		return TEXT("GuestToken");
+		return TEXT("");
 	}
 	return GuestToken;
 }

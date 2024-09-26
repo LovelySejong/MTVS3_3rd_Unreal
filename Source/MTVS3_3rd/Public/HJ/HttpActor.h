@@ -46,7 +46,7 @@ public:
 	void OnResPostMatchState(FHttpRequestPtr Request , FHttpResponsePtr Response , bool bWasSuccessful);
 
 	UFUNCTION(BlueprintCallable, Category = "HTTP")
-	void ReqPostRoomState(const FString& AccessToken , const FString& GameID , int32 RoomNumber);
+	void ReqPostRoomState(const FString& AccessToken , const int32& GameID , int32 RoomNumber);
 
 	void OnResPostRoomState(FHttpRequestPtr Request , FHttpResponsePtr Response , bool bWasSuccessful);
 };

@@ -98,6 +98,31 @@ FString AMTVS3_3rdPlayerState::GetGuestID() const
 	}
 	return GuestID;
 }
+void AMTVS3_3rdPlayerState::OnRep_HostID()
+{
+	if(GetOwner() == nullptr) return;
+
+	if ( GuestID != TEXT("") && HostID != TEXT("") )
+	{
+		AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
+		if ( !HttpActor ) return;
+		//Send API
+		HttpActor->ReqPostMatchState(GetHostToken() , GetGuestID());
+	}
+}
+
+void AMTVS3_3rdPlayerState::OnRep_GuestID()
+{
+	if ( GetOwner() == nullptr ) return;
+
+	if ( HostID != TEXT("") && GuestID != TEXT(""))
+	{
+		AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
+		if ( !HttpActor ) return;
+		//Send API
+		HttpActor->ReqPostMatchState(GetGuestToken() , GetHostID());
+	}
+}
 
 void AMTVS3_3rdPlayerState::SetHostToken(const FString& hostToken)
 {
@@ -142,48 +167,6 @@ void AMTVS3_3rdPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 	DOREPLIFETIME(AMTVS3_3rdPlayerState , GuestID);
 	DOREPLIFETIME(AMTVS3_3rdPlayerState , HostToken);
 	DOREPLIFETIME(AMTVS3_3rdPlayerState , GuestToken);
-}
-
-void AMTVS3_3rdPlayerState::ServerRPCSetHostToken_Implementation(const FString& _hostToken)
-{
-	UE_LOG(LogTemp , Warning , TEXT("HostToken Set in Server"));
-	SetHostToken(_hostToken);
-
-	auto GS = Cast<AMTVS3_3rdGameState>(GetWorld()->GetGameState());
-	if ( !GS ) return;
-	GS->SetHostToken(GetHostToken());
-
-	AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
-	if ( !HttpActor ) return;
-
-	HttpActor->ReqPostMatchState(GS->GetHostToken() , GS->GetHostID());
-	HttpActor->ReqPostMatchState(GS->GetGuestToken() , GS->GetGuestID());
-}
-
-void AMTVS3_3rdPlayerState::ServerRPCSetGuestToken_Implementation(const FString& _guestToken)
-{
-	UE_LOG(LogTemp , Warning , TEXT("GuestToken Set in Server"));
-	SetGuestToken(_guestToken);
-
-	auto GS = Cast<AMTVS3_3rdGameState>(GetWorld()->GetGameState());
-	GS->SetGuestToken(GetGuestToken());
-}
-
-void AMTVS3_3rdPlayerState::ServerRPCSetHostID_Implementation(const FString& hostId)
-{
-	UE_LOG(LogTemp , Warning , TEXT("HostID Set in Server"));
-	SetHostID(hostId);
-
-	auto GS = Cast<AMTVS3_3rdGameState>(GetWorld()->GetGameState());
-	GS->SetHostID(GetHostID());
-}
-
-void AMTVS3_3rdPlayerState::ServerRPCSetGuestID_Implementation(const FString& guestId)
-{
-	SetGuestID(guestId);
-
-	auto GS = Cast<AMTVS3_3rdGameState>(GetWorld()->GetGameState());
-	GS->SetGuestID(GetGuestID());
 }
 
 // Host 닉네임 RPC

@@ -185,7 +185,7 @@ void AHttpActor::ReqPostMatchState(const FString& AccessToken , const FString& P
 	TSharedRef<IHttpRequest , ESPMode::ThreadSafe> Request = Http->CreateRequest();
 	Request->OnProcessRequestComplete().BindUObject(this , &AHttpActor::OnResPostMatchState);
 
-	Request->SetURL(TEXT("http://125.132.216.190:7878/api/log/clear")); // 매칭 상태 URL
+	Request->SetURL(TEXT("http://125.132.216.190:7878/api/game")); // 매칭 상태 URL
 	Request->SetVerb(TEXT("POST"));
 
 	// AccessToken을 Authorization 헤더에 추가
@@ -221,26 +221,44 @@ void AHttpActor::OnResPostMatchState(FHttpRequestPtr Request , FHttpResponsePtr 
 		return;
 	}
 
+	// 응답 본문을 로그에 출력
+	UE_LOG(LogTemp , Log , TEXT("Response Code: %d") , Response->GetResponseCode());
+	UE_LOG(LogTemp , Log , TEXT("Response Body: %s") , *Response->GetContentAsString());
+
 	// JSON 응답 파싱
 	TSharedPtr<FJsonObject> JsonObject;
 	TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(Response->GetContentAsString());
 
 	if ( FJsonSerializer::Deserialize(Reader , JsonObject) )
 	{
-		// GameID를 응답에서 가져오기
-		FString GameID;
-		if ( JsonObject->TryGetStringField(TEXT("gameID") , GameID) )
+		// 'response' 객체에서 'gameId' 값을 가져옴
+		if ( JsonObject->HasTypedField<EJson::Object>(TEXT("response")) )
 		{
-			UE_LOG(LogTemp , Log , TEXT("GameID received: %s") , *GameID);
+			TSharedPtr<FJsonObject> ResponseObject = JsonObject->GetObjectField(TEXT("response"));
+			if ( ResponseObject->HasTypedField<EJson::Number>(TEXT("gameId")) )
+			{
+				int32 GameID = ResponseObject->GetIntegerField(TEXT("gameId"));
+				UE_LOG(LogTemp , Log , TEXT("gameId received: %d") , GameID);
 
-			// GameInstance에 GameID 저장
-			auto GI = GetWorld()->GetGameInstance<US3GameInstance>();
-			if ( !GI ) return;
-			GI->SetGameID(GameID);
+				// GameInstance에 GameID 저장
+				auto GI = GetWorld()->GetGameInstance<US3GameInstance>();
+				if ( GI )
+				{
+					GI->SetGameID(GameID);
+				}
+				else
+				{
+					UE_LOG(LogTemp , Error , TEXT("GameInstance is null."));
+				}
+			}
+			else
+			{
+				UE_LOG(LogTemp , Error , TEXT("Failed to find 'gameId' in 'response' object."));
+			}
 		}
 		else
 		{
-			UE_LOG(LogTemp , Error , TEXT("Failed to parse GameID from response."));
+			UE_LOG(LogTemp , Error , TEXT("Failed to find 'response' object in JSON."));
 		}
 	}
 	else
@@ -249,10 +267,10 @@ void AHttpActor::OnResPostMatchState(FHttpRequestPtr Request , FHttpResponsePtr 
 	}
 }
 
-void AHttpActor::ReqPostRoomState(const FString& AccessToken , const FString& GameID , int32 RoomNumber)
+void AHttpActor::ReqPostRoomState(const FString& AccessToken , const int32& GameID , int32 RoomNumber)
 {
 	// AccessToken과 RoomNumber를 로그로 출력
-	UE_LOG(LogTemp , Warning , TEXT("AccessToken: %s, ID: %s, RoomNumber: %d") , *AccessToken , *GameID , RoomNumber);
+	UE_LOG(LogTemp , Warning , TEXT("AccessToken: %s, gameId: %d, RoomNumber: %d") , *AccessToken , GameID , RoomNumber);
 
 	// HTTP module
 	FHttpModule* Http = &FHttpModule::Get();
@@ -272,7 +290,7 @@ void AHttpActor::ReqPostRoomState(const FString& AccessToken , const FString& Ga
 	FString ContentString;
 	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&ContentString);
 	Writer->WriteObjectStart();
-	Writer->WriteValue(TEXT("gameID") , GameID);
+	Writer->WriteValue(TEXT("gameId") , GameID);
 	Writer->WriteValue(TEXT("roomNumber") , RoomNumber);
 	Writer->WriteObjectEnd();
 	Writer->Close();

@@ -32,13 +32,17 @@ public:
 
 	void SetHostID(const FString& hostID);
 	FString GetHostID() const;
-	UPROPERTY(Replicated , BlueprintReadOnly , Category = Authentication)
+	UPROPERTY(ReplicatedUsing = OnRep_HostID , BlueprintReadOnly , Category = Authentication)
 	FString HostID;
+	UFUNCTION()
+	void OnRep_HostID();
 
 	void SetGuestID(const FString& guestID);
 	FString GetGuestID() const;
-	UPROPERTY(Replicated , BlueprintReadOnly , Category = Authentication)
+	UPROPERTY(ReplicatedUsing = OnRep_GuestID , BlueprintReadOnly , Category = Authentication)
 	FString GuestID;
+	UFUNCTION()
+	void OnRep_GuestID();
 
 	void SetHostToken(const FString& hostToken);
 	FString GetHostToken() const;
@@ -58,18 +62,9 @@ public:
 	UFUNCTION(Server , Reliable)
 	void ServerRPCSetHostNickname(const FString& hostName);
 
-	UFUNCTION(Server , Reliable)
-	void ServerRPCSetHostID(const FString& _hostId);
-	UFUNCTION(Server , Reliable)
-	void ServerRPCSetGuestID(const FString& _guestId);
-
 	// Guest 닉네임 RPC
 	UFUNCTION(Server , Reliable)
 	void ServerRPCSetGuestNickname(const FString& guestName);
 
-	UFUNCTION(Server , Reliable)
-	void ServerRPCSetHostToken(const FString& _hostToken);
-	UFUNCTION(Server , Reliable)
-	void ServerRPCSetGuestToken(const FString& _guestToken);
 # pragma endregion
 };
