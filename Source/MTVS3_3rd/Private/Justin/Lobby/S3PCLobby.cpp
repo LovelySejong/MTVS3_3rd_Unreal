@@ -41,6 +41,7 @@ void AS3PCLobby::BeginPlay()
 		if ( PS->bIsHost )
 		{
 			PS->ServerRPCSetHostNickname(GI->GetPlayerNickname());
+			PS->SetHostID(GI->GetPlayerID());
 		}
 	}
 }
@@ -71,6 +72,7 @@ void AS3PCLobby::OnRep_PlayerState()
 		auto GI = Cast<US3GameInstance>(GetWorld()->GetGameInstance());
 		if ( !GI ) return;
 		PS->ServerRPCSetGuestNickname(GI->GetPlayerNickname());
+		PS->SetGuestID(GI->GetPlayerID());
 		//if ( false == PS->bIsHost )
 		//{
 		//	GS->ServerRPCSetGuestNickname(GI->GetPlayerNickname());

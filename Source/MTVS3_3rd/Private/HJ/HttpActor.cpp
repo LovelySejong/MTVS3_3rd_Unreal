@@ -172,7 +172,7 @@ void AHttpActor::OnResPostLogin(FHttpRequestPtr Request , FHttpResponsePtr Respo
 	}
 }
 
-void AHttpActor::ReqPostRoomState(const FString& AccessToken , int32 RoomNumber)
+void AHttpActor::ReqPostRoomState(const FString& AccessToken , const FString& PartnerID , int32 RoomNumber)
 {
 	// AccessToken과 RoomNumber를 로그로 출력
 	UE_LOG(LogTemp , Warning , TEXT("AccessToken: %s, RoomNumber: %d") , *AccessToken , RoomNumber);
@@ -191,9 +191,11 @@ void AHttpActor::ReqPostRoomState(const FString& AccessToken , int32 RoomNumber)
 	Request->SetHeader(TEXT("Content-Type") , TEXT("application/json"));
 	Request->SetHeader(TEXT("Authorization") , FString::Printf(TEXT("Bearer %s") , *AccessToken));
 
+	// Body에 PartnerID와 RoomNumber를 JSON 형식으로 설정
 	FString ContentString;
 	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&ContentString);
 	Writer->WriteObjectStart();
+	Writer->WriteValue(TEXT("partnerID") , PartnerID); // PartnerID를 JSON에 포함
 	Writer->WriteValue(TEXT("roomNumber") , RoomNumber);
 	Writer->WriteObjectEnd();
 	Writer->Close();

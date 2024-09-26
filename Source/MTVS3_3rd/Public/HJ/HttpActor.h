@@ -40,7 +40,7 @@ public:
 	void OnResPostLogin(FHttpRequestPtr Request , FHttpResponsePtr Response , bool bConnectedSuccessfully);
 
 	UFUNCTION(BlueprintCallable, Category = "HTTP")
-	void ReqPostRoomState(const FString& AccessToken , int32 RoomNumber);
+	void ReqPostRoomState(const FString& AccessToken , const FString& PartnerID , int32 RoomNumber);
 
 	void OnResPostRoomState(FHttpRequestPtr Request , FHttpResponsePtr Response , bool bWasSuccessful);
 };

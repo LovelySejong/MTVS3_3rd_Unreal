@@ -14,8 +14,19 @@ void AMTVS3_3rdPlayerState::CopyProperties(APlayerState* NewPlayerState)
 
 	if ( AMTVS3_3rdPlayerState* MyNewPlayerState = Cast<AMTVS3_3rdPlayerState>(NewPlayerState) )
 	{
+		UE_LOG(LogTemp , Warning , TEXT("AMTVS3_3rdPlayerState::CopyProperties"));
 		// 기존 PlayerState의 데이터를 새로운 PlayerState로 복사
 		MyNewPlayerState->bIsHost = bIsHost;
+		MyNewPlayerState->HostID = HostID;
+		MyNewPlayerState->GuestID = GuestID;
+
+		UE_LOG(LogTemp , Warning , TEXT("[%s] bIshost: %d, HostId: %s, GuestID: %s"), 
+			*GetUniqueId().ToString(),
+		bIsHost, *HostID, *GuestID);
+
+		auto GS = Cast<AMTVS3_3rdGameState>(GetWorld()->GetGameState());
+		GS->SetHostID(MyNewPlayerState->HostID);
+		GS->SetGuestID(MyNewPlayerState->GuestID);
 	}
 }
 
@@ -57,6 +68,7 @@ FString AMTVS3_3rdPlayerState::GetGuestNickname() const
 void AMTVS3_3rdPlayerState::SetHostID(const FString& hostID)
 {
 	HostID = hostID;
+	UE_LOG(LogTemp , Log , TEXT("AMTVS3_3rdPlayerState::SetHostID(): %s") , *HostID);
 }
 
 FString AMTVS3_3rdPlayerState::GetHostID() const
@@ -68,10 +80,13 @@ FString AMTVS3_3rdPlayerState::GetHostID() const
 	}
 	return HostID;
 }
+
 void AMTVS3_3rdPlayerState::SetGuestID(const FString& guestID)
 {
 	GuestID = guestID;
+	UE_LOG(LogTemp , Log , TEXT("AMTVS3_3rdPlayerState::SetGuestID(): %s") , *GuestID);
 }
+
 FString AMTVS3_3rdPlayerState::GetGuestID() const
 {
 	if ( GuestID.IsEmpty() )
@@ -89,6 +104,8 @@ void AMTVS3_3rdPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AMTVS3_3rdPlayerState , bIsHost);
+	DOREPLIFETIME(AMTVS3_3rdPlayerState , HostID);
+	DOREPLIFETIME(AMTVS3_3rdPlayerState , GuestID);
 }
 
 // Host 닉네임 RPC

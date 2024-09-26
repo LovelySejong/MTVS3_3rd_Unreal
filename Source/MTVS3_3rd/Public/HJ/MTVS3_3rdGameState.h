@@ -28,6 +28,8 @@ public:
 
 	AMTVS3_3rdGameState();
 
+	virtual void BeginPlay() override;
+
 	#pragma region Default
 	// 디버그
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Default|Debug")
@@ -50,6 +52,16 @@ void SetHostNickname(const FString& hostNickname);
 	FString GetGuestNickname() const;
 	UPROPERTY(ReplicatedUsing = OnRep_GuestNickname , BlueprintReadOnly , Category = Authentication)
 	FString GuestNickname;
+
+	void SetHostID(const FString& hostID);
+	FString GetHostID() const;
+	UPROPERTY(Replicated , BlueprintReadOnly , Category = Authentication)
+	FString HostID;
+
+	void SetGuestID(const FString& guestID);
+	FString GetGuestID() const;
+	UPROPERTY(Replicated , BlueprintReadOnly , Category = Authentication)
+	FString GuestID;
 #pragma endregion
 
 # pragma region HJ 멀티플레이
