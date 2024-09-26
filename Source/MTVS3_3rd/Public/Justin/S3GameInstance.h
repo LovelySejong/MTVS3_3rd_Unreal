@@ -72,4 +72,7 @@ protected:
 private:
 	float MaxTime = 2.f;
 	float TotalTime = 0.f;
+
+	FString StringBase64Encode(const FString& str);
+	FString StringBase64Decode(const FString& str);
 };
