@@ -23,6 +23,10 @@ public:
 	void CopyProperties(APlayerState* NewPlayerState);
 	void SetHost(bool _bIsHost);
 
+	void SetGameID(const int32& _gameID);
+	int32 GetGameID() const;
+	int32 GameID;
+
 	void SetHostNickname(const FString& hostNickname);
 	FString GetHostNickname() const;
 	FString HostNickname;

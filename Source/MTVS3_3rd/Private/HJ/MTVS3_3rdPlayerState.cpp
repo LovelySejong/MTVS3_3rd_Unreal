@@ -20,6 +20,7 @@ void AMTVS3_3rdPlayerState::CopyProperties(APlayerState* NewPlayerState)
 		UE_LOG(LogTemp , Warning , TEXT("AMTVS3_3rdPlayerState::CopyProperties"));
 		// 기존 PlayerState의 데이터를 새로운 PlayerState로 복사
 		MyNewPlayerState->bIsHost = bIsHost;
+		MyNewPlayerState->GameID = GameID;
 		//MyNewPlayerState->HostID = HostID;
 		//MyNewPlayerState->GuestID = GuestID;
 
@@ -36,6 +37,21 @@ void AMTVS3_3rdPlayerState::CopyProperties(APlayerState* NewPlayerState)
 void AMTVS3_3rdPlayerState::SetHost(bool _bIsHost)
 {
 	bIsHost = _bIsHost;
+}
+
+void AMTVS3_3rdPlayerState::SetGameID(const int32& _gameID)
+{
+	GameID = _gameID;
+}
+
+int32 AMTVS3_3rdPlayerState::GetGameID() const
+{
+	if ( !GameID )
+	{
+		UE_LOG(LogTemp , Warning , TEXT("AMTVS3_3rdPlayerState GameID is empty , returning default value."));
+		return -1;
+	}
+	return GameID;
 }
 
 void AMTVS3_3rdPlayerState::SetHostNickname(const FString& hostNickname)
@@ -176,19 +192,20 @@ void AMTVS3_3rdPlayerState::OnResPostMatchState(FHttpRequestPtr Request , FHttpR
 			TSharedPtr<FJsonObject> ResponseObject = JsonObject->GetObjectField(TEXT("response"));
 			if ( ResponseObject->HasTypedField<EJson::Number>(TEXT("gameId")) )
 			{
-				int32 GameID = ResponseObject->GetIntegerField(TEXT("gameId"));
-				UE_LOG(LogTemp , Log , TEXT("gameId received: %d") , GameID);
+				int32 MyGameID = ResponseObject->GetIntegerField(TEXT("gameId"));
+				UE_LOG(LogTemp , Log , TEXT("gameId received: %d") , MyGameID);
 
+				SetGameID(MyGameID);
 				// GameInstance에 GameID 저장
-				auto GI = GetWorld()->GetGameInstance<US3GameInstance>();
-				if ( GI )
-				{
-					GI->SetGameID(GameID);
-				}
-				else
-				{
-					UE_LOG(LogTemp , Error , TEXT("GameInstance is null."));
-				}
+				//auto GI = GetWorld()->GetGameInstance<US3GameInstance>();
+				//if ( GI )
+				//{
+				//	GI->SetGameID(MyGameID);
+				//}
+				//else
+				//{
+				//	UE_LOG(LogTemp , Error , TEXT("GameInstance is null."));
+				//}
 			}
 			else
 			{

@@ -62,6 +62,13 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Authentication")
     void SetAccessToken(const FString& InAccessToken);
 	FString GetAccessToken() const;
+
+	FString HostToken;
+	UFUNCTION(BlueprintCallable, Category = "Authentication")
+    void SetHostToken(const FString& InAccessToken);
+	FString GuestToken;
+	UFUNCTION(BlueprintCallable, Category = "Authentication")
+    void SetGuestToken(const FString& InAccessToken);
 #pragma endregion
 
 protected:

@@ -214,4 +214,12 @@ FString US3GameInstance::GetAccessToken() const
 	}
 	return AccessToken;
 }
+void US3GameInstance::SetHostToken(const FString& InAccessToken)
+{
+	HostToken = InAccessToken;
+}
+void US3GameInstance::SetGuestToken(const FString& InAccessToken)
+{
+	GuestToken = InAccessToken;
+}
 #pragma endregion
