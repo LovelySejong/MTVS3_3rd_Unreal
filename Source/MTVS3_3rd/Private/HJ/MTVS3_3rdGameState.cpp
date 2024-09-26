@@ -281,15 +281,15 @@ void AMTVS3_3rdGameState::OnQuiz2Start()
 	if ( Q1ClearCount == RequiredCount ) // 멀티플레이에서 Count가 2일 때 문제방1 종료 인정
 	{
 		SetState(ERoomState::QUIZ2_ROOM);
+
+		US3GameInstance* GI = Cast<US3GameInstance>(UGameplayStatics::GetGameInstance(this));
+		if ( !GI ) return;
+
+		FString AccessToken = GI->AccessToken;
+		AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
+		if ( !HttpActor ) return;
+		HttpActor->ReqPostRoomState(AccessToken , GI->GetGameID() , 2);
 	}
-
-	US3GameInstance* GI = Cast<US3GameInstance>(UGameplayStatics::GetGameInstance(this));
-	if ( !GI ) return;
-
-	FString AccessToken = GI->AccessToken;
-	AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
-	if ( !HttpActor ) return;
-	HttpActor->ReqPostRoomState(AccessToken , GI->GetGameID() , 2);
 
 	//for ( auto PlayerState : PlayerArray )
 	//{
@@ -313,15 +313,15 @@ void AMTVS3_3rdGameState::OnMeetingStart()
 	if ( Q2ClearCount == RequiredCount ) // 멀티플레이에서 Count가 2일 때 문제방2 종료 인정
 	{
 		SetState(ERoomState::MEETING_ROOM);
+
+		US3GameInstance* GI = Cast<US3GameInstance>(UGameplayStatics::GetGameInstance(this));
+		if ( !GI ) return;
+
+		FString AccessToken = GI->AccessToken;
+		AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
+		if ( !HttpActor ) return;
+		HttpActor->ReqPostRoomState(AccessToken , GI->GetGameID() , 3);
 	}
-
-	US3GameInstance* GI = Cast<US3GameInstance>(UGameplayStatics::GetGameInstance(this));
-	if ( !GI ) return;
-
-	FString AccessToken = GI->AccessToken;
-	AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
-	if ( !HttpActor ) return;
-	HttpActor->ReqPostRoomState(AccessToken , GI->GetGameID() , 3);
 
 	//for ( auto PlayerState : PlayerArray )
 	//{
