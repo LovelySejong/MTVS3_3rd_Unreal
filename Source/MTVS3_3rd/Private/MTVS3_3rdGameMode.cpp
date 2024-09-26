@@ -17,6 +17,43 @@ AMTVS3_3rdGameMode::AMTVS3_3rdGameMode()
 	DefaultPawnClass = PlayerPawnClassFinder.Class;
 }
 
+void AMTVS3_3rdGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+
+	TArray<AActor*> ActorList;
+	GetSeamlessTravelActorList(false , ActorList);
+
+	auto GS = GetGameState<AMTVS3_3rdGameState>();
+	if ( GS )
+	{
+		for ( auto CurrPS : GS->PlayerArray )
+		{
+			for ( auto& Actor : ActorList )
+			{
+				auto PS = Cast<AMTVS3_3rdPlayerState>(Actor);
+				if ( PS )
+				{
+					UE_LOG(LogTemp , Log , TEXT("AMTVS3_3rdGameState::BeginPlay() bIsHost: %d") , PS->bIsHost);
+					UE_LOG(LogTemp , Log , TEXT("AMTVS3_3rdGameState::BeginPlay() HostID: %s") , *PS->HostID);
+					UE_LOG(LogTemp , Log , TEXT("AMTVS3_3rdGameState::BeginPlay() GuestID: %s") , *PS->GuestID);
+
+					if ( PS->bIsHost )
+					{
+						GS->SetHostID(PS->GetHostID());
+					}
+					else GS->SetGuestID(PS->GetGuestID());
+
+					if ( CurrPS->GetUniqueId().ToString() == PS->GetUniqueId().ToString() )
+					{
+						UE_LOG(LogTemp,Warning, TEXT("Same UniqueId [%s]"), *CurrPS->GetUniqueId().ToString());
+					}
+				}
+			}
+		}	
+	}	
+}
+
 # pragma region 주석 처리
 //APlayerController* AMTVS3_3rdGameMode::Login(UPlayer* NewPlayer , ENetRole InRemoteRole , const FString& Portal , const FString& Options , const FUniqueNetIdRepl& UniqueId , FString& ErrorMessage)
 //{
@@ -190,8 +227,6 @@ void AMTVS3_3rdGameMode::HandleStartingNewPlayer_Implementation(APlayerControlle
 		//}
 		//else UE_LOG(LogTemp , Warning , TEXT("NewPlayer PlayerState: no player state"));
 
-		TArray<AActor*> ActorList;
-		GetSeamlessTravelActorList(false , ActorList);
 		//for ( auto& P : ActorList )
 		//{
 		//	auto nice = Cast<AMTVS3_3rdPlayerState>(P);

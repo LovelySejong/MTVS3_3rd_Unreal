@@ -108,6 +108,17 @@ void AMTVS3_3rdPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>
 	DOREPLIFETIME(AMTVS3_3rdPlayerState , GuestID);
 }
 
+void AMTVS3_3rdPlayerState::ServerRPCSetGuestId_Implementation(const FString& guestId)
+{
+	SetGuestID(guestId);
+}
+
+void AMTVS3_3rdPlayerState::ServerRPCSetHostId_Implementation(const FString& hostId)
+{
+	UE_LOG(LogTemp , Warning , TEXT("HostID Set in Server"));
+	SetHostID(hostId);
+}
+
 // Host 닉네임 RPC
 void AMTVS3_3rdPlayerState::ServerRPCSetHostNickname_Implementation(const FString& hostName)
 {

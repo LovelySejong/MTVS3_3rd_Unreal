@@ -11,6 +11,8 @@
 #include "Justin/Lobby/LobbyWidget.h"
 #include "Justin/Lobby/S3PCLobby.h"
 #include "HJ/MTVS3_3rdPlayerState.h"
+#include "MTVS3_3rdPlayerController.h"
+
 
 AMTVS3_3rdGameState::AMTVS3_3rdGameState()
 {
@@ -177,11 +179,22 @@ void AMTVS3_3rdGameState::OnQuiz1Start()
 
 	FString AccessToken = GI->AccessToken;
 	AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
-	auto PC = Cast<AS3PCLobby>(GetWorld()->GetFirstPlayerController());
-	auto PS = PC->GetPlayerState<AMTVS3_3rdPlayerState>();
-	if ( !HttpActor || !PC || !PS ) return;
-	if ( PS->bIsHost ) HttpActor->ReqPostRoomState(AccessToken , PS->GetHostID() , 1);
-	else HttpActor->ReqPostRoomState(AccessToken , PS->GetGuestID() , 1);
+	if ( !HttpActor ) return;
+
+	for ( auto PlayerState : PlayerArray )
+	{
+		auto PS = Cast<AMTVS3_3rdPlayerState>(PlayerState);
+		if ( !PS ) return;
+
+		UE_LOG(LogTemp , Warning , TEXT("[%s]PlayerState bIsHost: %d") ,
+			*PS->GetUniqueId().ToString() ,
+			PS->bIsHost);
+		if ( PS->bIsHost )
+		{
+			HttpActor->ReqPostRoomState(AccessToken , GetGuestID() , 1);
+		}
+		else HttpActor->ReqPostRoomState(AccessToken , GetHostID() , 1);
+	}
 }
 
 void AMTVS3_3rdGameState::OnQuiz2Start()
@@ -197,11 +210,22 @@ void AMTVS3_3rdGameState::OnQuiz2Start()
 
 	FString AccessToken = GI->AccessToken;
 	AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
-	auto PC = Cast<AS3PCLobby>(GetWorld()->GetFirstPlayerController());
-	auto PS = PC->GetPlayerState<AMTVS3_3rdPlayerState>();
-	if ( !HttpActor || !PC || !PS ) return;
-	if ( PS->bIsHost ) HttpActor->ReqPostRoomState(AccessToken , PS->GetHostID() , 2);
-	else HttpActor->ReqPostRoomState(AccessToken , PS->GetGuestID() , 2);
+	if ( !HttpActor ) return;
+
+	for ( auto PlayerState : PlayerArray )
+	{
+		auto PS = Cast<AMTVS3_3rdPlayerState>(PlayerState);
+		if ( !PS ) return;
+
+		UE_LOG(LogTemp , Warning , TEXT("[%s]PlayerState bIsHost: %d") ,
+			*PS->GetUniqueId().ToString() ,
+			PS->bIsHost);
+		if ( PS->bIsHost )
+		{
+			HttpActor->ReqPostRoomState(AccessToken , GetGuestID() , 2);
+		}
+		else HttpActor->ReqPostRoomState(AccessToken , GetHostID() , 2);
+	}
 }
 
 void AMTVS3_3rdGameState::OnMeetingStart()
@@ -217,11 +241,22 @@ void AMTVS3_3rdGameState::OnMeetingStart()
 
 	FString AccessToken = GI->AccessToken;
 	AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
-	auto PC = Cast<AS3PCLobby>(GetWorld()->GetFirstPlayerController());
-	auto PS = PC->GetPlayerState<AMTVS3_3rdPlayerState>();
-	if ( !HttpActor || !PC || !PS ) return;
-	if ( PS->bIsHost ) HttpActor->ReqPostRoomState(AccessToken , PS->GetHostID() , 3);
-	else HttpActor->ReqPostRoomState(AccessToken , PS->GetGuestID() , 3);
+	if ( !HttpActor ) return;
+
+	for ( auto PlayerState : PlayerArray )
+	{
+		auto PS = Cast<AMTVS3_3rdPlayerState>(PlayerState);
+		if ( !PS ) return;
+
+		UE_LOG(LogTemp , Warning , TEXT("[%s]PlayerState bIsHost: %d") ,
+			*PS->GetUniqueId().ToString() ,
+			PS->bIsHost);
+		if ( PS->bIsHost )
+		{
+			HttpActor->ReqPostRoomState(AccessToken , GetGuestID() , 3);
+		}
+		else HttpActor->ReqPostRoomState(AccessToken , GetHostID() , 3);
+	}
 }
 
 void AMTVS3_3rdGameState::OnQuiz3Start()
@@ -233,11 +268,22 @@ void AMTVS3_3rdGameState::OnQuiz3Start()
 
 	FString AccessToken = GI->AccessToken;
 	AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
-	auto PC = Cast<AS3PCLobby>(GetWorld()->GetFirstPlayerController());
-	auto PS = PC->GetPlayerState<AMTVS3_3rdPlayerState>();
-	if ( !HttpActor || !PC || !PS ) return;
-	if ( PS->bIsHost ) HttpActor->ReqPostRoomState(AccessToken , PS->GetHostID() , 4);
-	else HttpActor->ReqPostRoomState(AccessToken , PS->GetGuestID() , 4);
+	if ( !HttpActor ) return;
+
+	for ( auto PlayerState : PlayerArray )
+	{
+		auto PS = Cast<AMTVS3_3rdPlayerState>(PlayerState);
+		if ( !PS ) return;
+
+		UE_LOG(LogTemp , Warning , TEXT("[%s]PlayerState bIsHost: %d") ,
+			*PS->GetUniqueId().ToString() ,
+			PS->bIsHost);
+		if ( PS->bIsHost )
+		{
+			HttpActor->ReqPostRoomState(AccessToken , GetGuestID() , 4);
+		}
+		else HttpActor->ReqPostRoomState(AccessToken , GetHostID() , 4);
+	}
 }
 
 void AMTVS3_3rdGameState::OnQuiz4Start()
@@ -249,11 +295,22 @@ void AMTVS3_3rdGameState::OnQuiz4Start()
 
 	FString AccessToken = GI->AccessToken;
 	AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
-	auto PC = Cast<AS3PCLobby>(GetWorld()->GetFirstPlayerController());
-	auto PS = PC->GetPlayerState<AMTVS3_3rdPlayerState>();
-	if ( !HttpActor || !PC || !PS ) return;
-	if ( PS->bIsHost ) HttpActor->ReqPostRoomState(AccessToken , PS->GetHostID() , 5);
-	else HttpActor->ReqPostRoomState(AccessToken , PS->GetGuestID() , 5);
+	if ( !HttpActor ) return;
+
+	for ( auto PlayerState : PlayerArray )
+	{
+		auto PS = Cast<AMTVS3_3rdPlayerState>(PlayerState);
+		if ( !PS ) return;
+
+		UE_LOG(LogTemp , Warning , TEXT("[%s]PlayerState bIsHost: %d") ,
+			*PS->GetUniqueId().ToString() ,
+			PS->bIsHost);
+		if ( PS->bIsHost )
+		{
+			HttpActor->ReqPostRoomState(AccessToken , GetGuestID() , 5);
+		}
+		else HttpActor->ReqPostRoomState(AccessToken , GetHostID() , 5);
+	}
 }
 
 void AMTVS3_3rdGameState::OnGameClear()
@@ -265,11 +322,22 @@ void AMTVS3_3rdGameState::OnGameClear()
 
 	FString AccessToken = GI->AccessToken;
 	AHttpActor* HttpActor = Cast<AHttpActor>(UGameplayStatics::GetActorOfClass(GetWorld() , AHttpActor::StaticClass()));
-	auto PC = Cast<AS3PCLobby>(GetWorld()->GetFirstPlayerController());
-	auto PS = PC->GetPlayerState<AMTVS3_3rdPlayerState>();
-	if ( !HttpActor || !PC || !PS ) return;
-	if ( PS->bIsHost ) HttpActor->ReqPostRoomState(AccessToken , PS->GetHostID() , 6);
-	else HttpActor->ReqPostRoomState(AccessToken , PS->GetGuestID() , 6);
+	if ( !HttpActor ) return;
+
+	for ( auto PlayerState : PlayerArray )
+	{
+		auto PS = Cast<AMTVS3_3rdPlayerState>(PlayerState);
+		if ( !PS ) return;
+
+		UE_LOG(LogTemp , Warning , TEXT("[%s]PlayerState bIsHost: %d") ,
+			*PS->GetUniqueId().ToString() ,
+			PS->bIsHost);
+		if ( PS->bIsHost )
+		{
+			HttpActor->ReqPostRoomState(AccessToken , GetGuestID() , 6);
+		}
+		else HttpActor->ReqPostRoomState(AccessToken , GetHostID() , 6);
+	}
 
 	auto GM = Cast<AMTVS3_3rdGameMode>(GetWorld()->GetAuthGameMode());
 

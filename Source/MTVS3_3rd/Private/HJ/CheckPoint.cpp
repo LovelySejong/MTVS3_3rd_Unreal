@@ -11,7 +11,7 @@
 // Sets default values
 ACheckPoint::ACheckPoint()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	BoxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComp"));
@@ -30,7 +30,7 @@ ACheckPoint::ACheckPoint()
 	BoxComp2 = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComp2"));
 	BoxComp2->SetupAttachment(RootComponent);
 	BoxComp2->SetBoxExtent(FVector(112.5f , 25.0f , 150.0f));
-	BoxComp2->SetRelativeLocation(FVector(0, -50, 0));
+	BoxComp2->SetRelativeLocation(FVector(0 , -50 , 0));
 
 	MeshComp2 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp2"));
 	MeshComp2->SetupAttachment(BoxComp2);
@@ -46,7 +46,7 @@ ACheckPoint::ACheckPoint()
 void ACheckPoint::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	BoxComp->OnComponentBeginOverlap.AddDynamic(this , &ACheckPoint::OnMyBoxBeginOverlap);
 }
 
@@ -64,33 +64,33 @@ void ACheckPoint::OnMyBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent ,
 		if ( this->ActorHasTag(FName("TutorialEnd")) )
 		{
 			this->Destroy();
-			gs->OnQuiz1Start();
+			if ( HasAuthority() ) gs->OnQuiz1Start();
 		}
 		else if ( this->ActorHasTag(FName("Quiz1End")) )
 		{
 			this->Destroy();
-			gs->OnQuiz2Start();
+			if ( HasAuthority() ) gs->OnQuiz2Start();
 		}
 		else if ( this->ActorHasTag(FName("Quiz2End")) )
 		{
 			this->Destroy();
-			// 문제 발생: 플레이어가 
-			gs->OnMeetingStart();
+			if ( HasAuthority() ) gs->OnMeetingStart();
 		}
 		else if ( this->ActorHasTag(FName("MeetingEnd")) )
 		{
 			this->Destroy();
-			gs->OnQuiz3Start();
+			if ( HasAuthority() ) gs->OnQuiz3Start();
 		}
 		else if ( this->ActorHasTag(FName("Quiz3End")) )
 		{
 			this->Destroy();
-			gs->OnQuiz4Start();
+			if ( HasAuthority() ) gs->OnQuiz4Start();
 		}
 		else if ( this->ActorHasTag(FName("Quiz4End")) )
 		{
 			this->Destroy();
-			gs->OnGameClear();
+			if ( HasAuthority() ) gs->OnGameClear();
 		}
 	}
+
 }

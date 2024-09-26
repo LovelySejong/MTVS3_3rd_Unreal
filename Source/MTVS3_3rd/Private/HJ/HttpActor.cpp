@@ -175,7 +175,7 @@ void AHttpActor::OnResPostLogin(FHttpRequestPtr Request , FHttpResponsePtr Respo
 void AHttpActor::ReqPostRoomState(const FString& AccessToken , const FString& PartnerID , int32 RoomNumber)
 {
 	// AccessToken과 RoomNumber를 로그로 출력
-	UE_LOG(LogTemp , Warning , TEXT("AccessToken: %s, RoomNumber: %d") , *AccessToken , RoomNumber);
+	UE_LOG(LogTemp , Warning , TEXT("AccessToken: %s, ID: %s, RoomNumber: %d") , *AccessToken , *PartnerID, RoomNumber);
 
 	// HTTP module
 	FHttpModule* Http = &FHttpModule::Get();
@@ -195,7 +195,7 @@ void AHttpActor::ReqPostRoomState(const FString& AccessToken , const FString& Pa
 	FString ContentString;
 	TSharedRef<TJsonWriter<>> Writer = TJsonWriterFactory<>::Create(&ContentString);
 	Writer->WriteObjectStart();
-	Writer->WriteValue(TEXT("partnerID") , PartnerID); // PartnerID를 JSON에 포함
+	Writer->WriteValue(TEXT("partnerID") , PartnerID);
 	Writer->WriteValue(TEXT("roomNumber") , RoomNumber);
 	Writer->WriteObjectEnd();
 	Writer->Close();

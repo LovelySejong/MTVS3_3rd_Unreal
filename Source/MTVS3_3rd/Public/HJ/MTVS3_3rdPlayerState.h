@@ -48,6 +48,11 @@ public:
 	UFUNCTION(Server , Reliable)
 	void ServerRPCSetHostNickname(const FString& hostName);
 
+	UFUNCTION(Server , Reliable)
+	void ServerRPCSetHostId(const FString& _hostId);
+	UFUNCTION(Server , Reliable)
+	void ServerRPCSetGuestId(const FString& _guestId);
+
 	// Guest 닉네임 RPC
 	UFUNCTION(Server , Reliable)
 	void ServerRPCSetGuestNickname(const FString& guestName);

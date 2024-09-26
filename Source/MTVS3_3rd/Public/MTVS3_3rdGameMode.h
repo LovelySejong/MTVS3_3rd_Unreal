@@ -13,6 +13,9 @@ class AMTVS3_3rdGameMode : public AGameModeBase
 
 public:
 	AMTVS3_3rdGameMode();
+
+	virtual void BeginPlay() override;
+
 	//protected:
 	//	virtual APlayerController* Login(UPlayer* NewPlayer , ENetRole InRemoteRole , const FString& Portal , const FString& Options , const FUniqueNetIdRepl& UniqueId , FString& ErrorMessage) override;
 	//
