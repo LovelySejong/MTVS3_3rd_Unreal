@@ -19,17 +19,15 @@ public:
 	//int32 PlayerNum = 0;
 	UPROPERTY(Replicated , BlueprintReadOnly , Category = Authentication)
 	bool bIsHost;
-	//void CopyProperties(APlayerState* NewPlayerState);
+	void CopyProperties(APlayerState* NewPlayerState);
 	void SetHost(bool _bIsHost);
 
 	void SetHostNickname(const FString& hostNickname);
 	FString GetHostNickname() const;
-	UPROPERTY(ReplicatedUsing = OnRep_HostNickname , BlueprintReadOnly , Category = Authentication)
 	FString HostNickname;
 
 	void SetGuestNickname(const FString& guestNickname);
 	FString GetGuestNickname() const;
-	UPROPERTY(ReplicatedUsing = OnRep_GuestNickname , BlueprintReadOnly , Category = Authentication)
 	FString GuestNickname;
 
 	void SetHostID(const FString& hostID);
@@ -48,24 +46,8 @@ public:
 	UFUNCTION(Server , Reliable)
 	void ServerRPCSetHostNickname(const FString& hostName);
 
-	UFUNCTION(NetMulticast , Reliable)
-	void MulticastRPCSetHostNickname(const FString& hostName);
-
-	UFUNCTION()
-	void OnRep_HostNickname();
-
-	void UpdateHostUI(const FString& hostName);
-
 	// Guest 닉네임 RPC
 	UFUNCTION(Server , Reliable)
 	void ServerRPCSetGuestNickname(const FString& guestName);
-
-	UFUNCTION(NetMulticast , Reliable)
-	void MulticastRPCSetGuestNickname(const FString& guestName);
-
-	UFUNCTION()
-	void OnRep_GuestNickname();
-
-	void UpdateGuestUI(const FString& guestName);
 # pragma endregion
 };

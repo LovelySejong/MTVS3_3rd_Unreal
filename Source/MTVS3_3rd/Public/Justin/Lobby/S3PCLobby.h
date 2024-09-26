@@ -50,6 +50,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly , Category = "Settings")
 	TSubclassOf<ULobbyWidget> LobbyWidgetClass;
 
+#pragma region HJ
+	virtual void OnRep_PlayerState() override;
+#pragma endregion
+
 private:
 	bool bIsHost;
 
