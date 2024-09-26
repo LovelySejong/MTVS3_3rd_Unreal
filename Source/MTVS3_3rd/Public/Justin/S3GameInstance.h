@@ -40,10 +40,10 @@ public:
 	void SetHost(bool _bIsHost);
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Authentication")
-    FString GameID;
+    int32 GameID;
 	UFUNCTION(BlueprintCallable, Category = "Authentication")
-    void SetGameID(const FString& _gameID);
-	FString GetGameID() const;
+    void SetGameID(const int32& _gameID);
+	int32 GetGameID() const;
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Authentication")
     FString PlayerID;
@@ -72,4 +72,7 @@ protected:
 private:
 	float MaxTime = 2.f;
 	float TotalTime = 0.f;
+
+	FString StringBase64Encode(const FString& str);
+	FString StringBase64Decode(const FString& str);
 };

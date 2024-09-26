@@ -40,16 +40,23 @@ void AS3PCLobby::BeginPlay()
 		auto GI = Cast<US3GameInstance>(GetWorld()->GetGameInstance());
 		if ( !GI ) return;
 		auto GS = Cast<AMTVS3_3rdGameState>(GetWorld()->GetGameState());
-		if ( !GS ) return;
+		if ( !GS )
+		{
+			UE_LOG(LogTemp , Warning , TEXT("GS is null in AS3PCLobby::BeginPlay()"));
+			return;
+		}
+
 		if ( PS->bIsHost )
 		{
 			PS->ServerRPCSetHostNickname(GI->GetPlayerNickname());
 			//PS->ServerRPCSetHostId(GI->GetPlayerID());	
+			
 			// PS ServerRPC함수에서 ID 설정
-			PS->ServerRPCSetHostID(GI->GetPlayerID());
+			PS->ServerRPCSetHostID(GI->GetPlayerID(), GI->GetAccessToken());
+
 			// 그 안에서 GS의 ID 변경
-			// PS ServerRPC함수에서 토큰 설정
-			PS->ServerRPCSetHostToken(GI->GetAccessToken());
+			// GS ServerRPC함수에서 토큰 설정
+				//GS->ServerRPCSetHostToken(GI->GetAccessToken());
 			// 그 안에서 GS의 토큰 변경
 		}
 		//GS->SetHostID(GI->GetPlayerID());
@@ -83,12 +90,13 @@ void AS3PCLobby::OnRep_PlayerState()
 		if ( !GI ) return;
 		PS->ServerRPCSetGuestNickname(GI->GetPlayerNickname());
 		// PS ServerRPC함수에서 ID 설정
-		PS->ServerRPCSetGuestID(GI->GetPlayerID());
+		PS->ServerRPCSetGuestID(GI->GetPlayerID(), GI->GetAccessToken());
+		
 		// 그 안에서 GS의 ID 변경
 		// PS ServerRPC함수에서 토큰 설정
-		PS->ServerRPCSetGuestToken(GI->GetAccessToken());
+		//PS->ServerRPCSetGuestToken();
 		// 그 안에서 GS의 토큰 변경
-		
+
 		//if ( false == PS->bIsHost )
 		//{
 		//	GS->ServerRPCSetGuestNickname(GI->GetPlayerNickname());
