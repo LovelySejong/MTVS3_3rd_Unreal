@@ -148,17 +148,17 @@ void US3GameInstance::SetHost(bool _bIsHost)
 	//UE_LOG(LogTemp , Warning , TEXT("===== Player Num is %d"), PlayerNum);
 }
 
-void US3GameInstance::SetGameID(const FString& _gameID)
+void US3GameInstance::SetGameID(const int32& _gameID)
 {
 	GameID = _gameID;
 }
 
-FString US3GameInstance::GetGameID() const
+int32 US3GameInstance::GetGameID() const
 {
-	if ( GameID.IsEmpty() )
+	if ( !GameID )
 	{
 		UE_LOG(LogTemp , Warning , TEXT("GameID is empty , returning default value."));
-		return TEXT("GameID");
+		return -1;
 	}
 	return GameID;
 }
