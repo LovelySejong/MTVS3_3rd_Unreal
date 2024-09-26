@@ -13,7 +13,7 @@ AS3LobbyGMBase::AS3LobbyGMBase()
 {
 	bHasHost = false;
 	bIsFull = false;
-	
+
 }
 APlayerController* AS3LobbyGMBase::Login(UPlayer* NewPlayer , ENetRole InRemoteRole , const FString& Portal , const FString& Options , const FUniqueNetIdRepl& UniqueId , FString& ErrorMessage)
 {
@@ -22,7 +22,7 @@ APlayerController* AS3LobbyGMBase::Login(UPlayer* NewPlayer , ENetRole InRemoteR
 
 	PlayersJoined.Add(UniqueId->ToString() , Username);
 
-	UE_LOG(LogTemp , Warning , TEXT("NewPlayer :%s, Username: %s, PlayersJoined Size: %d") , *UniqueId->ToString(), *Username, PlayersJoined.Num());
+	UE_LOG(LogTemp , Warning , TEXT("NewPlayer :%s, Username: %s, PlayersJoined Size: %d") , *UniqueId->ToString() , *Username , PlayersJoined.Num());
 
 	return Super::Login(NewPlayer , InRemoteRole , Portal , Options , UniqueId , ErrorMessage);
 }
@@ -110,33 +110,33 @@ void AS3LobbyGMBase::HandleStartingNewPlayer_Implementation(APlayerController* N
 	// Host의 게임 인스턴스 bIsHost에는 true를 저장하고
 	// Guest의 게임 인스턴스 bIsHost에는 false를 저장
 
-	if(auto pawn = Cast<AMTVS3_3rdPlayerState>(NewPlayer->GetPawn()))
-    {
-        UE_LOG(LogTemp,Warning,TEXT("[AS3LobbyGMBase] Pawn possessed: %s"), *GetNameSafe(pawn));
-    }
-    else UE_LOG(LogTemp,Warning,TEXT("[AS3LobbyGMBase] No Pawn possessed"));
+	if ( auto pawn = Cast<AMTVS3_3rdPlayerState>(NewPlayer->GetPawn()) )
+	{
+		UE_LOG(LogTemp , Warning , TEXT("[AS3LobbyGMBase] Pawn possessed: %s") , *GetNameSafe(pawn));
+	}
+	else UE_LOG(LogTemp , Warning , TEXT("[AS3LobbyGMBase] No Pawn possessed"));
 
 	if ( PC )
 	{
 		if ( bHasHost )
 		{
 			PC->SetHost(false);
-			
-			if(auto PS = PC->GetPlayerState<AMTVS3_3rdPlayerState>())
+
+			if ( auto PS = PC->GetPlayerState<AMTVS3_3rdPlayerState>() )
 			{
 				PS->SetHost(false);
-				UE_LOG(LogTemp,Warning,TEXT("[PreClientTravel] bIsHost:%d"), PS->bIsHost);
+				UE_LOG(LogTemp , Warning , TEXT("[PreClientTravel] bIsHost:%d") , PS->bIsHost);
 			}
 		}
 		else
 		{
 			bHasHost = true;
 			PC->SetHost(true);
-			
-			if(auto PS = PC->GetPlayerState<AMTVS3_3rdPlayerState>())
+
+			if ( auto PS = PC->GetPlayerState<AMTVS3_3rdPlayerState>() )
 			{
 				PS->SetHost(true);
-				UE_LOG(LogTemp,Warning,TEXT("[PreClientTravel] bIsHost: %d"), PS->bIsHost);
+				UE_LOG(LogTemp , Warning , TEXT("[PreClientTravel] bIsHost: %d") , PS->bIsHost);
 			}
 		}
 	}

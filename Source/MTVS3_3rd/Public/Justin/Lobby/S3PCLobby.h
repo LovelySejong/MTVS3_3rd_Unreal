@@ -40,6 +40,8 @@ public:
 	UFUNCTION(Server , Reliable)
 	void Server_SetReady();
 
+	TObjectPtr<ULobbyWidget> LobbyWidget;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -48,8 +50,11 @@ protected:
 	UPROPERTY(EditDefaultsOnly , Category = "Settings")
 	TSubclassOf<ULobbyWidget> LobbyWidgetClass;
 
+#pragma region HJ
+	virtual void OnRep_PlayerState() override;
+#pragma endregion
+
 private:
-	TObjectPtr<ULobbyWidget> LobbyWidget;
 	bool bIsHost;
 
 	UPROPERTY(ReplicatedUsing = OnRep_bIsReady)

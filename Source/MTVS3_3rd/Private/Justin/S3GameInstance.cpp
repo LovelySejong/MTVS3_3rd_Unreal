@@ -8,7 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerState.h"
 #include <HJ/MTVS3_3rdGameState.h>
-#include <string>
+
 
 US3GameInstance::US3GameInstance()
 {
@@ -55,23 +55,23 @@ void US3GameInstance::CreateServer()
 	UE_LOG(LogTemp , Warning , TEXT("Creating session Start "));
 
 	FOnlineSessionSettings SessionSettings;
-	SessionSettings.bAllowJoinInProgress = true;
+	SessionSettings.bAllowJoinInProgress = false;
 	SessionSettings.bIsDedicated = false;
-	
-	SessionSettings.bUseLobbiesIfAvailable = true;
+	SessionSettings.bIsLANMatch = true;
 
-	SessionSettings.bIsLANMatch = IOnlineSubsystem::Get()->GetSubsystemName() == "NULL";
+	/*if ( IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" )
+	else
+		SessionSettings.bIsLANMatch = false;*/
 
 	SessionSettings.bShouldAdvertise = true;
 	SessionSettings.bUsesPresence = true;
 	SessionSettings.NumPublicConnections = 2;
-	SessionSettings.Set(FName("sPRsaUKm"), FString("f2WT04QT"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+	SessionSettings.Set("sPRsaUKm" , FString("f2WT04QT") , EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 	//SessionSettings.BuildUniqueId = 123;
 
 	ULocalPlayer* Local = GetWorld()->GetFirstLocalPlayerFromController();
 	FString Test = GetWorld()->GetFirstPlayerController()->PlayerState->GetUniqueId().ToString();
 	UE_LOG(LogTemp , Warning , TEXT("LocalPlayer: %s , PlayerState: %s") , *Local->GetPreferredUniqueNetId().ToString() , *Test); //Same Unique Id
-	
 	SessionInterface->CreateSession(*Local->GetPreferredUniqueNetId() , "Justin's Session" , SessionSettings);
 	//SessionInterface->CreateSession(0 , "Justin's Session" , SessionSettings);
 }
@@ -81,10 +81,11 @@ void US3GameInstance::FindServer()
 	UE_LOG(LogTemp , Warning , TEXT("Find Sessions Start "));
 
 	SessionSearch = MakeShareable(new FOnlineSessionSearch());
-	if ( IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" )
+	SessionSearch->bIsLanQuery = true;
+	/*if ( IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" )
 		SessionSearch->bIsLanQuery = true;
 	else
-		SessionSearch->bIsLanQuery = false;
+		SessionSearch->bIsLanQuery = false;*/
 
 	SessionSearch->MaxSearchResults = 10000;
 	SessionSearch->QuerySettings.Set(SEARCH_PRESENCE , true , EOnlineComparisonOp::Equals);
@@ -147,9 +148,19 @@ void US3GameInstance::SetHost(bool _bIsHost)
 	//UE_LOG(LogTemp , Warning , TEXT("===== Player Num is %d"), PlayerNum);
 }
 
-void US3GameInstance::SetAccessToken(const FString& InAccessToken)
+void US3GameInstance::SetPlayerID(const FString& id)
 {
-	AccessToken = InAccessToken;
+	PlayerID = id;
+}
+
+FString US3GameInstance::GetPlayerID() const
+{
+	if ( PlayerID.IsEmpty() )
+	{
+		UE_LOG(LogTemp , Warning , TEXT("PlayerID is empty , returning default value."));
+		return TEXT("PlayerID");
+	}
+	return PlayerID;
 }
 
 void US3GameInstance::SetPlayerNickname(const FString& Nickname)
@@ -157,7 +168,7 @@ void US3GameInstance::SetPlayerNickname(const FString& Nickname)
 	if ( Nickname.IsEmpty() )
 	{
 		UE_LOG(LogTemp , Warning , TEXT("Nickname is empty, setting to default value."));
-		PlayerNickname = TEXT("Player")	;
+		PlayerNickname = TEXT("Player");
 	}
 	else
 	{
@@ -174,24 +185,9 @@ FString US3GameInstance::GetPlayerNickname() const
 	}
 	return PlayerNickname;
 }
+
+void US3GameInstance::SetAccessToken(const FString& InAccessToken)
+{
+	AccessToken = InAccessToken;
+}
 #pragma endregion
-
-FString US3GameInstance::StringBase64Encode(const FString& str)
-{
-	// Set 할 때 : FString -> UTF8 (std::string) -> TArray<uint8> -> base64 로 Encode
-	std::string utf8String = TCHAR_TO_UTF8(*str);
-	TArray<uint8> arrayData = TArray<uint8>((uint8*)(utf8String.c_str()) ,
-	utf8String.length());
-	return FBase64::Encode(arrayData);
-
-}
-
-FString US3GameInstance::StringBase64Decode(const FString& str)
-{
-	// Get 할 때 : base64 로 Decode -> TArray<uint8> -> TCHAR
-	TArray<uint8> arrayData;
-	FBase64::Decode(str , arrayData);
-	std::string ut8String((char*)(arrayData.GetData()) , arrayData.Num());
-	return UTF8_TO_TCHAR(ut8String.c_str());
-
-}

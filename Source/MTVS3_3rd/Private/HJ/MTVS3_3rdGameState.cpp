@@ -7,6 +7,9 @@
 #include "HJ/HttpActor.h"
 #include "Justin/S3GameInstance.h"
 #include "MTVS3_3rdGameMode.h"
+#include "Net/UnrealNetwork.h"
+#include "Justin/Lobby/LobbyWidget.h"
+#include "Justin/Lobby/S3PCLobby.h"
 
 AMTVS3_3rdGameState::AMTVS3_3rdGameState()
 {
@@ -20,6 +23,92 @@ AMTVS3_3rdGameState::AMTVS3_3rdGameState()
 	//Q4GimmickStates.Add(1 , false);
 	//Q4GimmickStates.Add(2 , false);
 }
+
+#pragma region 매칭
+void AMTVS3_3rdGameState::SetHostNickname(const FString& hostNickname)
+{
+	HostNickname = hostNickname;
+	OnRep_HostNickname();
+}
+
+FString AMTVS3_3rdGameState::GetHostNickname() const
+{
+	if ( HostNickname.IsEmpty() )
+	{
+		UE_LOG(LogTemp , Warning , TEXT("HostNickname is empty, returning default value."));
+		return TEXT("Host");
+	}
+	return HostNickname;
+}
+
+void AMTVS3_3rdGameState::SetGuestNickname(const FString& guestNickname)
+{
+	GuestNickname = guestNickname;
+	UE_LOG(LogTemp , Log , TEXT("SetGuestNickname: %s") , *GuestNickname);
+	OnRep_GuestNickname();
+}
+
+FString AMTVS3_3rdGameState::GetGuestNickname() const
+{
+	if ( GuestNickname.IsEmpty() )
+	{
+		UE_LOG(LogTemp , Warning , TEXT("GuestNickname is empty, returning default value."));
+		return TEXT("Guest");
+	}
+	return GuestNickname;
+}
+#pragma endregion
+
+#pragma region 멀티플레이
+void AMTVS3_3rdGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AMTVS3_3rdGameState , HostNickname);
+	DOREPLIFETIME(AMTVS3_3rdGameState , GuestNickname);
+}
+
+void AMTVS3_3rdGameState::OnRep_HostNickname()
+{
+	// 클라이언트는 OnRep_HostNickname에 따라 UI 업데이트
+	UpdateHostUI(GetHostNickname());
+}
+
+void AMTVS3_3rdGameState::UpdateHostUI(const FString& hostName)
+{
+	auto PC = Cast<AS3PCLobby>(GetWorld()->GetFirstPlayerController());
+	if ( !PC )
+	{
+		UE_LOG(LogTemp , Warning , TEXT("PC is null in UpdateHostUI"));
+		return;
+	}
+
+	auto LobbyUI = Cast<ULobbyWidget>(PC->LobbyWidget);
+	if ( !LobbyUI )
+	{
+		UE_LOG(LogTemp , Warning , TEXT("LobbyUI is null in UpdateHostUI"));
+		return;
+	}
+
+	LobbyUI->SetNameText(1 , hostName);
+}
+
+void AMTVS3_3rdGameState::OnRep_GuestNickname()
+{
+	UpdateGuestUI(GetGuestNickname());
+	UpdateHostUI(GetHostNickname());
+}
+
+void AMTVS3_3rdGameState::UpdateGuestUI(const FString& guestName)
+{
+	auto PC = Cast<AS3PCLobby>(GetWorld()->GetFirstPlayerController());
+	auto LobbyUI = Cast<ULobbyWidget>(PC->LobbyWidget);
+	if ( PC && LobbyUI )
+	{
+		LobbyUI->SetNameText(2 , guestName);
+	}
+}
+#pragma endregion
 
 #pragma region 방 체크
 // 체크포인트 액터가 호출하는 함수들
