@@ -57,16 +57,16 @@ void AHttpActor::InitStartUI()
 	pc->SetInputMode(FInputModeGameOnly());
 	pc->SetShowMouseCursor(true);
 
-	// 뷰포트 크기 가져오기
-	int32 ViewportSizeX , ViewportSizeY;
-	pc->GetViewportSize(ViewportSizeX , ViewportSizeY);
+	//// 뷰포트 크기 가져오기
+	//int32 ViewportSizeX , ViewportSizeY;
+	//pc->GetViewportSize(ViewportSizeX , ViewportSizeY);
 
-	// 뷰포트 크기의 30% 위치 계산
-	int32 DesiredMouseX = FMath::TruncToInt(ViewportSizeX * 0.3f);
-	int32 DesiredMouseY = FMath::TruncToInt(ViewportSizeY * 0.3f);
+	//// 뷰포트 크기의 30% 위치 계산
+	//int32 DesiredMouseX = FMath::TruncToInt(ViewportSizeX * 0.3f);
+	//int32 DesiredMouseY = FMath::TruncToInt(ViewportSizeY * 0.3f);
 
-	// 마우스 위치 설정
-	pc->SetMouseLocation(DesiredMouseX , DesiredMouseY);
+	//// 마우스 위치 설정
+	//pc->SetMouseLocation(DesiredMouseX , DesiredMouseY);
 }
 
 void AHttpActor::ReqPostLogin(const FText& ID , const FText& Password)
