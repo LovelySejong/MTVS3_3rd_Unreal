@@ -9,7 +9,6 @@
 #include "Kismet/GameplayStatics.h"
 #include "HJ/MTVS3_3rdPlayerState.h"
 #include "HJ/MTVS3_3rdGameState.h"
-#include "GameFramework/GameUserSettings.h"
 
 AS3LobbyGMBase::AS3LobbyGMBase()
 {
@@ -46,13 +45,6 @@ APlayerController* AS3LobbyGMBase::Login(UPlayer* NewPlayer , ENetRole InRemoteR
 void AS3LobbyGMBase::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
-
-	UGameUserSettings* MyGameSettings = GEngine->GetGameUserSettings();
-	//MyGameSettings->SetFullscreenMode(EWindowMode::Fullscreen);
-	MyGameSettings->SetScreenResolution({ 960, 540 });
-
-	MyGameSettings->ApplySettings(true);
-	MyGameSettings->SaveSettings();
 
 	auto Pawn = NewPlayer->GetPawn();
 	UE_LOG(LogTemp , Warning , TEXT("[PostLogin] PlayerCharacter: %s") , *GetNameSafe(Pawn));
