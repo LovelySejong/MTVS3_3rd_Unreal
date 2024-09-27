@@ -57,11 +57,12 @@ void US3GameInstance::CreateServer()
 	FOnlineSessionSettings SessionSettings;
 	SessionSettings.bAllowJoinInProgress = false;
 	SessionSettings.bIsDedicated = false;
-	SessionSettings.bIsLANMatch = true;
+	//SessionSettings.bIsLANMatch = true;
 
-	/*if ( IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" )
+	if ( IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" )
+		SessionSettings.bIsLANMatch = true;
 	else
-		SessionSettings.bIsLANMatch = false;*/
+		SessionSettings.bIsLANMatch = false;
 
 	SessionSettings.bShouldAdvertise = true;
 	SessionSettings.bUsesPresence = true;
@@ -81,11 +82,11 @@ void US3GameInstance::FindServer()
 	UE_LOG(LogTemp , Warning , TEXT("Find Sessions Start "));
 
 	SessionSearch = MakeShareable(new FOnlineSessionSearch());
-	SessionSearch->bIsLanQuery = true;
-	/*if ( IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" )
+	//SessionSearch->bIsLanQuery = true;
+	if ( IOnlineSubsystem::Get()->GetSubsystemName() == "NULL" )
 		SessionSearch->bIsLanQuery = true;
 	else
-		SessionSearch->bIsLanQuery = false;*/
+		SessionSearch->bIsLanQuery = false;
 
 	SessionSearch->MaxSearchResults = 10000;
 	SessionSearch->QuerySettings.Set(SEARCH_PRESENCE , true , EOnlineComparisonOp::Equals);
