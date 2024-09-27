@@ -64,6 +64,8 @@ void US3GameInstance::CreateServer()
 	else
 		SessionSettings.bIsLANMatch = false;
 
+	SessionSettings.bUseLobbiesIfAvailable = true;
+
 	SessionSettings.bShouldAdvertise = true;
 	SessionSettings.bUsesPresence = true;
 	SessionSettings.NumPublicConnections = 2;
