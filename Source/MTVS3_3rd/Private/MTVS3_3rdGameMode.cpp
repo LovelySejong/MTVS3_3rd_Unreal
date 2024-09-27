@@ -24,6 +24,8 @@ void AMTVS3_3rdGameMode::BeginPlay()
 	TArray<AActor*> ActorList;
 	GetSeamlessTravelActorList(false , ActorList);
 
+	bUseSeamlessTravel = true;
+
 	//auto GS = GetGameState<AMTVS3_3rdGameState>();
 	//if ( GS )
 	//{
